@@ -7,14 +7,14 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from '
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ClubMemberCreateForm from '../../components/ClubMemberCreateForm';
 import MemberScrollView from '../../components/MemberScrollView';
-import { clubNavigations } from '../../constants/navigations';
+import { mainNavigations } from '../../constants/navigations';
 import { useGetMemberList, useMutateCreateMemberList } from '../../hooks/useMember';
-import { ClubStackParamList } from '../../navigations/ClubStackNavigator';
+import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { MemberCreateListReq } from '../../types/member/request/MemberCreateReq';
 
 type ClubDetailScreenProps = StackScreenProps<
-  ClubStackParamList,
-  typeof clubNavigations.CLUB_DETAIL
+  MainStackParamList,
+  typeof mainNavigations.CLUB_DETAIL
 >;
 
 const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
@@ -132,6 +132,15 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
               계좌번호(뒤 4자리){club.accountNumber}
             </Text>
           </View>
+          <Button 
+            onPress={() => 
+              navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: club.clubId })
+            }
+          >
+            <Text>
+              이벤트 생성(테스트)
+            </Text>
+          </Button>
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -3,22 +3,25 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 
-import { clubNavigations } from '../constants/navigations';
-import CustomForm from '../screens/club/ClubCreateScreen';
+import { mainNavigations } from '../constants/navigations';
 import ClubDetailScreen from '../screens/club/ClubDetailScreen';
 import ClubListScreen from '../screens/club/ClubListScreen';
 import { ClubGetRes } from '../types/club/response/ClubGetRes';
+import ClubCreateScreen from '../screens/club/ClubCreateScreen';
+import EventCreateScreen from '../screens/event/EventCreateScreen';
 
 
-export type ClubStackParamList = {
-  [clubNavigations.CLUB_LIST]: undefined;
-  [clubNavigations.CLUB_DETAIL]: { club: ClubGetRes };
-  [clubNavigations.CLUB_CREATE]: undefined;
+export type MainStackParamList = {
+  [mainNavigations.CLUB_LIST]: undefined;
+  [mainNavigations.CLUB_DETAIL]: { club: ClubGetRes };
+  [mainNavigations.CLUB_CREATE]: undefined;
+
+  [mainNavigations.EVENT_CREATE]: { clubId: string };
 }
 
-const Stack = createStackNavigator<ClubStackParamList>();
+const Stack = createStackNavigator<MainStackParamList>();
 
-function ClubStackNavigator() {
+function MainStackNavigator() {
 
   return (
     <Stack.Navigator
@@ -36,24 +39,31 @@ function ClubStackNavigator() {
         headerTintColor: 'black',
       }}>
       <Stack.Screen
-        name={clubNavigations.CLUB_LIST}
+        name={mainNavigations.CLUB_LIST}
         component={ClubListScreen}
         options={{
           headerTitle: '모임 리스트 조회',
         }}
       />
       <Stack.Screen
-        name={clubNavigations.CLUB_DETAIL}
+        name={mainNavigations.CLUB_DETAIL}
         component={ClubDetailScreen}
         options={{
           headerTitle: '모임 상세 조회',
         }}
       />
       <Stack.Screen
-        name={clubNavigations.CLUB_CREATE}
-        component={CustomForm}
+        name={mainNavigations.CLUB_CREATE}
+        component={ClubCreateScreen}
         options={{
           headerTitle: '모임 생성',
+        }}
+      />
+      <Stack.Screen
+        name={mainNavigations.EVENT_CREATE}
+        component={EventCreateScreen}
+        options={{
+          headerTitle: '이벤트 생성',
         }}
       />
     </Stack.Navigator>
@@ -62,4 +72,4 @@ function ClubStackNavigator() {
 
 const styles = StyleSheet.create({});
 
-export default ClubStackNavigator;
+export default MainStackNavigator;

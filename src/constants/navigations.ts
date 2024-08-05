@@ -1,8 +1,9 @@
-const clubNavigations = {
+const mainNavigations = {
   CLUB_LIST: 'clubList',
   CLUB_DETAIL: 'clubDetail',
   CLUB_CREATE: 'clubCreate',
-  CLUB_UPDATE: 'clubUpdate',
+
+  EVENT_CREATE: 'eventCreate',
 } as const;
 
-export { clubNavigations };
+export { mainNavigations };
