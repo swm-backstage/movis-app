@@ -42,28 +42,29 @@ function MainStackNavigator() {
         name={mainNavigations.CLUB_LIST}
         component={ClubListScreen}
         options={{
-          headerTitle: '모임 리스트 조회',
+          headerShown: false,
+          // headerTitle: '모임 리스트 조회',
         }}
       />
       <Stack.Screen
         name={mainNavigations.CLUB_DETAIL}
         component={ClubDetailScreen}
         options={{
-          headerTitle: '모임 상세 조회',
+          headerTitle: '',
         }}
       />
       <Stack.Screen
         name={mainNavigations.CLUB_CREATE}
         component={ClubCreateScreen}
         options={{
-          headerTitle: '모임 생성',
+          headerTitle: '',
         }}
       />
       <Stack.Screen
         name={mainNavigations.EVENT_CREATE}
         component={EventCreateScreen}
         options={{
-          headerTitle: '이벤트 생성',
+          headerTitle: '',
         }}
       />
     </Stack.Navigator>
