@@ -1,24 +1,25 @@
 import { ActivityIndicator, Button } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { mainNavigations } from '../../constants/navigations';
 import { useGetClubList } from '../../hooks/useClub';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
+import useAuth from '../../hooks/useAuth';
 
 
 type ClubHomeScreenProps = StackScreenProps<
-MainStackParamList,
+  MainStackParamList,
   typeof mainNavigations.CLUB_LIST
 >;
 
 function ClubListScreen({ navigation }: ClubHomeScreenProps) {
   const {data: data, isLoading, isError} = useGetClubList();
-  
+  const {logoutMutation}=useAuth();
+
   if (isLoading) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
@@ -32,27 +33,52 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
     navigation.navigate(mainNavigations.CLUB_DETAIL, { club });
   };
 
+  const showLogoutAlert = () => {
+    Alert.alert(
+      "로그아웃",
+      "로그아웃 하시겠습니까?",
+      [
+        {
+          text: "아니오",
+          style: "cancel"
+        },
+        {
+          text: "예",
+          onPress: () => logoutMutation.mutate()
+        }
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.userName}>
           백진암
         </Text>
-
-        <MaterialCommunityIcons
-          name="account-circle-outline"
-          style={styles.userIcon}
+        <AntDesign
+          name="logout"
+          style={styles.logoutIcon}
           onPress={() => {
-            
-            console.log('회원 정보 수정');
+            showLogoutAlert();
           }}
         />
       </View>
       <ScrollView style={styles.clubListContainer}>
         {data.clubGetListDto.map((club: ClubGetRes) => (
-          <TouchableOpacity key={club.clubId} onPress={() => handlePressClubDetailScreen(club)}>
+          <TouchableOpacity key={club.clubId} onPress={() => console.log('장부 이동')}>
             <View style={styles.clubContainer}>
-              <View style={styles.clubInfo}>
+              <View style={styles.clubSettingContainer}>
+                <View style={styles.iconView}>
+                  <AntDesign
+                    name="setting"
+                    onPress={() => handlePressClubDetailScreen(club)}
+                    style={styles.settingIcon}
+                  />
+                </View>
+              </View>
+              <View style={styles.clubInfoContainer}>
                 <View style={styles.clubMainInfo}>
                   <Text style={styles.name}>
                     {club.name}
@@ -103,38 +129,39 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    marginHorizontal: 20,
+    width: '100%',
   },
   header: {
-    width: '100%',
-    marginTop: 10,
-    marginBottom: 30,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    marginBottom: 20,
     flex: 0.08,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    // 그림자 설정 추가
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5, // Android용 그림자
+    backgroundColor: 'white',
   },
   userName: {
     fontSize: 18,
     color: 'black',
   },
-  userIcon: {
-    fontSize: 35,
-    color: 'black',
+  logoutIcon: {
+    fontSize: 30,
+    color: 'rgba(153, 102, 255, 1)',
   },
   clubListContainer: {
     flex: 0.92,
-    width: '100%',
+    marginHorizontal: 20,
     backgroundColor: 'white',
-  },
-  shadowContainer: {
-    flex: 1,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    marginTop: 50,
-    padding: 20,
-    borderRadius: 5,
-    width: '100%',
   },
   clubContainer: {
     borderWidth: 0.3,
@@ -142,11 +169,24 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     padding: 6,
     height: 220,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  clubInfo: {
+  clubSettingContainer: {
+    flexDirection: 'row',
+    height: 40,
+    justifyContent: 'flex-end',
+  },
+  iconView: {
+    position: 'absolute',
+  },
+  settingIcon: {
+    fontSize: 25,
+    padding: 5,
+    color: 'rgba(153, 102, 255, 1)',
+  },
+  clubInfoContainer: {
     backgroundColor: 'rgba(128, 128, 128, 0.15)',
+    height: 100,
     borderRadius: 5,
     flexDirection: 'row',
   },

@@ -24,10 +24,17 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
   const { clubId } = route.params;
   const { data: memberList, isLoading, isError } = useGetMemberList(clubId);
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   useEffect(() => {
     form.setFieldsValue({ checkedMemberList: selectedMembers });
   }, [selectedMembers]);
+
+  useEffect(() => {
+    if (memberList) {
+      setSelectAll(selectedMembers.length === memberList.members.length);
+    }
+  }, [selectedMembers, memberList]);
 
   const onFinish = async (values: any) => {
     console.log(values);
@@ -38,6 +45,23 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
       prev.includes(member) ? prev.filter(m => m !== member) : [...prev, member]
     );
   };
+
+  const handleSelectAllChange = () => {
+    if (selectAll) {
+      setSelectedMembers([]);
+    } else {
+      setSelectedMembers(memberList.members.map(member => member.name));
+    }
+    setSelectAll(!selectAll);
+  };
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -105,10 +129,17 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
               <Form.Item
                 label="이벤트 참가 회원"
                 name="checkedMemberList"
-                rules={[{ required: true, message: '필수 항목입니다. ' }]}
                 style={styles.formItem}
               >
-                  <ScrollView style={styles.checkboxGroup}>
+                <View style={styles.checkboxGroup}>
+                  <Checkbox
+                    checked={selectAll}
+                    onChange={handleSelectAllChange}
+                    style={styles.checkbox}
+                  >
+                    전체 선택
+                  </Checkbox>
+                  <ScrollView style={styles.checkboxSelectGroup}>
                     {memberList.members.map(member => (
                       <Checkbox
                         key={member.name}
@@ -120,8 +151,9 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
                       </Checkbox>
                     ))}
                   </ScrollView>
+                </View>
               </Form.Item>
-              
+
               <Form.Item>
                 <Button type="primary" onPress={form.submit} style={styles.submitButton}>
                   이벤트 생성
@@ -194,9 +226,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: '#d9d9d9',
     borderWidth: 1,
-    marginBottom: 15,
-    height: 150,
+    padding: 7,
+    marginTop: 10,
+    marginBottom: 0,
     paddingHorizontal: 10,
+  },
+  checkboxSelectGroup: {
+    height: 120,
   },
   checkboxGroupLabel: {
     marginBottom: 5,
