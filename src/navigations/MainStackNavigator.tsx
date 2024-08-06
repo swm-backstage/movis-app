@@ -9,6 +9,8 @@ import ClubListScreen from '../screens/club/ClubListScreen';
 import { ClubGetRes } from '../types/club/response/ClubGetRes';
 import ClubCreateScreen from '../screens/club/ClubCreateScreen';
 import EventCreateScreen from '../screens/event/EventCreateScreen';
+import WebViewScreen from '../screens/webview/WebViewScreen';
+
 
 
 export type MainStackParamList = {
@@ -17,6 +19,8 @@ export type MainStackParamList = {
   [mainNavigations.CLUB_CREATE]: undefined;
 
   [mainNavigations.EVENT_CREATE]: { clubId: string };
+
+  [mainNavigations.WEBVIEW]: { clubId: string };
 }
 
 const Stack = createStackNavigator<MainStackParamList>();
@@ -63,6 +67,13 @@ function MainStackNavigator() {
       <Stack.Screen
         name={mainNavigations.EVENT_CREATE}
         component={EventCreateScreen}
+        options={{
+          headerTitle: '',
+        }}
+      />
+      <Stack.Screen
+        name={mainNavigations.WEBVIEW}
+        component={WebViewScreen}
         options={{
           headerTitle: '',
         }}
