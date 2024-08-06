@@ -5,19 +5,19 @@ import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-na
 import { ScrollView } from 'react-native-gesture-handler';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { clubNavigations } from '../../constants/navigations';
+import { mainNavigations } from '../../constants/navigations';
 import { useGetClubList } from '../../hooks/useClub';
-import { ClubStackParamList } from '../../navigations/ClubStackNavigator';
+import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
 
 
 type ClubHomeScreenProps = StackScreenProps<
-  ClubStackParamList,
-  typeof clubNavigations.CLUB_LIST
+MainStackParamList,
+  typeof mainNavigations.CLUB_LIST
 >;
 
 function ClubListScreen({ navigation }: ClubHomeScreenProps) {
-  const {data: ClubGetListRes, isLoading, isError} = useGetClubList();
+  const {data: data, isLoading, isError} = useGetClubList();
   
   if (isLoading) {
     return (
@@ -29,7 +29,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
   }
 
   const handlePressClubDetailScreen = (club: ClubGetRes) => {
-    navigation.navigate(clubNavigations.CLUB_DETAIL, { club });
+    navigation.navigate(mainNavigations.CLUB_DETAIL, { club });
   };
 
   return (
@@ -38,16 +38,18 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
         <Text style={styles.userName}>
           백진암
         </Text>
+
         <MaterialCommunityIcons
           name="account-circle-outline"
           style={styles.userIcon}
           onPress={() => {
+            
             console.log('회원 정보 수정');
           }}
         />
       </View>
       <ScrollView style={styles.clubListContainer}>
-        {ClubGetListRes.clubGetListDto.map((club: ClubGetRes) => (
+        {data.clubGetListDto.map((club: ClubGetRes) => (
           <TouchableOpacity key={club.clubId} onPress={() => handlePressClubDetailScreen(club)}>
             <View style={styles.clubContainer}>
               <View style={styles.clubInfo}>
@@ -82,7 +84,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
         <Button
           type="primary"
           style={styles.submitButton}
-          onPress={() => navigation.navigate('clubCreate')}>
+          onPress={() => navigation.navigate(mainNavigations.CLUB_CREATE)}>
           <AntDesign
             name="plus"
             style={styles.submitButtonIcon}

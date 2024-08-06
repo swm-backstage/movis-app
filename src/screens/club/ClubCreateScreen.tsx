@@ -9,15 +9,15 @@ import { StackScreenProps } from '@react-navigation/stack';
 import React, { ReactNode } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { clubNavigations } from '../../constants/navigations';
-import { ClubStackParamList } from '../../navigations/ClubStackNavigator';
+import { mainNavigations } from '../../constants/navigations';
+import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubCreateReq } from '../../types/club/request/ClubCreateReq';
 import { useMutateCreateClub } from '../../hooks/useClub';
 
 
 type ClubCreateScreenProps = StackScreenProps<
-  ClubStackParamList,
-  typeof clubNavigations.CLUB_CREATE
+MainStackParamList,
+  typeof mainNavigations.CLUB_CREATE
 >;
 
 type PickerRenderProps = {
@@ -66,8 +66,6 @@ function ClubCreateScreen({ navigation }: ClubCreateScreenProps) {
     );
   };
 
-  const pickerRef = React.useRef(null);
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.titleContainer}>
@@ -79,7 +77,7 @@ function ClubCreateScreen({ navigation }: ClubCreateScreenProps) {
         <Provider>
           <ScrollView keyboardShouldPersistTaps="handled" style={styles.formScrollContrainer}>
             <Form
-              name="basic"
+              name="club"
               form={form}
               layout="vertical"
               onFinish={onFinish}

@@ -1,7 +1,6 @@
 import AuthStackNavigator from './AuthStackNavigator';
 import useAuth from '../hooks/useAuth';
-import ClubStackNavigator from './ClubStackNavigator';
-
+import MainStackNavigator from './MainStackNavigator';
 
 
 function RootNavigator() {
@@ -9,7 +8,7 @@ function RootNavigator() {
 
   console.log('isLogin:', isLogin);
 
-  return <>{isLogin ?  <ClubStackNavigator/> : <AuthStackNavigator/> }</>
+  return <>{isLogin ? <MainStackNavigator/> : <AuthStackNavigator/> }</>
 }
 
 
