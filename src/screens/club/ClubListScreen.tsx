@@ -66,7 +66,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
         />
       </View>
       <ScrollView style={styles.clubListContainer}>
-        {data.clubGetListDto.map((club: ClubGetRes) => (
+        {data ? data.clubGetListDto.map((club: ClubGetRes) => (
           <TouchableOpacity key={club.clubId} onPress={() => navigation.navigate(mainNavigations.WEBVIEW, { clubId: club.clubId })}>
             <View style={styles.clubContainer}>
               <View style={styles.clubSettingContainer}>
@@ -104,7 +104,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
               </View>
             </View>
           </TouchableOpacity>
-        ))}
+        )) : undefined}
       </ScrollView>
       <View style={styles.buttonContainer}>
         <Button
