@@ -12,7 +12,7 @@ const MemberScrollView: React.FC<MemberScrollViewProps> = ({ memberList }) => {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollViewContainer}>
-        {memberList.map((member) => (
+        {memberList && memberList.map((member) => (
           <View key={member.memberId} style={styles.memberItem}>
             <Text style={styles.memberName}>{member.name}</Text>
             <Text style={styles.memberPhoneNo}>{member.phoneNo}</Text>

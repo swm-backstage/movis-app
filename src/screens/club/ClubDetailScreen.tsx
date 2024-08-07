@@ -224,7 +224,6 @@ const styles = StyleSheet.create({
   },
   addMemberContainer: {
     overflow: 'hidden',
-    marginTop: 20,
     marginBottom: 10,
   },
 });
