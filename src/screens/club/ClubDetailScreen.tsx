@@ -1,16 +1,18 @@
 import { Button, Form } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useState } from 'react';
-import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ClubMemberCreateForm from '../../components/ClubMemberCreateForm';
+import CustomLoader from '../../components/Loader';
 import MemberScrollView from '../../components/MemberScrollView';
 import { mainNavigations } from '../../constants/navigations';
 import { useGetMemberList, useMutateCreateMemberList } from '../../hooks/useMember';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { MemberCreateListReq } from '../../types/member/request/MemberCreateReq';
+import AntdWithStyleButton from '../../components/AntdWithStyleButton';
 
 type ClubDetailScreenProps = StackScreenProps<
   MainStackParamList,
@@ -67,12 +69,7 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
   };
 
   if (isLoading) {
-    return (
-      <SafeAreaView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Loading...</Text>
-      </SafeAreaView>
-    );
+    return <CustomLoader />
   }
 
   return (
@@ -103,11 +100,10 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
               onFinish={handleAddMember}
             >
               <ClubMemberCreateForm />
-              <Form.Item
-                style={styles.formItem}>
-                <Button type="primary" onPress={form.submit} style={styles.submitButton}>
+              <Form.Item style={styles.formItem}>
+                <AntdWithStyleButton onPress={form.submit}>
                   회원 추가
-                </Button>
+                </AntdWithStyleButton>
               </Form.Item>
             </Form>
           </Animated.View>
@@ -132,15 +128,9 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
               계좌번호(뒤 4자리){club.accountNumber}
             </Text>
           </View>
-          <Button 
-            onPress={() => 
-              navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: club.clubId })
-            }
-          >
-            <Text>
-              이벤트 생성(테스트)
-            </Text>
-          </Button>
+          <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: club.clubId })}>
+            이벤트 생성(테스트)
+          </AntdWithStyleButton>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -170,7 +160,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   formItem: {
-
+    backgroundColor: 'red',
   },
   submitButton: {
     width: '100%',

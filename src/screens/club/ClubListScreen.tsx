@@ -1,14 +1,16 @@
-import { ActivityIndicator, Button } from '@ant-design/react-native';
+import { Button } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
-import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import CustomLoader from '../../components/Loader';
 import { mainNavigations } from '../../constants/navigations';
+import useAuth from '../../hooks/useAuth';
 import { useGetClubList } from '../../hooks/useClub';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
-import useAuth from '../../hooks/useAuth';
+import AntdWithStyleButton from '../../components/AntdWithStyleButton';
 
 
 type ClubHomeScreenProps = StackScreenProps<
@@ -17,17 +19,8 @@ type ClubHomeScreenProps = StackScreenProps<
 >;
 
 function ClubListScreen({ navigation }: ClubHomeScreenProps) {
-  const {data: data, isLoading, isError} = useGetClubList();
-  const {logoutMutation}=useAuth();
-
-  if (isLoading) {
-    return (
-      <SafeAreaView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Loading...</Text>
-      </SafeAreaView>
-    );
-  }
+  const { data: data, isLoading, isError } = useGetClubList();
+  const { logoutMutation } = useAuth();
 
   const handlePressClubDetailScreen = (club: ClubGetRes) => {
     navigation.navigate(mainNavigations.CLUB_DETAIL, { club });
@@ -51,9 +44,13 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
     );
   };
 
+  if (isLoading) {
+    return <CustomLoader />
+  }
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+    <View style={styles.container}>
+      <View style={styles.headerContainer}>
         <Text style={styles.userName}>
           백진암
         </Text>
@@ -107,31 +104,20 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
         )) : undefined}
       </ScrollView>
       <View style={styles.buttonContainer}>
-        <Button
-          type="primary"
-          style={styles.submitButton}
-          onPress={() => navigation.navigate(mainNavigations.CLUB_CREATE)}>
-          <AntDesign
-            name="plus"
-            style={styles.submitButtonIcon}
-          />
-        </Button>
+        <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.CLUB_CREATE)}>
+          <AntDesign name="plus" style={styles.submitButtonIcon} />
+        </AntdWithStyleButton>
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   container: {
     flex: 1,
     width: '100%',
   },
-  header: {
+  headerContainer: {
     paddingVertical: 8,
     paddingHorizontal: 20,
     marginBottom: 20,
@@ -139,7 +125,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // 그림자 설정 추가
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -232,19 +217,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   buttonContainer: {
-    width: '100%',
-    marginTop: 20,
+    marginHorizontal: 20,
     borderRadius: 5,
     marginBottom: 30,
   },
-  submitButton: {
-    borderWidth: 0.3,
-    borderColor: 'black',
-    borderRadius: 5,
-    backgroundColor: 'white',
-  },
   submitButtonIcon: {
-    color: 'black',
+    color: 'white',
     fontSize: 30,
   },
 });
