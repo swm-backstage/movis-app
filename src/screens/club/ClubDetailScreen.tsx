@@ -13,6 +13,7 @@ import { useGetMemberList, useMutateCreateMemberList } from '../../hooks/useMemb
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { MemberCreateListReq } from '../../types/member/request/MemberCreateReq';
 import AntdWithStyleButton from '../../components/AntdWithStyleButton';
+import { bankMap } from '../../constants/mockData';
 
 type ClubDetailScreenProps = StackScreenProps<
   MainStackParamList,
@@ -100,11 +101,9 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
               onFinish={handleAddMember}
             >
               <ClubMemberCreateForm />
-              <Form.Item style={styles.formItem}>
-                <AntdWithStyleButton onPress={form.submit}>
-                  회원 추가
-                </AntdWithStyleButton>
-              </Form.Item>
+              <AntdWithStyleButton onPress={form.submit}>
+                회원 추가
+              </AntdWithStyleButton>
             </Form>
           </Animated.View>
           <View style={styles.clubInfoMemberData}>
@@ -118,7 +117,7 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
           <View style={styles.clubInfoBankData}>
             <View style={styles.bankData}>
               <Text style={styles.bankName}>
-                토스 뱅크
+                {bankMap.get(club.bankCode)}
               </Text>
               <Text style={styles.bankCode}>
                 (은행 코드:  {club.bankCode})
@@ -162,10 +161,6 @@ const styles = StyleSheet.create({
   formItem: {
     backgroundColor: 'red',
   },
-  submitButton: {
-    width: '100%',
-    borderRadius: 5,
-  },
   clubName: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -174,6 +169,10 @@ const styles = StyleSheet.create({
   clubSettingIcon: {
     fontSize: 30,
     color: 'rgba(153, 102, 255, 1)',
+  },
+  addMemberContainer: {
+    overflow: 'hidden',
+    marginBottom: 10,
   },
   clubInfoContainer: {
     marginTop: 20,
@@ -211,10 +210,6 @@ const styles = StyleSheet.create({
   accountNumber: {
     fontSize: 16,
     color: 'black',
-  },
-  addMemberContainer: {
-    overflow: 'hidden',
-    marginBottom: 10,
   },
 });
 
