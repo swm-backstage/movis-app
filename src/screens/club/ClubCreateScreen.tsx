@@ -10,13 +10,14 @@ import React, { ReactNode } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { mainNavigations } from '../../constants/navigations';
+import { useMutateCreateClub } from '../../hooks/useClub';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubCreateReq } from '../../types/club/request/ClubCreateReq';
-import { useMutateCreateClub } from '../../hooks/useClub';
+import AntdWithStyleButton from '../../components/AntdWithStyleButton';
 
 
 type ClubCreateScreenProps = StackScreenProps<
-MainStackParamList,
+  MainStackParamList,
   typeof mainNavigations.CLUB_CREATE
 >;
 
@@ -51,7 +52,7 @@ function ClubCreateScreen({ navigation }: ClubCreateScreenProps) {
   ];
 
   const onFinish = async (values: ClubCreateReq) => {
-    
+
     values.bankCode = values.bankCode[0];
 
     createClub.mutate(
@@ -62,7 +63,6 @@ function ClubCreateScreen({ navigation }: ClubCreateScreenProps) {
           console.error('Error creating club:', error, error.message, error.name);
         }
       }
-      
     );
   };
 
@@ -82,13 +82,6 @@ function ClubCreateScreen({ navigation }: ClubCreateScreenProps) {
               layout="vertical"
               onFinish={onFinish}
               onFinishFailed={() => { }}
-              // initialValues={{
-              //   name: "test",
-              //   description: "test",
-              //   balance: "9999",
-              //   bankCode: ['090'],
-              //   accountNumber: "1234",
-              // }}
               style={styles.form}
             >
               <Form.Item
@@ -160,9 +153,9 @@ function ClubCreateScreen({ navigation }: ClubCreateScreenProps) {
                 <Input type="number" placeholder="계좌번호 뒤 4자리를 입력해주세요." style={styles.input} />
               </Form.Item>
               <Form.Item>
-                <Button type="primary" onPress={form.submit} style={styles.submitButton}>
+                <AntdWithStyleButton onPress={form.submit}>
                   모임 생성
-                </Button>
+                </AntdWithStyleButton>
               </Form.Item>
             </Form>
           </ScrollView>
@@ -205,14 +198,10 @@ const styles = StyleSheet.create({
   },
   formItem: {
     marginBottom: 15,
-    paddingHorizontal: 10,
     borderBottomWidth: 5,
     borderBottomColor: 'white',
     position: 'relative',
     color: 'black',
-  },
-  formLabel: {
-    // borderWidth: 0,
   },
   input: {
     backgroundColor: 'white',
@@ -233,12 +222,7 @@ const styles = StyleSheet.create({
     borderColor: '#d9d9d9',
     borderWidth: 1,
     textAlignVertical: 'top',
-    color: 'blakc',
-  },
-  submitButton: {
-    width: '100%',
-    marginTop: 20,
-    borderRadius: 5,
+    color: 'black',
   },
 });
 

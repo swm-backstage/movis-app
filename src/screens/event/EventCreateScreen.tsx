@@ -1,14 +1,17 @@
+import { Button, Checkbox, DatePicker, Form, Input, Provider, View } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { mainNavigations } from '../../constants/navigations';
-import { MainStackParamList } from '../../navigations/MainStackNavigator';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Form, Input, DatePicker, Button, Provider, Checkbox, ActivityIndicator } from '@ant-design/react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useGetMemberList } from '../../hooks/useMember';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import CustomLoader from '../../components/Loader';
+import { mainNavigations } from '../../constants/navigations';
 import { useMutateCreateEvent } from '../../hooks/useEvent';
+import { useGetMemberList } from '../../hooks/useMember';
+import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { EventCreateReq, GatherFeeInfo } from '../../types/event/request/EventCreateReq';
+import AntdWithStyleButton from '../../components/AntdWithStyleButton';
+
 
 type EventCreateScreenProps = StackScreenProps<
   MainStackParamList,
@@ -23,11 +26,11 @@ type PickerRenderProps = {
 
 function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
   const [form] = Form.useForm();
-  const [feeError, setFeeError] = useState<string | null>(null);
   const { clubId } = route.params;
   const { data: data, isLoading, isError } = useGetMemberList(clubId);
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [showGatherFeeInfo, setShowGatherFeeInfo] = useState(false);
   const createEvent = useMutateCreateEvent();
 
   useEffect(() => {
@@ -40,9 +43,9 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
     }
   }, [selectedMembers, data]);
 
-  const handleCheckboxChange = (member: string) => {
+  const handleCheckboxChange = (memberId: string) => {
     setSelectedMembers(prev =>
-      prev.includes(member) ? prev.filter(m => m !== member) : [...prev, member]
+      prev.includes(memberId) ? prev.filter(m => m !== memberId) : [...prev, memberId]
     );
   };
 
@@ -50,21 +53,11 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
     if (selectAll) {
       setSelectedMembers([]);
     } else {
-      setSelectedMembers(data.members.map(member => member.name));
+      setSelectedMembers(data.members.map(member => member.memberId));
     }
     setSelectAll(!selectAll);
   };
 
-  const onFieldsChange = (changedFields: any) => {
-    const totalPaymentAmount = form.getFieldValue('totalPaymentAmount');
-    const paymentDeadline = form.getFieldValue('paymentDeadline');
-
-    if (!(totalPaymentAmount && paymentDeadline)) {
-      setFeeError('납부 금액, 마감일을 모두 입력해주세요. ');
-    } else {
-      setFeeError(null);
-    }
-  };
 
   const onFinish = async (data: any) => {
     const values: EventCreateReq = {
@@ -87,26 +80,23 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
       {
         onSuccess: () => navigation.goBack(),
         onError: (error) => {
-          console.error('Error creating event:', error, error.message, error.name);
+          console.error('Error creating event:', error,
+            error.message, error.name);
         }
       }
     );
   };
 
   if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+    return <CustomLoader />
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.titleContainer}>
+    <View style={styles.container}>
+      <View style={styles.headerContainer}>
         <Text style={styles.titleText}>이벤트 생성을 도와드려요!!</Text>
       </View>
-      <View style={styles.formContainer}>
+      <View style={styles.bodyContainer}>
         <Provider>
           <ScrollView keyboardShouldPersistTaps="handled" style={styles.formScrollContrainer}>
             <Form
@@ -114,7 +104,6 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
               form={form}
               layout="vertical"
               onFinish={onFinish}
-              onFieldsChange={onFieldsChange}
               style={styles.form}
             >
               <Form.Item
@@ -144,9 +133,9 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
                   <ScrollView style={styles.checkboxSelectGroup}>
                     {data ? data.members.map(member => (
                       <Checkbox
-                        key={member.name}
-                        checked={selectedMembers.includes(member.name)}
-                        onChange={() => handleCheckboxChange(member.name)}
+                        key={member.memberId}
+                        checked={selectedMembers.includes(member.memberId)}
+                        onChange={() => handleCheckboxChange(member.memberId)}
                         style={styles.checkbox}
                       >
                         {member.name}
@@ -155,63 +144,77 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
                   </ScrollView>
                 </View>
               </Form.Item>
-              <View style={styles.gatherFeeInfoContainer}>
-                <Text style={styles.gatherFeeInfoTitle}>
-                  회비 설정
-                </Text>
-                <View style={styles.gatherFeeInfo}>
-                  <Form.Item
-                    label="납부 금액"
-                    name="totalPaymentAmount"
-                    style={styles.formItem}
-                  >
-                    <Input type="number" style={styles.input} />
-                  </Form.Item>
-                  <Form.Item
-                    label="납부 마감일"
-                    name="paymentDeadline"
-                    style={styles.formItem}
-                  >
-                    <DatePicker
-                      minDate={new Date(new Date().setDate(new Date().getDate()))}
-                      maxDate={new Date(new Date().getFullYear() + 10, new Date().getMonth(), new Date().getDate())}
-                      format="YYYY-MM-DD"
-                      okText="선택"
-                      dismissText="취소"
-                      locale={{
-                        DatePickerLocale: {
-                          year: '년',
-                          month: '월',
-                          day: '일',
-                          hour: '시',
-                          minute: '분',
-                          am: '오전',
-                          pm: '오후',
-                        },
-                      }}
+
+              {showGatherFeeInfo ? (
+                <View style={styles.getherFeeInfoContainer}>
+                  <View style={styles.gatherFeeInfoHeader}>
+                    <AntDesign
+                      name='close'
+                      onPress={() => setShowGatherFeeInfo(false)}
+                      style={styles.closeButton}
+                    />
+                  </View>
+                  <View style={styles.gatherFeeInfoForm}>
+                    <Form.Item
+                      label="납부 금액"
+                      name="totalPaymentAmount"
+                      rules={[{ required: true, message: '필수 항목입니다. ' }]}
+                      style={styles.formItem}
                     >
-                      {({ extra, value, toggle }: PickerRenderProps) => (
-                        <Input
-                          value={value?.length ? extra : undefined}
-                          onFocus={toggle}
-                          style={styles.input}
-                        />
-                      )}
-                    </DatePicker>
-                  </Form.Item>
+                      <Input type="number" style={styles.input} />
+                    </Form.Item>
+                    <Form.Item
+                      label="납부 마감일"
+                      name="paymentDeadline"
+                      rules={[{ required: true, message: '필수 항목입니다. ' }]}
+                      style={styles.formItem}
+                    >
+                      <DatePicker
+                        minDate={new Date(new Date().setDate(new Date().getDate()))}
+                        maxDate={new Date(new Date().getFullYear() + 10, new Date().getMonth(), new Date().getDate())}
+                        okText="선택"
+                        dismissText="취소"
+                        locale={{
+                          DatePickerLocale: {
+                            year: '년',
+                            month: '월',
+                            day: '일',
+                            hour: '시',
+                            minute: '분',
+                            am: '오전',
+                            pm: '오후',
+                          },
+                        }}
+                      >
+                        {({ extra, value, toggle }: PickerRenderProps) => (
+                          <Input
+                            value={value?.length ? extra : undefined}
+                            onFocus={toggle}
+                            style={styles.input}
+                          />
+                        )}
+                      </DatePicker>
+                    </Form.Item>
+                  </View>
                 </View>
-                  {feeError && <Text style={styles.errorText}>{feeError}</Text>}
-              </View>
-              <Form.Item>
-                <Button type="primary" onPress={form.submit} style={styles.submitButton}>
-                  이벤트 생성
-                </Button>
+              ) : (
+                <View style={styles.feeSettingButtonContainer}>
+                  <AntdWithStyleButton onPress={() => setShowGatherFeeInfo(true)}>
+                    회비 설정
+                  </AntdWithStyleButton>
+                </View>
+              )
+              }
+              <Form.Item style={styles.formItem}>
+                <AntdWithStyleButton onPress={form.submit}>
+                이벤트 생성
+                </AntdWithStyleButton>
               </Form.Item>
             </Form>
           </ScrollView>
         </Provider>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -220,16 +223,19 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 20,
   },
-  titleContainer: {
+  headerContainer: {
     flex: 0.2,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  formContainer: {
-    flex: 0.8,
+  titleText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  bodyContainer: {
     flexGrow: 0.8,
-    marginBottom: 40,
-    justifyContent: 'center',
+    marginBottom: 20,
   },
   formScrollContrainer: {
     borderColor: '#d9d9d9',
@@ -237,36 +243,26 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 12,
   },
-  titleText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-  },
   form: {
     paddingBottom: 50,
     backgroundColor: 'white',
   },
   formItem: {
     marginBottom: 10,
-    paddingHorizontal: 10,
     borderBottomWidth: 5,
     borderBottomColor: 'white',
+    paddingHorizontal: 0,
     position: 'relative',
     color: 'black',
   },
   input: {
-    backgroundColor: 'white',
-    width: '100%',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 5,
     borderColor: '#d9d9d9',
     borderWidth: 1,
-    marginBottom: 5,
-    color: 'black',
   },
   submitButton: {
-    width: '100%',
     marginTop: 20,
     borderRadius: 5,
   },
@@ -282,39 +278,29 @@ const styles = StyleSheet.create({
   checkboxSelectGroup: {
     height: 120,
   },
-  checkboxGroupLabel: {
-    marginBottom: 5,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
   checkbox: {
     marginVertical: 5,
   },
-  hiddenFormItem: {
-    display: 'none',
+  getherFeeInfoContainer: {
+    padding: 14.5
   },
-  hiddenInput: {
-    display: 'none',
+  gatherFeeInfoHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
-  gatherFeeInfoContainer: {
-    padding: 14,
-  },
-  gatherFeeInfoTitle: {
-    color: 'black',
-    fontSize: 18,
-  },
-  gatherFeeInfo: {
+  gatherFeeInfoForm: {
     borderRadius: 5,
     borderColor: '#d9d9d9',
     borderWidth: 1,
+    marginTop: 5,
   },
-  loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+  feeSettingButtonContainer: {
+    paddingHorizontal: 15.5,
   },
-  errorText: {
-    color: 'red',
-    marginBottom: 20,
+  closeButton: {
+    fontSize: 25,
+    color: 'rgba(153, 102, 255, 1)',
   },
 });
 
