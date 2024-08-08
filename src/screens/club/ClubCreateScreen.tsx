@@ -14,6 +14,7 @@ import { useMutateCreateClub } from '../../hooks/useClub';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubCreateReq } from '../../types/club/request/ClubCreateReq';
 import AntdWithStyleButton from '../../components/AntdWithStyleButton';
+import { bankList } from '../../constants/mockData';
 
 
 type ClubCreateScreenProps = StackScreenProps<
@@ -40,19 +41,13 @@ function ClubCreateScreen({ navigation }: ClubCreateScreenProps) {
 
   type PickerColumn = PickerColumnItem[];
 
-  const data: PickerColumn = [
-    {
-      label: '카카오뱅크',
-      value: '080',
-    },
-    {
-      label: '토스뱅크',
-      value: '090',
-    },
-  ];
+
+  const data: PickerColumn = bankList.map(bank => ({
+    label: bank.name,
+    value: bank.code,
+  }));
 
   const onFinish = async (values: ClubCreateReq) => {
-
     values.bankCode = values.bankCode[0];
 
     createClub.mutate(

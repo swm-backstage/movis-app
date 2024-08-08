@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'rgba(153, 102, 255, 1)', // 기본 색상
     borderColor: 'rgba(153, 102, 255, 1)', // 기본 테두리 색상
-    marginTop: 20,
     borderRadius: 5,
   },
   buttonActive: {
