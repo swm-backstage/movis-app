@@ -17,7 +17,7 @@ const ClubMemberCreateForm: React.FC = ({ }) => {
                     {...restField}
                     label="이름"
                     name={[name, 'name']}
-                    rules={[{ required: true, message: '이름을 입력해주세요.' }]}
+                    rules={[{ required: true, message: '필수 항목' }]}
                   >
                     <Input type="text" placeholder="이름" style={styles.input} />
                   </Form.Item>
@@ -27,9 +27,12 @@ const ClubMemberCreateForm: React.FC = ({ }) => {
                     {...restField}
                     label="전화번호"
                     name={[name, 'phoneNo']}
-                    rules={[{ required: true, message: '전화번호를 입력해주세요.' }]}
+                    rules={[
+                      { pattern: /^010-\d{4}-\d{4}$/, message: '전화번호 형식이 옳바르지 않습니다.' },
+                      { required: true, message: '필수 항목' }
+                    ]}
                   >
-                    <Input placeholder="전화번호" style={styles.input} />
+                    <Input placeholder="010-1234-5678" style={styles.input} />
                   </Form.Item>
                 </View>
                 <View style={styles.formBtn}>

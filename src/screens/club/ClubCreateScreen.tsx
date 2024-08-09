@@ -6,8 +6,8 @@ import {
   Provider,
 } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { ReactNode } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { ReactNode, useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { mainNavigations } from '../../constants/navigations';
 import { useMutateCreateClub } from '../../hooks/useClub';
@@ -40,7 +40,6 @@ function ClubCreateScreen({ navigation }: ClubCreateScreenProps) {
   }
 
   type PickerColumn = PickerColumnItem[];
-
 
   const data: PickerColumn = bankList.map(bank => ({
     label: bank.name,
@@ -94,7 +93,17 @@ function ClubCreateScreen({ navigation }: ClubCreateScreenProps) {
                 label="모임 소개"
                 name="description"
                 rules={[
-                  { pattern: /^.{1,200}$/, message: '200자 이하로 입력해주세요.' },
+                  { validator: (_, value) => {
+                    if(!value){
+                      return Promise.resolve();
+                    }
+                    const normalizedValue = value.replace(/(\r\n|\n|\r)/gm, '');
+                    if (normalizedValue.length > 200) {
+                      return Promise.reject('200자 이하로 입력해주세요.');
+                    }
+                    return Promise.resolve();
+                    }, 
+                  },
                   { required: true, message: '필수 항목입니다. ' }
                 ]}
                 style={styles.formItem}
@@ -113,7 +122,11 @@ function ClubCreateScreen({ navigation }: ClubCreateScreenProps) {
                 rules={[{ required: true, message: '필수 항목입니다. ' }]}
                 style={styles.formItem}
               >
-                <Input type="number" placeholder="현재 모임 장부의 잔액을 입력하세요." style={styles.input} />
+                <Input
+                  placeholder="현재 모임 장부의 잔액을 입력하세요."
+                  keyboardType="numeric"
+                  style={styles.input}
+                />
               </Form.Item>
               <Form.Item
                 label="은행"
@@ -145,7 +158,14 @@ function ClubCreateScreen({ navigation }: ClubCreateScreenProps) {
                 ]} validateDebounce={500}
                 style={styles.formItem}
               >
-                <Input type="number" placeholder="계좌번호 뒤 4자리를 입력해주세요." style={styles.input} />
+                <Input 
+                  type="number" 
+                  placeholder="계좌번호 뒤 4자리를 입력해주세요." 
+                  onChangeText={(text) => {
+                    form.setFieldsValue({ accountNumber: text.slice(0, 4) });
+                  }}
+                  style={styles.input} 
+                />
               </Form.Item>
               <Form.Item>
                 <AntdWithStyleButton onPress={form.submit}>
