@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack';
-import React from 'react';
-import { Dimensions, SafeAreaView, StyleSheet } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { BackHandler, Dimensions, SafeAreaView, StyleSheet } from 'react-native';
 import WebView from 'react-native-webview';
 import { mainNavigations } from '../../constants/navigations';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
@@ -13,16 +13,59 @@ type WebViewScreenProps = StackScreenProps<
   typeof mainNavigations.WEBVIEW
 >;
 
-function WebViewScreen({ route, navigation }: WebViewScreenProps) {
-
+function WebViewScreen({ route }: WebViewScreenProps) {
   const { clubId } = route.params;
+  const webViewRef = useRef();
+  const [isCanGoBack, setIsCanGoBack] = useState(false);
+
+  const onPressHardwareBackButton = () => {
+    if (webViewRef.current && isCanGoBack) {
+      webViewRef.current.goBack();
+      return true;
+    } 
+    else {
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', onPressHardwareBackButton);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', onPressHardwareBackButton);
+    }
+  }, [isCanGoBack]);
 
   return (
     <SafeAreaView style={styles.container}>
       <WebView
-        style={styles.webview}
+        ref={webViewRef}
         // source={{ uri: `https://movis.klr.kr/clubs/${clubId}` }}
         source={{ uri: `https://movis.klr.kr` }}
+        onLoadStart={() => webViewRef.current.injectJavaScript(`
+          (function() {
+            function wrap(fn) {
+              return function wrapper() {
+                var res = fn.apply(this, arguments);
+                window.ReactNativeWebView.postMessage('navigationStateChange');
+                return res;
+              }
+            }
+      
+            history.pushState = wrap(history.pushState);
+            history.replaceState = wrap(history.replaceState);
+            window.addEventListener('popstate', function() {
+              window.ReactNativeWebView.postMessage('navigationStateChange');
+            });
+          })();
+      
+          true;
+        `)}
+        onMessage={({ nativeEvent: state }) => {
+          if (state.data === 'navigationStateChange') {
+            setIsCanGoBack(state.canGoBack);
+          }
+        }}
+        style={styles.webview}
       />
     </SafeAreaView>
   );
@@ -32,8 +75,6 @@ function WebViewScreen({ route, navigation }: WebViewScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
   },
   webview: {
     flex: 1,
