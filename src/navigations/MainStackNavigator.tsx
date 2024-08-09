@@ -47,7 +47,6 @@ function MainStackNavigator() {
         component={ClubListScreen}
         options={{
           headerShown: false,
-          // headerTitle: '모임 리스트 조회',
         }}
       />
       <Stack.Screen
@@ -75,7 +74,7 @@ function MainStackNavigator() {
         name={mainNavigations.WEBVIEW}
         component={WebViewScreen}
         options={{
-          headerTitle: '',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
