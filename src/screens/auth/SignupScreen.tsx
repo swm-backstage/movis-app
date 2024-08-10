@@ -78,6 +78,7 @@ function SignupScreen({ navigation }: AuthHomeScreenProps) {
       identifier: values.identifier,
       password: values.password,
     }
+    console.log('start')
     if(values.password === values.passwordConfirm){
       signupMutation.mutate(signupBody, {
         onSuccess: () => {
@@ -236,12 +237,14 @@ const styles = StyleSheet.create({
     width: 210,
     height: 39,
     paddingHorizontal: 15,
+    color: '#000'
   },
   largeInput: {
     borderRadius: 5,
     width: 300,
     height: 39,
     paddingHorizontal: 15,
+    color: '#000'
   },
   smallInput: {
     borderRadius: 5,

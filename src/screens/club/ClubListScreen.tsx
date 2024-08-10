@@ -106,6 +106,9 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
           </TouchableOpacity>
         )) : undefined}
       </ScrollView>
+      <View>
+        <Button type='primary' onPress={()=>navigation.navigate(mainNavigations.NOTIFICATION)}></Button>
+      </View>
       <View style={styles.buttonContainer}>
         <Button
           type="primary"
