@@ -10,6 +10,7 @@ import { ClubGetRes } from '../types/club/response/ClubGetRes';
 import ClubCreateScreen from '../screens/club/ClubCreateScreen';
 import EventCreateScreen from '../screens/event/EventCreateScreen';
 import WebViewScreen from '../screens/webview/WebViewScreen';
+import NotificiationTest from '../screens/NotificiationTest';
 
 
 
@@ -21,6 +22,7 @@ export type MainStackParamList = {
   [mainNavigations.EVENT_CREATE]: { clubId: string };
 
   [mainNavigations.WEBVIEW]: { clubId: string };
+  [mainNavigations.NOTIFICATION]: undefined,
 }
 
 const Stack = createStackNavigator<MainStackParamList>();
@@ -76,6 +78,12 @@ function MainStackNavigator() {
         options={{
           headerShown: false,
         }}
+      />
+      <Stack.Screen name={mainNavigations.NOTIFICATION}
+      component={NotificiationTest}
+      options={{
+        headerTitle:'',
+      }}
       />
     </Stack.Navigator>
   )

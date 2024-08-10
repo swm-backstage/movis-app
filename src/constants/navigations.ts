@@ -6,6 +6,7 @@ const mainNavigations = {
   EVENT_CREATE: 'eventCreate',
 
   WEBVIEW: 'webview',
+  NOTIFICATION: 'notification'
 } as const;
 
 export { mainNavigations };

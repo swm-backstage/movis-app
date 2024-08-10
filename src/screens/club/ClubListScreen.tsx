@@ -103,6 +103,9 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
           </TouchableOpacity>
         )) : undefined}
       </ScrollView>
+      <View>
+        <Button type='primary' onPress={()=>navigation.navigate(mainNavigations.NOTIFICATION)}></Button>
+      </View>
       <View style={styles.buttonContainer}>
         <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.CLUB_CREATE)}>
           <AntDesign name="plus" style={styles.submitButtonIcon} />

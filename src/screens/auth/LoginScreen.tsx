@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height:39,
     paddingHorizontal: 15,
+    color: '#000'
   },
   greenButton: {
     backgroundColor: '#00B894',
