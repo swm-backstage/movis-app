@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
   },
   bankCode: {
     fontSize: 12,
+    color: 'black',
   },
   accountNumber: {
     fontSize: 16,

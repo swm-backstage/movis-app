@@ -45,9 +45,11 @@ const styles = StyleSheet.create({
   },
   memberName: {
     fontSize: 18,
+    color: 'black',
   },
   memberPhoneNo: {
     fontSize: 14,
+    color: 'black',
   },
 });
 
