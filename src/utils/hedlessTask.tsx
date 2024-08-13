@@ -52,6 +52,7 @@ const headlessNotificationListener = async ({ notification }: any) => {
 
     if (notification) {
         const noti = JSON.parse(notification);
+        console.log(noti)
         if (noti.title !== "" && noti.bigText !== '') {
             
             const { name, accountNumber, cash, time, billType } = parseNotification(noti);

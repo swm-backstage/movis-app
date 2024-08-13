@@ -26,9 +26,12 @@ function parseNotification(notification: any) {
         };
     }
     else{
+        console.log(bigText)
         const name = bigText.toString().split(' ').pop();
-        const accountNumberMatch = bigText.match(/\b\d{4}\b/);
-        const accountNumber = accountNumberMatch ? accountNumberMatch[1] : '';
+        const accountNumberMatch = bigText.match(/\d+/);
+        const accountNumber = accountNumberMatch ? accountNumberMatch[0] : '';
+
+        
         console.log("witdraw: ", name, accountNumber, cash, time)
         return {
             name,
