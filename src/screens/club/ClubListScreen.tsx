@@ -51,9 +51,9 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.userName}>
+        {/* <Text style={styles.userName}>
           백진암
-        </Text>
+        </Text> */}
         <Icon
           name="alert"
           style={styles.alerIcon}
@@ -149,12 +149,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'black',
   },
-  logoutIcon: {
+  alerIcon:{
     fontSize: 30,
     color: 'rgba(153, 102, 255, 1)',
   },
-  alerIcon:{
-    marginLeft: 210,
+  logoutIcon: {
     fontSize: 30,
     color: 'rgba(153, 102, 255, 1)',
   },
