@@ -1,8 +1,8 @@
 import { Button, Icon } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import CustomLoader from '../../components/Loader';
 import { mainNavigations } from '../../constants/navigations';
@@ -11,6 +11,8 @@ import { useGetClubList } from '../../hooks/useClub';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
 import AntdWithStyleButton from '../../components/AntdWithStyleButton';
+import queryClient from '../../api/queryClient';
+import { queryKeys } from '../../constants/key';
 
 
 type ClubHomeScreenProps = StackScreenProps<
@@ -21,6 +23,8 @@ type ClubHomeScreenProps = StackScreenProps<
 function ClubListScreen({ navigation }: ClubHomeScreenProps) {
   const { data: data, isLoading, isError } = useGetClubList();
   const { logoutMutation } = useAuth();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
 
   const handlePressClubDetailScreen = (club: ClubGetRes) => {
     navigation.navigate(mainNavigations.CLUB_DETAIL, { club });
@@ -42,6 +46,20 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
       ],
       { cancelable: false }
     );
+  };
+
+
+  const handleRefresh = async () => {
+    try {
+      setIsRefreshing(true);
+      await queryClient.invalidateQueries({
+        queryKey: [queryKeys.CLUB, queryKeys.GET_CLUBLIST],
+      });
+    } catch (error) {
+      console.error('Error refreshing club list:', error);
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   if (isLoading) {
@@ -69,7 +87,14 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
           }}
         />
       </View>
-      <ScrollView style={styles.clubListContainer}>
+      <ScrollView 
+        style={styles.clubListContainer}
+        refreshControl={
+          <RefreshControl 
+            refreshing={isRefreshing} 
+            onRefresh={handleRefresh}
+          />}
+      >
         {data ? data.clubGetListDto.map((club: ClubGetRes) => (
           <TouchableOpacity key={club.clubId} onPress={() => navigation.navigate(mainNavigations.WEBVIEW, { clubId: club.clubId })}>
             <View style={styles.clubContainer}>
@@ -110,9 +135,6 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
           </TouchableOpacity>
         )) : undefined}
       </ScrollView>
-      {/* <View>
-        <Button type='primary' onPress={()=>navigation.navigate(mainNavigations.NOTIFICATION)}></Button>
-      </View> */}
       <View style={styles.buttonContainer}>
         <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.CLUB_CREATE)}>
           <AntDesign name="plus" style={styles.submitButtonIcon} />
