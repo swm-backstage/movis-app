@@ -5,6 +5,7 @@ import { removeEncryptStorage, setEncryptStorage } from "../utils/encryptStorage
 import { removeHeader, setHeader } from "../utils/header";
 import { useEffect } from "react";
 import queryClient from '../api/queryClient';
+import { useNavigation } from "@react-navigation/native";
 
 
 
@@ -59,18 +60,24 @@ function useGetRefreshToken(){
 }
 
 function useLogout(mutationOptions?: UseMutationCustomOptions){
+    const navigation = useNavigation();
+
     return useMutation({
         mutationFn: logout,
         onSuccess:()=>{
             removeHeader('Authorization');
             removeEncryptStorage('refreshToken');
+            
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+            });
         },
         onSettled:()=>{
             queryClient.invalidateQueries({queryKey:['auth']})
         },
         ...mutationOptions
     });
-
 }
 
 function useAuth(){
