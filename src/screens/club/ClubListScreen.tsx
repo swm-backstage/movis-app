@@ -1,4 +1,4 @@
-import { Button } from '@ant-design/react-native';
+import { Button, Icon } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -54,6 +54,13 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
         <Text style={styles.userName}>
           백진암
         </Text>
+        <Icon
+          name="alert"
+          style={styles.alerIcon}
+          onPress={() => {
+            navigation.navigate(mainNavigations.NOTIFICATION);
+          }}
+        />
         <AntDesign
           name="logout"
           style={styles.logoutIcon}
@@ -103,9 +110,9 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
           </TouchableOpacity>
         )) : undefined}
       </ScrollView>
-      <View>
+      {/* <View>
         <Button type='primary' onPress={()=>navigation.navigate(mainNavigations.NOTIFICATION)}></Button>
-      </View>
+      </View> */}
       <View style={styles.buttonContainer}>
         <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.CLUB_CREATE)}>
           <AntDesign name="plus" style={styles.submitButtonIcon} />
@@ -143,6 +150,11 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   logoutIcon: {
+    fontSize: 30,
+    color: 'rgba(153, 102, 255, 1)',
+  },
+  alerIcon:{
+    marginLeft: 210,
     fontSize: 30,
     color: 'rgba(153, 102, 255, 1)',
   },
