@@ -9,6 +9,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import HeaderTitle from '../../components/HeaderTitle';
 import useAuth from '../../hooks/useAuth';
 import { RequestLogin } from '../../api/auth';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 type AuthHomeScreenProps = StackScreenProps<AuthStackParamList>;
 
@@ -40,7 +41,7 @@ function LoginScreen({navigation} : AuthHomeScreenProps) {
 
   return (
     <LinearGradient
-      colors={['#0077B6', '#00B894']}
+      colors={['#9369E0', '#D9CCFF']}
       style={styles.gradient}
     >
       <SafeAreaView style={styles.container}>
@@ -61,15 +62,16 @@ function LoginScreen({navigation} : AuthHomeScreenProps) {
         </View>
 
         <View style={styles.buttonContainer}>
-          <Button style={styles.greenButton} activeStyle={{backgroundColor:'#66CDAA'}} onPress={()=>handleSubmit()}>
+          <Button style={styles.greenButton} activeStyle={{backgroundColor:'#B799FF'}} onPress={()=>handleSubmit()}>
             <Text style={styles.textColorWhite}>로그인</Text>
           </Button>
 
           <Button style={styles.grayButton} onPress={() =>navigation.navigate('Signup')}>
             <Text style={styles.textColorBlack}>회원가입</Text>
           </Button>
+          
         </View>
-        <View style={styles.lineContainer}>
+        {/* <View style={styles.lineContainer}>
           <View style={styles.line} />
           <Text style={styles.text}>또는</Text>
           <View style={styles.line} />
@@ -79,7 +81,7 @@ function LoginScreen({navigation} : AuthHomeScreenProps) {
           <Button style={styles.grayButton} onPress={()=> navigation.navigate('Guest')}>
             <Text style={styles.textColorBlack}>게스트 로그인</Text>
           </Button>
-        </View>
+        </View> */}
 
       </SafeAreaView>
     </LinearGradient >
@@ -134,9 +136,10 @@ const styles = StyleSheet.create({
     color: '#000'
   },
   greenButton: {
-    backgroundColor: '#00B894',
+    backgroundColor: '#9966FF',
     borderRadius: 5,
-    borderColor: '#00B894'
+    borderColor: '#9966FF',
+    borderWidth: 0,
   },
   grayButton:{
     backgroundColor: '#E8E8E8',

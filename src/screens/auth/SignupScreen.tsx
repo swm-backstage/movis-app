@@ -3,7 +3,7 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HeaderTitle from '../../components/HeaderTitle';
-import { TextInput } from 'react-native-gesture-handler';
+import { TextInput } from 'react-native';
 import useAuth from '../../hooks/useAuth';
 import { RequestCreateUser, RequestLogin } from '../../api/auth';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -107,7 +107,7 @@ function SignupScreen({ navigation }: AuthHomeScreenProps) {
 
   return (
     <LinearGradient
-      colors={['#0077B6', '#00B894']}
+      colors={['#9369E0', '#D9CCFF']}
       style={styles.gradient}
     >
       <SafeAreaView style={styles.container}>
@@ -119,7 +119,7 @@ function SignupScreen({ navigation }: AuthHomeScreenProps) {
 
         <View>
           <View style={styles.inputWithButtonLargeContainer}>
-            <TextInput style={styles.inputWithButton} placeholder='아이디'
+            <TextInput style={styles.inputWithButton} placeholder='아이디' placeholderTextColor={'#B0B0B0'}
               value={values.identifier}
               onChangeText={(text) => handleChangeText('identifier', text)}
             ></TextInput>
@@ -133,7 +133,7 @@ function SignupScreen({ navigation }: AuthHomeScreenProps) {
 
 
           <View style={[styles.inputContainer, { marginTop: 2.5 }]}>
-            <TextInput style={styles.largeInput} placeholder='비밀번호'
+            <TextInput style={styles.largeInput} placeholder='비밀번호' placeholderTextColor={'#B0B0B0'}
               value={values.password}
               onChangeText={(text) => handleChangeText('password', text)}
               secureTextEntry></TextInput>
@@ -141,14 +141,14 @@ function SignupScreen({ navigation }: AuthHomeScreenProps) {
           {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
 
           <View style={styles.inputContainer}>
-            <TextInput style={styles.largeInput} placeholder='비밀번호 확인'
+            <TextInput style={styles.largeInput} placeholder='비밀번호 확인' placeholderTextColor={'#B0B0B0'}
               value={values.passwordConfirm}
               onChangeText={(text) => handleChangeText('passwordConfirm', text)}
               secureTextEntry></TextInput>
           </View>
 
           <View style={[styles.inputWithButtonLargeContainer, { marginTop: 5 }]}>
-            <TextInput style={styles.inputWithButton} placeholder='전화번호'
+            <TextInput style={styles.inputWithButton} placeholder='전화번호' placeholderTextColor={'#B0B0B0'}
               value={values.phone}
               onChangeText={(text) => handleChangeText('phone', text)}
             ></TextInput>
@@ -159,14 +159,14 @@ function SignupScreen({ navigation }: AuthHomeScreenProps) {
           {errors.phone ? <Text style={styles.errorText}>{errors.phone}</Text> : null}
 
           <View style={[styles.inputWithButtonSmallContainer, { marginTop: 2.5, marginBottom: 10, alignSelf: 'flex-end' }]}>
-            <TextInput style={styles.smallInput} placeholder="인증코드" />
+            <TextInput style={styles.smallInput} placeholder="인증코드" placeholderTextColor={'#fff'} />
             <TouchableOpacity activeOpacity={0.7} style={styles.smallButton}>
               <Text style={styles.text}>확인</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.inputContainer}>
-            <TextInput style={styles.largeInput} placeholder='이름'
+            <TextInput style={styles.largeInput} placeholder='이름' placeholderTextColor={'#B0B0B0'}
               value={values.name}
               onChangeText={(text) => handleChangeText('name', text)}></TextInput>
           </View>
@@ -254,14 +254,14 @@ const styles = StyleSheet.create({
   },
   largeButton: {
     margin: 6,
-    backgroundColor: '#00B894',
+    backgroundColor: '#9966FF',
     borderRadius: 5,
     width: 72,
     height: 29,
   },
   smallButton: {
     margin: 5,
-    backgroundColor: '#00B894',
+    backgroundColor: '#9966FF',
     borderRadius: 5,
     width: 46,
     height: 29,
