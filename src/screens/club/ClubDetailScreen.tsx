@@ -127,9 +127,9 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
               계좌번호(뒤 4자리){club.accountNumber}
             </Text>
           </View>
-          <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: club.clubId })}>
+          {/* <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: club.clubId })}>
             이벤트 생성(테스트)
-          </AntdWithStyleButton>
+          </AntdWithStyleButton> */}
         </View>
       </ScrollView>
     </SafeAreaView>
