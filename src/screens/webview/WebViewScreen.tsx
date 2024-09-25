@@ -4,6 +4,8 @@ import { BackHandler, Dimensions, SafeAreaView, StyleSheet } from 'react-native'
 import WebView, { WebViewMessageEvent } from 'react-native-webview';
 import { mainNavigations } from '../../constants/navigations';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
+import { getHeader } from "../../utils/header";
+
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -61,10 +63,12 @@ function WebViewScreen({ route, navigation }: WebViewScreenProps) {
     }
   };
   const onLoad = () => {
+    console.log(getHeader('Authorization'));
     if (webViewRef.current) {
       webViewRef.current.injectJavaScript(injectedJavascript);
       webViewRef.current.postMessage(JSON.stringify({
         isChongmu: true,
+        accessToken: getHeader('Authorization')
       }));
     }
   }
