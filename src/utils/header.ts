@@ -4,6 +4,10 @@ function setHeader(key: string, value :string){
     axiosHost.defaults.headers.common[key]=value;
 }
 
+function getHeader(key: string) {
+    return axiosHost.defaults.headers.common[key];
+}
+
 function removeHeader(key:string){
     if(!axiosHost.defaults.headers.common[key]){
         return
@@ -11,4 +15,4 @@ function removeHeader(key:string){
     delete axiosHost.defaults.headers.common[key];
 }
 
-export{setHeader, removeHeader}
+export{setHeader, getHeader, removeHeader}
