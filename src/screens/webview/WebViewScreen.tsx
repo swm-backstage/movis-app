@@ -63,12 +63,12 @@ function WebViewScreen({ route, navigation }: WebViewScreenProps) {
     }
   };
   const onLoad = () => {
-    console.log(getHeader('Authorization'));
     if (webViewRef.current) {
+      console.log(getHeader('Authorization').split(' ')[1]);
       webViewRef.current.injectJavaScript(injectedJavascript);
       webViewRef.current.postMessage(JSON.stringify({
         isChongmu: true,
-        accessToken: getHeader('Authorization')
+        accessToken: getHeader('Authorization').split(' ')[1]
       }));
     }
   }
