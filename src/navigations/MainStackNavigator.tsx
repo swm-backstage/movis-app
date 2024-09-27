@@ -11,6 +11,7 @@ import ClubCreateScreen from '../screens/club/ClubCreateScreen';
 import EventCreateScreen from '../screens/event/EventCreateScreen';
 import WebViewScreen from '../screens/webview/WebViewScreen';
 import NotificiationTest from '../screens/NotificiationTest';
+import TransactionHistoryCreateScreen from '../screens/transactionHistory/TransactionHistoryCreateScreen';
 
 
 
@@ -20,6 +21,8 @@ export type MainStackParamList = {
   [mainNavigations.CLUB_CREATE]: undefined;
 
   [mainNavigations.EVENT_CREATE]: { clubId: string };
+
+  [mainNavigations.TRANSACTIONHISTORY_CREATE]: { clubId: string, eventId: string};
 
   [mainNavigations.WEBVIEW]: { clubId: string };
   [mainNavigations.NOTIFICATION]: undefined,
@@ -68,6 +71,13 @@ function MainStackNavigator() {
       <Stack.Screen
         name={mainNavigations.EVENT_CREATE}
         component={EventCreateScreen}
+        options={{
+          headerTitle: '',
+        }}
+      />
+      <Stack.Screen
+        name={mainNavigations.TRANSACTIONHISTORY_CREATE}
+        component={TransactionHistoryCreateScreen}
         options={{
           headerTitle: '',
         }}
