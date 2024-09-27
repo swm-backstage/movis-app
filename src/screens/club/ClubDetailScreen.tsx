@@ -130,6 +130,9 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
           {/* <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: club.clubId })}>
             이벤트 생성(테스트)
           </AntdWithStyleButton> */}
+          <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.TRANSACTIONHISTORY_CREATE, { clubId: club.clubId, eventId: 'hi' })}>
+            거래내역 생성
+          </AntdWithStyleButton>
         </View>
       </ScrollView>
     </SafeAreaView>

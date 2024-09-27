@@ -5,6 +5,8 @@ const mainNavigations = {
 
   EVENT_CREATE: 'eventCreate',
 
+  TRANSACTIONHISTORY_CREATE: 'transacntionHistoryCreate',
+
   WEBVIEW: 'webview',
   NOTIFICATION: 'notification'
 } as const;
