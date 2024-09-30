@@ -5,6 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import AntdWithStyleButton from './AntdWithStyleButton';
 import { MemberGetListRes } from '../types/member/response/MemberGetListRes';
+import DateTimePickerWithAntdDInput from './DateTimePickerWithAntDInput';
 
 interface TransactionHistoryDepositCreateProps {
   clubId: string;
@@ -26,20 +27,10 @@ const TransactionHistoryDepositCreate: React.FC<TransactionHistoryDepositCreateP
     console.log('API를 연결하세요. ');
   }
 
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date: Date) => {
-    const isoDateString = date.toISOString();
-    setSelectedDate(isoDateString);
-    hideDatePicker();
-    form.setFieldsValue({ paidAt: isoDateString });
-  };
+  const setFormFieldsValue = (data: string) => {
+    console.log(data);
+    form.setFieldsValue({paidAt: data});
+  }
 
   return (
     <Provider>
@@ -87,25 +78,7 @@ const TransactionHistoryDepositCreate: React.FC<TransactionHistoryDepositCreateP
           rules={[{ required: true, message: '필수 항목입니다.' }]}
           style={styles.formItem}
         >
-          <View>
-            <TouchableOpacity onPress={showDatePicker}>
-              <Input
-                value={selectedDate ? new Date(selectedDate).toLocaleString('ko-KR') : ''}
-                placeholder="날짜를 선택하세요"
-                style={styles.input}
-                editable={false}
-              />
-            </TouchableOpacity>
-            <DateTimePicker
-              isVisible={isDatePickerVisible}
-              mode="datetime"
-              onConfirm={handleConfirm}
-              onCancel={hideDatePicker}
-              date={selectedDate ? new Date(selectedDate) : new Date()}
-              maximumDate={new Date()}
-              locale="ko-KR"
-            />
-          </View>
+          <DateTimePickerWithAntdDInput setFormFieldsValue={setFormFieldsValue} />
         </Form.Item>
         <Form.Item
           label="상세 내역"

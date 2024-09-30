@@ -3,6 +3,8 @@ import { StyleSheet, Image } from "react-native";
 import { DatePicker, Form, Input, Provider, View } from "@ant-design/react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import AntdWithStyleButton from "./AntdWithStyleButton";
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 
 interface TransactionHistoryWithdrawCreateProps {
   clubId: string,
@@ -14,6 +16,8 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
 }) => {
   const [form] = Form.useForm();
   const [imageUri, setImageUri] = useState<string | undefined>(undefined);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const showPicker = () => {
     launchImageLibrary({}, (res) => {
@@ -34,6 +38,20 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
       }
     })
   }
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+  const handleConfirm = (date: Date) => {
+    const isoDateString = date.toISOString();
+    setSelectedDate(isoDateString);
+    hideDatePicker();
+    form.setFieldsValue({ paidAt: isoDateString });
+  };
 
   return (
     <Provider>
@@ -77,30 +95,25 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
           rules={[{ required: true, message: '필수 항목입니다.' }]}
           style={styles.formItem}
         >
-          <DatePicker
-            maxDate={new Date()}
-            okText="선택"
-            dismissText="취소"
-            picker
-            format="YYYY-MM-DD"
-            locale={{
-              DatePickerLocale: {
-                year: '년',
-                month: '월',
-                day: '일',
-                hour: '시',
-                minute: '분',
-              },
-            }}
-          >
-            {({ extra, value, toggle }) => (
+          <View>
+            <TouchableOpacity onPress={showDatePicker}>
               <Input
-                value={value?.length ? extra : undefined}
-                onFocus={toggle}
+                value={selectedDate ? new Date(selectedDate).toLocaleString('ko-KR') : ''}
+                placeholder="날짜를 선택하세요"
                 style={styles.input}
+                editable={false}
               />
-            )}
-          </DatePicker>
+            </TouchableOpacity>
+            <DateTimePicker
+              isVisible={isDatePickerVisible}
+              mode="datetime"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+              date={selectedDate ? new Date(selectedDate) : new Date()}
+              maximumDate={new Date()}
+              locale="ko-KR"
+            />
+          </View>
         </Form.Item>
         <Form.Item
           label="상세 내역"
