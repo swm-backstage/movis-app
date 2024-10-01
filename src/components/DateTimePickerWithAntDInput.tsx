@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   inputWrapper: {
-    backgroundColor: 'red',
     justifyContent: 'center',
     height: '100%',
   },

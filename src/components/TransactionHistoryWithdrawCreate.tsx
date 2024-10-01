@@ -5,19 +5,51 @@ import { launchImageLibrary } from "react-native-image-picker";
 import AntdWithStyleButton from "./AntdWithStyleButton";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import { useMutateCreateEventBill } from '../hooks/useEventBill';
+import { EventBillCreateReq } from '../types/eventBill/request/EventBillCreateReq';
+import DateTimePickerWithAntdDInput from './DateTimePickerWithAntDInput';
 
 interface TransactionHistoryWithdrawCreateProps {
   clubId: string,
   eventId: string,
+  navigateGoBack: () => void,
 }
 
 const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreateProps> = ({
-  clubId, eventId
+  clubId, 
+  eventId,
+  navigateGoBack,
 }) => {
   const [form] = Form.useForm();
-  const [imageUri, setImageUri] = useState<string | undefined>(undefined);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const createEventBill = useMutateCreateEventBill();
+
+  const onFinish = (data: any) => {
+    const values: EventBillCreateReq = {
+      image: form.getFieldValue("image"),
+      paidAmount: form.getFieldValue("paidAmount"),
+      paidAt: form.getFieldValue("paidAt"),
+      name: form.getFieldValue("name"),
+      explanation: form.getFieldValue("explanation"),
+    };
+    const queryParams = {
+      eventId: eventId,
+    }
+    console.log(values);
+    createEventBill.mutate(
+      { body: values, queryParams },
+      {
+        onSuccess: navigateGoBack,
+        onError: (error) => {
+          console.error('Error creating fee:', error,
+            error.message, error.name, error.response?.data);
+        }
+      }
+    );
+  }
+
+  const setFormFieldsValue = (data: string) => {
+    form.setFieldsValue({paidAt: data});
+  }
 
   const showPicker = () => {
     launchImageLibrary({}, (res) => {
@@ -34,24 +66,10 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
           name: selectedImage.fileName,
         });
         console.log(res);
-        setImageUri(selectedImage.uri);
+        form.setFieldsValue({image: selectedImage.uri});
       }
     })
   }
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-  const handleConfirm = (date: Date) => {
-    const isoDateString = date.toISOString();
-    setSelectedDate(isoDateString);
-    hideDatePicker();
-    form.setFieldsValue({ paidAt: isoDateString });
-  };
 
   return (
     <Provider>
@@ -59,28 +77,31 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
         name="event"
         form={form}
         layout="vertical"
+        onFinish={onFinish}
         style={styles.form}
       >
         <Form.Item
           label="영수증 이미지"
-          name="checkedMemberList"
+          name="image"
           style={styles.formItem}
         > 
-          <View style={styles.uploadedImageContainer}>
-            {imageUri && (
-              <Image
-                source={{ uri: imageUri }}
-                style={styles.uploadedImage}
-              />
-            )}
+          <View>
+            <View style={styles.uploadedImageContainer}>
+              {form.getFieldValue("image") && (
+                <Image
+                  source={{ uri: form.getFieldValue("image") }}
+                  style={styles.uploadedImage}
+                />
+              )}
+            </View>
+            <AntdWithStyleButton onPress={showPicker}>
+              추가하기
+            </AntdWithStyleButton>
           </View>
-          <AntdWithStyleButton onPress={showPicker}>
-            추가하기
-          </AntdWithStyleButton>
         </Form.Item>
         <Form.Item
           label="금액"
-          name="eventName"
+          name="paidAmount"
           rules={[
             { pattern: /^.{2,30}$/, message: '필수 항목입니다. ' },
             { required: true, message: '필수 항목입니다.' },
@@ -91,33 +112,26 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
         </Form.Item>
         <Form.Item
           label="날짜"
-          name="paymentDeadline"
+          name="paidAt"
           rules={[{ required: true, message: '필수 항목입니다.' }]}
           style={styles.formItem}
         >
-          <View>
-            <TouchableOpacity onPress={showDatePicker}>
-              <Input
-                value={selectedDate ? new Date(selectedDate).toLocaleString('ko-KR') : ''}
-                placeholder="날짜를 선택하세요"
-                style={styles.input}
-                editable={false}
-              />
-            </TouchableOpacity>
-            <DateTimePicker
-              isVisible={isDatePickerVisible}
-              mode="datetime"
-              onConfirm={handleConfirm}
-              onCancel={hideDatePicker}
-              date={selectedDate ? new Date(selectedDate) : new Date()}
-              maximumDate={new Date()}
-              locale="ko-KR"
-            />
-          </View>
+          <DateTimePickerWithAntdDInput setFormFieldsValue={setFormFieldsValue} />
+        </Form.Item>
+        <Form.Item
+          label="내역 이름"
+          name="name"
+          rules={[
+            { pattern: /^.{0,30}$/, message: '30글자 이하로 입력해주세요.' },
+            { required: true, message: '필수 항목입니다.' },
+          ]}
+          style={styles.formItem}
+        >
+          <Input type="text" placeholder="30글자 이하" style={styles.input} />
         </Form.Item>
         <Form.Item
           label="상세 내역"
-          name="eventName"
+          name="explanation"
           rules={[
             { pattern: /^.{0,30}$/, message: '300글자 이하로 입력해주세요.' },
             { required: true, message: '필수 항목입니다.' },
@@ -127,8 +141,8 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
           <Input type="text" placeholder="300글자 이하" style={styles.input} />
         </Form.Item>
         <Form.Item style={styles.formItem}>
-          <AntdWithStyleButton onPress={form.submit}>
-            추가하기
+          <AntdWithStyleButton onPress={() => {form.submit();}}>
+              추가하기
           </AntdWithStyleButton>
         </Form.Item>
       </Form>

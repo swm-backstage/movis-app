@@ -11,7 +11,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import TransactionHistoryDepositCreate from '../../components/TransactionHistoryDepositCreate';
 import TransactionHistoryWithdrawCreate from '../../components/TransactionHistoryWithdrawCreate';
 import { mainNavigations } from '../../constants/navigations';
-import { useGetMemberList } from '../../hooks/useMember';
+import { useGetEventMemberList } from '../../hooks/useEventMember';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 
 type TransactionHistoryCreateScreenProps = StackScreenProps<
@@ -22,11 +22,15 @@ type TransactionHistoryCreateScreenProps = StackScreenProps<
 const TransactionHistoryCreateScreen = ({ route, navigation }: TransactionHistoryCreateScreenProps) => {
   const [isDepositView, setIsDepositView] = useState(true);
   const { clubId, eventId } = route.params;
-  const { data: memberGetListRes, isLoading, isError } = useGetMemberList(clubId);
+  const { data: eventMemberGetListRes, isLoading, isError } = useGetEventMemberList(eventId);
 
   const handleDepositViewToggle = () => {
     setIsDepositView(!isDepositView);
   };
+
+  const navigateGoBack = () => {
+    navigation.goBack();
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -53,12 +57,14 @@ const TransactionHistoryCreateScreen = ({ route, navigation }: TransactionHistor
           <TransactionHistoryDepositCreate 
             clubId={clubId}
             eventId={eventId}
-            memberGetListRes={memberGetListRes}
+            eventMemberGetListRes={eventMemberGetListRes}
+            navigateGoBack={navigateGoBack}
           />
           ) : (
           <TransactionHistoryWithdrawCreate
             clubId={clubId}
             eventId={eventId}
+            navigateGoBack={navigateGoBack}
           />    
           )}
       </ScrollView>

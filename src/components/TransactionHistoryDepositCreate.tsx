@@ -6,29 +6,57 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import AntdWithStyleButton from './AntdWithStyleButton';
 import { MemberGetListRes } from '../types/member/response/MemberGetListRes';
 import DateTimePickerWithAntdDInput from './DateTimePickerWithAntDInput';
+import { createFee } from '../api/fee';
+import { useMutateCreateFee } from '../hooks/useFee';
+import { FeeCreateReq } from '../types/fee/request/feeCreateReq';
+import { EventMemberGetListRes } from '../types/eventMember/response/EventMemberGetListRes';
 
 interface TransactionHistoryDepositCreateProps {
   clubId: string;
   eventId: string;
-  memberGetListRes: MemberGetListRes | undefined;
+  eventMemberGetListRes: EventMemberGetListRes | undefined;
+  navigateGoBack: () => void;
 }
 
 const TransactionHistoryDepositCreate: React.FC<TransactionHistoryDepositCreateProps> = ({
   clubId,
   eventId,
-  memberGetListRes,
+  eventMemberGetListRes,
+  navigateGoBack,
 }) => {
   const [form] = Form.useForm();
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const createFee = useMutateCreateFee();
+
+  console.log(clubId, eventId);
+  console.log(eventMemberGetListRes);
 
   const onFinish = (data: any) => {
-    // TODO: API연결
-    console.log('API를 연결하세요. ');
+    const values: FeeCreateReq = {
+      eventMemberId: form.getFieldValue("eventMemberId"),
+      paidAmount: form.getFieldValue("paidAmount"),
+      paidAt: form.getFieldValue("paidAt"),
+      name: form.getFieldValue("name"),
+      explanation: form.getFieldValue("explanation"),
+    };
+    const queryParams = {
+      eventId: eventId,
+    }
+
+    createFee.mutate(
+      { body: values, queryParams },
+      {
+        onSuccess: navigateGoBack,
+        onError: (error) => {
+          console.error('Error creating fee:', error,
+            error.message, error.name, error.response?.data);
+        }
+      }
+    );
   }
 
   const setFormFieldsValue = (data: string) => {
-    console.log(data);
     form.setFieldsValue({paidAt: data});
   }
 
@@ -50,10 +78,10 @@ const TransactionHistoryDepositCreate: React.FC<TransactionHistoryDepositCreateP
           <Radio.Group>
             <View style={styles.checkboxGroup}>
               <ScrollView style={styles.checkboxSelectGroup}>
-                {memberGetListRes
-                  ? memberGetListRes.members.map((member) => (
-                      <Radio key={member.memberId} value={member.memberId} style={styles.checkbox}>
-                        {member.name}
+                {eventMemberGetListRes
+                  ? eventMemberGetListRes.eventMemberList.map((eventMember) => (
+                      <Radio key={eventMember.eventMemberId} value={eventMember.eventMemberId} style={styles.checkbox}>
+                        {eventMember.eventMemberId}
                       </Radio>
                     ))
                   : undefined}
@@ -81,6 +109,17 @@ const TransactionHistoryDepositCreate: React.FC<TransactionHistoryDepositCreateP
           <DateTimePickerWithAntdDInput setFormFieldsValue={setFormFieldsValue} />
         </Form.Item>
         <Form.Item
+          label="내역 이름"
+          name="name"
+          rules={[
+            { pattern: /^.{0,30}$/, message: '30글자 이하로 입력해주세요.' },
+            { required: true, message: '필수 항목입니다.' },
+          ]}
+          style={styles.formItem}
+        >
+          <Input type="text" placeholder="30글자 이하" style={styles.input} />
+        </Form.Item>
+        <Form.Item
           label="상세 내역"
           name="explanation"
           rules={[
@@ -93,7 +132,6 @@ const TransactionHistoryDepositCreate: React.FC<TransactionHistoryDepositCreateP
         </Form.Item>
         <Form.Item style={styles.formItem}>
           <AntdWithStyleButton onPress={() => {
-            console.log(form.getFieldsValue())
             form.submit();
            }}>추가하기</AntdWithStyleButton>
         </Form.Item>
