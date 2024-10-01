@@ -5,6 +5,9 @@ const queryKeys = {
   
   MEMBER: 'member',
   GET_MEMBERLIST: 'getMemberList',
+
+  EVENT_MEMBER: 'eventMember',
+  GET_EVENT_MEMBERLIST: 'getEventMemberList',
 } as const;
 
 const storageKeys = {

@@ -86,7 +86,7 @@ function WebViewScreen({ route, navigation }: WebViewScreenProps) {
     <SafeAreaView style={styles.container}>
       <WebView
         ref={webViewRef}
-        source={{ uri: `https://movis.klr.kr/clubs/${clubId}` }}
+        source={{ uri: `https://movis.klr.kr/clubs/${clubId}/app` }}
         // source={{ uri: `http://10.0.2.2:3000/` }}
         onMessage={onMessage}
         onLoad={onLoad}

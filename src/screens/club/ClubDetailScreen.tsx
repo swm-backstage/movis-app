@@ -127,10 +127,10 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
               계좌번호(뒤 4자리){club.accountNumber}
             </Text>
           </View>
-          {/* <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: club.clubId })}>
+          <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: club.clubId })}>
             이벤트 생성(테스트)
-          </AntdWithStyleButton> */}
-          <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.TRANSACTIONHISTORY_CREATE, { clubId: club.clubId, eventId: 'hi' })}>
+          </AntdWithStyleButton>
+          <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.TRANSACTIONHISTORY_CREATE, { clubId: club.clubId, eventId: 'dbe9803f-b0cc-4f68-8176-d035d9032fc9' })}>
             거래내역 생성
           </AntdWithStyleButton>
         </View>

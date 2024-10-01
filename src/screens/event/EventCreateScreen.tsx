@@ -1,16 +1,16 @@
-import { Button, Checkbox, DatePicker, Form, Input, Provider, View } from '@ant-design/react-native';
+import { Checkbox, DatePicker, Form, Input, Provider, View } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import AntdWithStyleButton from '../../components/AntdWithStyleButton';
 import CustomLoader from '../../components/Loader';
 import { mainNavigations } from '../../constants/navigations';
 import { useMutateCreateEvent } from '../../hooks/useEvent';
 import { useGetMemberList } from '../../hooks/useMember';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { EventCreateReq, GatherFeeInfo } from '../../types/event/request/EventCreateReq';
-import AntdWithStyleButton from '../../components/AntdWithStyleButton';
 
 
 type EventCreateScreenProps = StackScreenProps<
