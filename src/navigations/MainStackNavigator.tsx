@@ -12,6 +12,8 @@ import EventCreateScreen from '../screens/event/EventCreateScreen';
 import WebViewScreen from '../screens/webview/WebViewScreen';
 import NotificiationTest from '../screens/NotificiationTest';
 import TransactionHistoryCreateScreen from '../screens/transactionHistory/TransactionHistoryCreateScreen';
+import { clubUserGetResDtoList } from '../types/clubUser/response/ClubUserGetListRes';
+import ClubUserUpdateScreen from '../screens/clubUser/ClubUserUpdateScreen';
 
 
 
@@ -19,6 +21,8 @@ export type MainStackParamList = {
   [mainNavigations.CLUB_LIST]: undefined;
   [mainNavigations.CLUB_DETAIL]: { club: ClubGetRes };
   [mainNavigations.CLUB_CREATE]: undefined;
+
+  [mainNavigations.CLUB_USER_UPDATE]: {clubId: string};
 
   [mainNavigations.EVENT_CREATE]: { clubId: string };
 
@@ -64,6 +68,13 @@ function MainStackNavigator() {
       <Stack.Screen
         name={mainNavigations.CLUB_CREATE}
         component={ClubCreateScreen}
+        options={{
+          headerTitle: '',
+        }}
+      />
+      <Stack.Screen
+        name={mainNavigations.CLUB_USER_UPDATE}
+        component={ClubUserUpdateScreen}
         options={{
           headerTitle: '',
         }}

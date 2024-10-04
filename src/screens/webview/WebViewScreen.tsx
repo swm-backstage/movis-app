@@ -61,8 +61,7 @@ function WebViewScreen({ route, navigation }: WebViewScreenProps) {
     } else if (data.type === 'eventConfig') {
       
     } else if (data.type === 'transactionHistoryCreate') {
-      // TODO
-      navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: data.clubId });
+      navigation.navigate(mainNavigations.TRANSACTIONHISTORY_CREATE, { clubId: data.clubId, eventId: data.eventId });
     }
   };
   const onLoad = () => {
