@@ -9,7 +9,6 @@ interface ClubUserScrollViewProps {
 
 const ClubUserScrollView: React.FC<ClubUserScrollViewProps> = ({ clubId }) => {
   const { data: clubUserList, isLoading, isError } = useGetClubUserList(clubId);
-	console.log(clubUserList);
   if (isLoading) {
     return <CustomLoader />
   }

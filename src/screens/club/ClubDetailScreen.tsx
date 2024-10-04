@@ -11,10 +11,10 @@ import ClubUserScrollView from '../../components/ClubUserScrollView';
 import MemberScrollView from '../../components/MemberScrollView';
 import { bankMap } from '../../constants/mockData';
 import { mainNavigations } from '../../constants/navigations';
+import { useMutateCreateClubUser } from '../../hooks/useClubUser';
 import { useMutateCreateMemberList } from '../../hooks/useMember';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { MemberCreateListReq } from '../../types/member/request/MemberCreateReq';
-import { useGetClubUserList, useMutateCreateClubUser } from '../../hooks/useClubUser';
 
 type ClubDetailScreenProps = StackScreenProps<
   MainStackParamList,

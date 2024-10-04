@@ -24,10 +24,15 @@ function useMutateCreateClubUser(mutationOptions?: UseMutationCustomOptions) {
   })
 }
 
-function useMutateDelegateClubUser(clubId: string, toIdentifier: string) {
-  return useQuery({
-    queryFn: () => delegateClubUser({'clubId': clubId}, toIdentifier),
-    queryKey: [queryKeys.CLUB_USER, queryKeys.GET_CLUB_USERLIST]
+function useMutateDelegateClubUser(mutationOptions?: UseMutationCustomOptions) {
+  return useMutation({
+    mutationFn: delegateClubUser,
+    onSuccess: newClubUser => {
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.CLUB_USER, queryKeys.GET_CLUB_USERLIST],
+      });
+    },
+    ...mutationOptions
   })
 }
 

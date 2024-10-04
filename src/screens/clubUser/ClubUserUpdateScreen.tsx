@@ -1,11 +1,14 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { Form, Picker, Button } from '@ant-design/react-native';
+import { Form, Picker, Button, Radio, Provider } from '@ant-design/react-native';
 
 import { mainNavigations } from '../../constants/navigations';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
-import { useGetClubUserList } from '../../hooks/useClubUser';
+import { useGetClubUserList, useMutateCreateClubUser, useMutateDelegateClubUser } from '../../hooks/useClubUser';
+import AntdWithStyleButton from '../../components/AntdWithStyleButton';
+import { ScrollView } from 'react-native-gesture-handler';
+import { ClubUserDelegateReq } from '../../types/clubUser/request/ClubUserReq';
 
 type ClubUserUpdateScreenProps = StackScreenProps<
   MainStackParamList,
@@ -15,41 +18,61 @@ type ClubUserUpdateScreenProps = StackScreenProps<
 function ClubUserUpdateScreen({ route, navigation }: ClubUserUpdateScreenProps) {
   const { clubId } = route.params;
   const { data: clubUserList, isLoading, isError } = useGetClubUserList(clubId);
-
-  console.log(clubUserList);
+  const delegateClubUser = useMutateDelegateClubUser();
 
   const [form] = Form.useForm();
 
-  const handleSubmit = (values: any) => {
-    // 특정 함수를 여기에서 실행합니다.
-    console.log('선택된 역할:', values.role);
-    // TODO: 원하는 함수를 여기에 추가하세요.
+  const onFinish = (values: any) => {
+    const queryParams = {
+      clubId: clubId,
+    }
+    delegateClubUser.mutate(
+      { toIdentifier: values.toIdentifier, queryParams: queryParams },
+      {
+        onSuccess: navigation.goBack,
+        onError: (error) => {
+          console.error('Error Delegating:', error,
+            error.message, error.name, error.response?.data);
+        }
+      }
+    );
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Form
-        form={form}
-        onFinish={handleSubmit}
-        style={styles.form}
-      >
-        <Form.Item
-          name="role"
-          label="역할 선택"
-          rules={[{ required: true, message: '역할을 선택해주세요.' }]}
+      <Provider>
+        <Form
+          form={form}
+          name="delegateManagerRole"
+          layout="vertical"
+          onFinish={onFinish}
+          style={styles.form}
         >
-          <Picker
-            data={[
-              { label: 'role_executive', value: 'role_executive' },
-            ]}
-            cols={1}
-            value={['role_executive']}
-          />
-        </Form.Item>
-        <Button type="primary" onPress={form.submit}>
-          확인
-        </Button>
-      </Form>
+          <Form.Item
+            name="toIdentifier"
+            label="역할 선택"
+            rules={[{ required: true, message: '역할을 선택해주세요.' }]}
+            style={styles.formItem}
+          >
+            <Radio.Group>
+              <View style={styles.checkboxGroup}>
+                <ScrollView style={styles.checkboxSelectGroup}>
+                  {clubUserList && clubUserList.clubUserGetResDtoList.map((clubUser) => (
+                    <View key={clubUser.clubUserId} style={styles.clubUserItem}>
+                      <Radio key={clubUser.clubUserId} value={clubUser.identifier} style={styles.checkbox}>
+                        {clubUser.identifier}
+                      </Radio>
+                    </View>
+                  ))}
+                </ScrollView>
+              </View>
+            </Radio.Group>
+          </Form.Item>
+          <AntdWithStyleButton onPress={form.submit}>
+            총무 권한 위임
+          </AntdWithStyleButton>
+        </Form>
+      </Provider>
     </SafeAreaView>
   );
 }
@@ -57,10 +80,33 @@ function ClubUserUpdateScreen({ route, navigation }: ClubUserUpdateScreenProps) 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    marginHorizontal: 20,
   },
   form: {
-    marginTop: 20,
+    backgroundColor: 'white',
+  },
+  formItem: {
+    marginBottom: 10,
+    borderBottomWidth: 5,
+    borderBottomColor: 'white',
+    paddingHorizontal: 0,
+    position: 'relative',
+    color: 'black',
+  },
+  checkboxGroup: {
+    borderRadius: 5,
+    borderColor: '#d9d9d9',
+    borderWidth: 1,
+    padding: 7,
+    marginTop: 10,
+    marginBottom: 0,
+    paddingHorizontal: 10,
+  },
+  checkboxSelectGroup: {
+    height: 120,
+  },
+  checkbox: {
+    marginVertical: 5,
   },
 });
 
