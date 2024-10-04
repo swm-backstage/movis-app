@@ -68,10 +68,7 @@ const ClubMemberCreateForm: React.FC = ({ }) => {
 
 const styles = StyleSheet.create({
   formScrollContrainer: {
-    borderColor: '#d9d9d9',
-    borderWidth: 1,
-    borderRadius: 5,
-    height: 250,
+    maxHeight: 250,
     paddingBottom: 10,
     marginBottom: 10,
   },

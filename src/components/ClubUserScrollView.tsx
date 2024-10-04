@@ -1,15 +1,15 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useGetMemberList } from '../hooks/useMember';
+import { useGetClubUserList } from '../hooks/useClubUser';
 import CustomLoader from './Loader';
 
-interface MemberScrollViewProps {
+interface ClubUserScrollViewProps {
   clubId: string;
 }
 
-const MemberScrollView: React.FC<MemberScrollViewProps> = ({ clubId }) => {
-  const { data: memberList, isLoading, isError } = useGetMemberList(clubId);
-
+const ClubUserScrollView: React.FC<ClubUserScrollViewProps> = ({ clubId }) => {
+  const { data: clubUserList, isLoading, isError } = useGetClubUserList(clubId);
+	console.log(clubUserList);
   if (isLoading) {
     return <CustomLoader />
   }
@@ -17,10 +17,10 @@ const MemberScrollView: React.FC<MemberScrollViewProps> = ({ clubId }) => {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollViewContainer} nestedScrollEnabled={true}>
-        {memberList && memberList.members.map((member) => (
-          <View key={member.memberId} style={styles.memberItem}>
-            <Text style={styles.memberName}>{member.name}</Text>
-            <Text style={styles.memberPhoneNo}>{member.phoneNo}</Text>
+        {clubUserList && clubUserList.clubUserGetResDtoList.map((clubUser) => (
+          <View key={clubUser.clubUserId} style={styles.clubUserItem}>
+            <Text style={styles.identifier}>{clubUser.identifier}</Text>
+            <Text style={styles.role}>{clubUser.role}</Text>
           </View>
         ))}
       </ScrollView>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
 
   },
-  memberItem: {
+  clubUserItem: {
     backgroundColor: 'white',
     borderWidth: 0.3,
     borderRadius: 5,
@@ -48,14 +48,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  memberName: {
+  identifier: {
     fontSize: 18,
     color: 'black',
   },
-  memberPhoneNo: {
+  role: {
     fontSize: 14,
     color: 'black',
   },
 });
 
-export default MemberScrollView;
+export default ClubUserScrollView;

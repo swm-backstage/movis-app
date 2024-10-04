@@ -2,6 +2,10 @@ const queryKeys = {
   CLUB: 'club',
   GET_CLUB: 'getClub',
   GET_CLUBLIST: 'getClubList',
+
+  CLUB_USER: 'clubUser',
+  GET_CLUB_USERLIST: 'getClubUserList',
+
   
   MEMBER: 'member',
   GET_MEMBERLIST: 'getMemberList',
