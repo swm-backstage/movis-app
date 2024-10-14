@@ -16,7 +16,7 @@ interface TransactionHistoryWithdrawCreateProps {
 }
 
 const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreateProps> = ({
-  clubId, 
+  clubId,
   eventId,
   navigateGoBack,
 }) => {
@@ -48,7 +48,7 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
   }
 
   const setFormFieldsValue = (data: string) => {
-    form.setFieldsValue({paidAt: data});
+    form.setFieldsValue({ paidAt: data });
   }
 
   const showPicker = () => {
@@ -66,7 +66,7 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
           name: selectedImage.fileName,
         });
         console.log(res);
-        form.setFieldsValue({image: selectedImage.uri});
+        form.setFieldsValue({ image: selectedImage.uri });
       }
     })
   }
@@ -84,7 +84,7 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
           label="영수증 이미지"
           name="image"
           style={styles.formItem}
-        > 
+        >
           <View>
             <View style={styles.uploadedImageContainer}>
               {form.getFieldValue("image") && (
@@ -141,8 +141,8 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
           <Input type="text" placeholder="300글자 이하" style={styles.input} />
         </Form.Item>
         <Form.Item style={styles.formItem}>
-          <AntdWithStyleButton onPress={() => {form.submit();}}>
-              추가하기
+          <AntdWithStyleButton onPress={() => { form.submit(); }}>
+            추가하기
           </AntdWithStyleButton>
         </Form.Item>
       </Form>
