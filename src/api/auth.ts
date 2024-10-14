@@ -9,7 +9,7 @@ type RequestCreateUser = {
     phoneNo: string;
 }
 
-type RequestLogin ={
+type RequestLogin = {
     identifier: string;
     password: string;
 }
@@ -25,32 +25,33 @@ const postSingup = async ({ identifier, password, name, phoneNo }: RequestCreate
     return data;
 };
 
-type ResponseToken={
+type ResponseToken = {
     accessToken: string;
     refreshToken: string;
 }
 
-const postLogin = async ({ identifier, password }: RequestLogin) :Promise<ResponseToken> => {
+const postLogin = async ({ identifier, password }: RequestLogin): Promise<ResponseToken> => {
     const { data } = await axiosHost.post('/api/v1/auth/test/login ', {
         identifier,
         password,
     });
+    console.log(data)
     return data;
 }
 
-const getAccessToken = async ():Promise<ResponseToken> =>{
+const getAccessToken = async (): Promise<ResponseToken> => {
     const refreshToken = await getEncryptStorage('refreshToken');
-    const {data} = await axiosHost.patch('/api/v1/auth/reissue',{
+    const { data } = await axiosHost.patch('/api/v1/auth/reissue', {
         refreshToken
     })
 
-    return data; 
+    return data;
 }
 
 const logout = async () => {
     await axiosHost.post('/api/v1/auth/logout');
-    
+
 }
 
-export {postSingup, postLogin, getAccessToken, logout}
-export type {RequestCreateUser,RequestLogin, ResponseToken, }
+export { postSingup, postLogin, getAccessToken, logout }
+export type { RequestCreateUser, RequestLogin, ResponseToken, }

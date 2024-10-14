@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { createEvent } from "../api/event";
+import { createEvent, getEventList } from "../api/event";
 import { UseMutationCustomOptions } from "../types/common";
 
 function useMutateCreateEvent(
@@ -12,4 +12,12 @@ function useMutateCreateEvent(
   })
 }
 
-export { useMutateCreateEvent };
+function useQueryGetEventList(clubId: string, lastId: string, size: number) {
+  return useQuery({
+    queryFn: () => getEventList(clubId, lastId, size),
+    queryKey: ["getEventList", clubId],
+    refetchOnMount: 'always',
+  })
+}
+
+export { useMutateCreateEvent, useQueryGetEventList };
