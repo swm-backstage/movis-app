@@ -136,6 +136,11 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
         )) : undefined}
       </ScrollView>
       <View style={styles.buttonContainer}>
+        <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.UNCLASSIFIED)}>
+          <AntDesign name="book" style={styles.submitButtonIcon} />
+        </AntdWithStyleButton>
+      </View>
+      <View style={styles.buttonContainer}>
         <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.CLUB_CREATE)}>
           <AntDesign name="plus" style={styles.submitButtonIcon} />
         </AntdWithStyleButton>

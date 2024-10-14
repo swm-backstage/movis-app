@@ -10,7 +10,11 @@ const mainNavigations = {
   TRANSACTIONHISTORY_CREATE: 'transacntionHistoryCreate',
 
   WEBVIEW: 'webview',
-  NOTIFICATION: 'notification'
+  NOTIFICATION: 'notification',
+
+  UNCLASSIFIED : 'unclassified',
+  WITHDRAWAL : 'withdrawal',
+  DEPOSIT : 'deposit'
 } as const;
 
 export { mainNavigations };

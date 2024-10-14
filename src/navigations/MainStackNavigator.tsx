@@ -11,9 +11,14 @@ import ClubCreateScreen from '../screens/club/ClubCreateScreen';
 import EventCreateScreen from '../screens/event/EventCreateScreen';
 import WebViewScreen from '../screens/webview/WebViewScreen';
 import NotificiationTest from '../screens/NotificiationTest';
+
+import UnclassifiedListScreen from '../screens/unclassified/UnclassifiedListScreen';
+import WithdrawalClassifiedScreen from '../screens/unclassified/WithdrawalClassifiedScreen';
+import DepositClassifiedScreen from '../screens/unclassified/DepositClassifiedScreen';
 import TransactionHistoryCreateScreen from '../screens/transactionHistory/TransactionHistoryCreateScreen';
 import { clubUserGetResDtoList } from '../types/clubUser/response/ClubUserGetListRes';
 import ClubUserUpdateScreen from '../screens/clubUser/ClubUserUpdateScreen';
+
 
 
 
@@ -30,6 +35,9 @@ export type MainStackParamList = {
 
   [mainNavigations.WEBVIEW]: { clubId: string };
   [mainNavigations.NOTIFICATION]: undefined,
+  [mainNavigations.UNCLASSIFIED]: undefined,
+  [mainNavigations.WITHDRAWAL]: { selectedWithdrawals: any[], clubId: string },
+  [mainNavigations.DEPOSIT]: { selectedDeposits: any[], clubId: string }
 }
 
 const Stack = createStackNavigator<MainStackParamList>();
@@ -101,11 +109,30 @@ function MainStackNavigator() {
         }}
       />
       <Stack.Screen name={mainNavigations.NOTIFICATION}
-      component={NotificiationTest}
-      options={{
-        headerTitle:'',
-      }}
+        component={NotificiationTest}
+        options={{
+          headerTitle: '',
+        }}
       />
+      <Stack.Screen name={mainNavigations.UNCLASSIFIED}
+        component={UnclassifiedListScreen}
+        options={{
+          headerTitle: '',
+        }}
+      />
+      <Stack.Screen name={mainNavigations.WITHDRAWAL}
+        component={WithdrawalClassifiedScreen}
+        options={{
+          headerTitle: '',
+        }}
+      />
+      <Stack.Screen name={mainNavigations.DEPOSIT}
+        component={DepositClassifiedScreen}
+        options={{
+          headerTitle: '',
+        }}
+      />
+
     </Stack.Navigator>
   )
 }

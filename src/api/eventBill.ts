@@ -1,3 +1,5 @@
+
+import { EventBilClassifiedReq } from "../types/eventBill/EventBIllClassifiedReq";
 import { EventBillCreateReq } from "../types/eventBill/request/EventBillCreateReq";
 import axiosHost from "./axios";
 
@@ -15,4 +17,10 @@ const createEvenBill = async ({ body, queryParams }: EventBillCreateReqWithParam
   return data;
 };
 
-export { createEvenBill };
+const classifiedEventBill = async (eventBillId: string, body: EventBilClassifiedReq): Promise<void> => {
+    const { data } = await axiosHost.patch(`/api/v1/eventBill/${eventBillId}`, body);
+    return data;
+};
+
+export { classifiedEventBill, createEvenBill };
+

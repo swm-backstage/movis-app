@@ -1,15 +1,15 @@
-import { ClubGetListRes } from "../types/club/response/ClubGetListRes";
-import { EventMemberGetListRes } from "../types/eventMember/response/EventMemberGetListRes";
+
+import { EventMemberGetListRes } from "../types/eventMember/EventMemberGetListRes";
 import axiosHost from "./axios";
 
-const getEventMemberList = async (queryParams: Record<string, any>): Promise<EventMemberGetListRes> => {
-	const config = {
-		params: queryParams,
-	};
-  const { data } = await axiosHost.get('/api/v1/eventMembers', config);
-
-  return data;
+const getEventMemberList = async (eventId: string): Promise<EventMemberGetListRes> => {
+    const { data } = await axiosHost.get('/api/v1/eventMembers', {
+        params: {
+            eventId: eventId
+        },
+    });
+    return data;
 };
 
-
 export { getEventMemberList };
+
