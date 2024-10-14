@@ -1,3 +1,4 @@
+
 import { EventMemberGetListRes } from "../types/eventMember/EventMemberGetListRes";
 import axiosHost from "./axios";
 
@@ -11,3 +12,4 @@ const getEventMemberList = async (eventId: string): Promise<EventMemberGetListRe
 };
 
 export { getEventMemberList };
+

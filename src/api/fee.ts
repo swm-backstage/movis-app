@@ -1,5 +1,11 @@
 import { FeeClassifiedReq } from "../types/fee/FeeClassifiedReq";
+import { FeeCreateReq } from "../types/fee/request/feeCreateReq";
 import axiosHost from "./axios";
+
+type FeeCreateReqWithParams = {
+  body: FeeCreateReq;
+  queryParams?: Record<string, any>;
+};
 
 const classifiedFee = async (feeId: string, body: FeeClassifiedReq): Promise<void> => {
     const { data } = await axiosHost.patch('/api/v1/fees', body,
@@ -13,4 +19,13 @@ const classifiedFee = async (feeId: string, body: FeeClassifiedReq): Promise<voi
     return data;
 };
 
-export { classifiedFee };
+const createFee = async ({body, queryParams }: FeeCreateReqWithParams): Promise<void> => {
+  const config = {
+    params: queryParams,
+  };
+  const { data } = await axiosHost.post('/api/v1/fees/input', body, config);
+
+  return data;
+};
+
+export { classifiedFee, createFee };

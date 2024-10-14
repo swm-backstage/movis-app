@@ -1,19 +1,20 @@
-import { Button, Form } from '@ant-design/react-native';
+import { Form, Input } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import AntdWithStyleButton from '../../components/AntdWithStyleButton';
 import ClubMemberCreateForm from '../../components/ClubMemberCreateForm';
-import CustomLoader from '../../components/Loader';
+import ClubUserScrollView from '../../components/ClubUserScrollView';
 import MemberScrollView from '../../components/MemberScrollView';
+import { bankMap } from '../../constants/mockData';
 import { mainNavigations } from '../../constants/navigations';
-import { useGetMemberList, useMutateCreateMemberList } from '../../hooks/useMember';
+import { useMutateCreateClubUser } from '../../hooks/useClubUser';
+import { useMutateCreateMemberList } from '../../hooks/useMember';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { MemberCreateListReq } from '../../types/member/request/MemberCreateReq';
-import AntdWithStyleButton from '../../components/AntdWithStyleButton';
-import { bankMap } from '../../constants/mockData';
 
 type ClubDetailScreenProps = StackScreenProps<
   MainStackParamList,
@@ -21,36 +22,67 @@ type ClubDetailScreenProps = StackScreenProps<
 >;
 
 const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
-  const [form] = Form.useForm();
+  const [clubUserForm] = Form.useForm();
+  const [memberForm] = Form.useForm();
   const { club } = route.params;
-  const { data: memberList, isLoading, isError } = useGetMemberList(club.clubId);
   const createMemberList = useMutateCreateMemberList();
-
+  const createClubUser = useMutateCreateClubUser();
   const [isAddMemberVisible, setIsAddMemberVisible] = useState<boolean>(false);
+  const [isAddClubUserVisible, setIsAddClubUserVisible] = useState<boolean>(false);
+  const addMemberHeight = useSharedValue(0);
+  const addClubUserHeight = useSharedValue(0);
 
-  const height = useSharedValue(0);
+  const handleToggleAddClubUser = () => {
+    setIsAddClubUserVisible(!isAddClubUserVisible);
 
-  const handleToggleAddMember = () => {
-    setIsAddMemberVisible(!isAddMemberVisible);
-
-    height.value = withTiming(isAddMemberVisible ? 0 : 320, {
+    addClubUserHeight.value = withTiming(isAddClubUserVisible ? 0 : 200, {
       duration: 250,
       easing: Easing.inOut(Easing.ease),
     });
   };
+  const handleToggleAddMember = () => {
+    setIsAddMemberVisible(!isAddMemberVisible);
 
-  const animatedStyle = useAnimatedStyle(() => {
+    addMemberHeight.value = withTiming(isAddMemberVisible ? 0 : 320, {
+      duration: 250,
+      easing: Easing.inOut(Easing.ease),
+    });
+  };
+  const addClubUserAnimatedStyle = useAnimatedStyle(() => {
     return {
-      height: height.value,
+      height: addClubUserHeight.value,
+    };
+  });
+  const addMemberAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      height: addMemberHeight.value,
     };
   });
 
+  const handleAddClubUser = async (values: string) => {
+    setIsAddClubUserVisible(false);
+    addClubUserHeight.value = withTiming(0, {
+      duration: 0,
+      easing: Easing.inOut(Easing.ease),
+    });
+  
+    createClubUser.mutate(
+      {'clubId': club.clubId, 'identifier': values.identifier},
+      {
+        onError: (error) => {
+          console.error(error, error.response?.data);
+        }
+      }
+    );
+
+    clubUserForm.resetFields();
+  };
   const handleAddMember = async (values: MemberCreateListReq) => {
     if (values.memberList === null)
       return;
 
     setIsAddMemberVisible(false);
-    height.value = withTiming(0, {
+    addMemberHeight.value = withTiming(0, {
       duration: 0,
       easing: Easing.inOut(Easing.ease),
     });
@@ -66,12 +98,8 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
       }
     );
 
-    form.resetFields();
+    memberForm.resetFields();
   };
-
-  if (isLoading) {
-    return <CustomLoader />
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -80,7 +108,48 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
           {club.name}
         </Text>
       </View>
-      <ScrollView style={styles.scrollContainer}>
+      <ScrollView style={styles.scrollContainer} nestedScrollEnabled={true}>
+        <View style={styles.clubInfoContainer}>
+          <View style={styles.clubInfoHeaderContainer}>
+            <Text style={styles.clubInfoLabel}>
+              운영진 목록
+            </Text>
+            <AntDesign
+              name={isAddClubUserVisible ? "up" : "adduser"}
+              onPress={handleToggleAddClubUser}
+              style={styles.clubSettingIcon}
+            />
+          </View>
+          <Animated.View style={[styles.addClubUserContainer, addClubUserAnimatedStyle]}>
+            <Form
+              name="clubUserForm"
+              form={clubUserForm}
+              layout="vertical"
+              style={styles.form}
+              onFinish={handleAddClubUser}
+            >
+              <Form.Item
+                label="운영진 등록"
+                name="identifier"
+                rules={[
+                  { required: true, message: '필수 항목입니다. ' }
+                ]}
+                style={styles.formItem}
+              >
+                <Input type="text" placeholder="아이디를 입력하세요. " style={styles.input} />
+              </Form.Item>
+            </Form>
+            <AntdWithStyleButton onPress={clubUserForm.submit}>
+              운영진 등록
+            </AntdWithStyleButton>
+          </Animated.View>
+          <View>
+            <ClubUserScrollView clubId={club.clubId}/>
+          </View>
+          <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.CLUB_USER_UPDATE, { clubId: club.clubId })}>
+            운영진 수정
+          </AntdWithStyleButton>
+        </View>
         <View style={styles.clubInfoContainer}>
           <View style={styles.clubInfoHeaderContainer}>
             <Text style={styles.clubInfoLabel}>
@@ -92,22 +161,22 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
               style={styles.clubSettingIcon}
             />
           </View>
-          <Animated.View style={[styles.addMemberContainer, animatedStyle]}>
+          <Animated.View style={[styles.addMemberContainer, addMemberAnimatedStyle]}>
             <Form
-              name="basic"
-              form={form}
+              name="memberForm"
+              form={memberForm}
               layout="vertical"
               style={styles.form}
               onFinish={handleAddMember}
             >
               <ClubMemberCreateForm />
-              <AntdWithStyleButton onPress={form.submit}>
-                회원 추가
-              </AntdWithStyleButton>
             </Form>
+            <AntdWithStyleButton onPress={memberForm.submit}>
+              회원 추가
+            </AntdWithStyleButton>
           </Animated.View>
-          <View style={styles.clubInfoMemberData}>
-            <MemberScrollView memberList={memberList.members} />
+          <View>
+            <MemberScrollView clubId={club.clubId} />
           </View>
         </View>
         <View style={styles.clubInfoContainer}>
@@ -127,10 +196,13 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
               계좌번호(뒤 4자리){club.accountNumber}
             </Text>
           </View>
-          {/* <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: club.clubId })}>
-            이벤트 생성(테스트)
-          </AntdWithStyleButton> */}
         </View>
+        <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: club.clubId })}>
+          이벤트 생성(테스트)
+        </AntdWithStyleButton>
+        <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.TRANSACTIONHISTORY_CREATE, { clubId: club.clubId, eventId: 'dbe9803f-b0cc-4f68-8176-d035d9032fc9' })}>
+          거래내역 생성(테스트)
+        </AntdWithStyleButton>
       </ScrollView>
     </SafeAreaView>
   );
@@ -157,9 +229,27 @@ const styles = StyleSheet.create({
   },
   form: {
     backgroundColor: 'white',
+    borderColor: '#d9d9d9',
+    borderWidth: 1,
+    borderRadius: 5,
   },
   formItem: {
-    backgroundColor: 'red',
+    borderBottomWidth: 5,
+    borderBottomColor: 'white',
+    position: 'relative',
+    height: 150,
+    color: 'black',
+  },
+  input: {
+    backgroundColor: 'white',
+    width: '100%',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
+    borderColor: '#d9d9d9',
+    borderWidth: 1,
+
+    color: 'black',
   },
   clubName: {
     fontSize: 24,
@@ -169,6 +259,10 @@ const styles = StyleSheet.create({
   clubSettingIcon: {
     fontSize: 30,
     color: 'rgba(153, 102, 255, 1)',
+  },
+  addClubUserContainer: {
+    overflow: 'hidden',
+    marginBottom: 10,
   },
   addMemberContainer: {
     overflow: 'hidden',
@@ -185,9 +279,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: 'black',
-  },
-  clubInfoMemberData: {
-
   },
   clubInfoBankData: {
     marginTop: 12,

@@ -60,11 +60,12 @@ function WebViewScreen({ route, navigation }: WebViewScreenProps) {
       navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: data.clubId });
     } else if (data.type === 'eventConfig') {
       
+    } else if (data.type === 'transactionHistoryCreate') {
+      navigation.navigate(mainNavigations.TRANSACTIONHISTORY_CREATE, { clubId: data.clubId, eventId: data.eventId });
     }
   };
   const onLoad = () => {
     if (webViewRef.current) {
-      console.log(getHeader('Authorization').split(' ')[1]);
       webViewRef.current.injectJavaScript(injectedJavascript);
       webViewRef.current.postMessage(JSON.stringify({
         isChongmu: true,
@@ -84,7 +85,7 @@ function WebViewScreen({ route, navigation }: WebViewScreenProps) {
     <SafeAreaView style={styles.container}>
       <WebView
         ref={webViewRef}
-        source={{ uri: `https://movis.klr.kr/clubs/${clubId}` }}
+        source={{ uri: `https://movis.klr.kr/clubs/${clubId}/app` }}
         // source={{ uri: `http://10.0.2.2:3000/` }}
         onMessage={onMessage}
         onLoad={onLoad}

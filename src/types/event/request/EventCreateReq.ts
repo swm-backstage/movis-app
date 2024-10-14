@@ -11,4 +11,3 @@ type GatherFeeInfo = {
 }
   
 export type { EventCreateReq, GatherFeeInfo };
-  

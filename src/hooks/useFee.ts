@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
+
 import { UseMutationCustomOptions } from "../types/common";
-import { classifiedFee } from "../api/fee";
+import { classifiedFee,createFee } from "../api/fee";
 import { FeeClassifiedReq } from "../types/fee/FeeClassifiedReq";
 
 type FeeClassifiedMutationVariables = {
@@ -15,4 +16,14 @@ function useClassifiedFee(mutationOptions?: UseMutationCustomOptions) {
     })
 }
 
-export { useClassifiedFee };
+function useMutateCreateFee(
+  mutationOptions?: UseMutationCustomOptions
+) {
+  return useMutation({
+    mutationFn: createFee,
+    ...mutationOptions
+  })
+}
+
+export { useClassifiedFee,useMutateCreateFee };
+

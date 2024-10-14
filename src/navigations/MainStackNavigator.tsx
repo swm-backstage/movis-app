@@ -11,9 +11,14 @@ import ClubCreateScreen from '../screens/club/ClubCreateScreen';
 import EventCreateScreen from '../screens/event/EventCreateScreen';
 import WebViewScreen from '../screens/webview/WebViewScreen';
 import NotificiationTest from '../screens/NotificiationTest';
+
 import UnclassifiedListScreen from '../screens/unclassified/UnclassifiedListScreen';
 import WithdrawalClassifiedScreen from '../screens/unclassified/WithdrawalClassifiedScreen';
 import DepositClassifiedScreen from '../screens/unclassified/DepositClassifiedScreen';
+import TransactionHistoryCreateScreen from '../screens/transactionHistory/TransactionHistoryCreateScreen';
+import { clubUserGetResDtoList } from '../types/clubUser/response/ClubUserGetListRes';
+import ClubUserUpdateScreen from '../screens/clubUser/ClubUserUpdateScreen';
+
 
 
 
@@ -22,7 +27,11 @@ export type MainStackParamList = {
   [mainNavigations.CLUB_DETAIL]: { club: ClubGetRes };
   [mainNavigations.CLUB_CREATE]: undefined;
 
+  [mainNavigations.CLUB_USER_UPDATE]: {clubId: string};
+
   [mainNavigations.EVENT_CREATE]: { clubId: string };
+
+  [mainNavigations.TRANSACTIONHISTORY_CREATE]: { clubId: string, eventId: string};
 
   [mainNavigations.WEBVIEW]: { clubId: string };
   [mainNavigations.NOTIFICATION]: undefined,
@@ -72,8 +81,22 @@ function MainStackNavigator() {
         }}
       />
       <Stack.Screen
+        name={mainNavigations.CLUB_USER_UPDATE}
+        component={ClubUserUpdateScreen}
+        options={{
+          headerTitle: '',
+        }}
+      />
+      <Stack.Screen
         name={mainNavigations.EVENT_CREATE}
         component={EventCreateScreen}
+        options={{
+          headerTitle: '',
+        }}
+      />
+      <Stack.Screen
+        name={mainNavigations.TRANSACTIONHISTORY_CREATE}
+        component={TransactionHistoryCreateScreen}
         options={{
           headerTitle: '',
         }}
