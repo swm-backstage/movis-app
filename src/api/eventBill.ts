@@ -8,7 +8,7 @@ type EventBillCreateReqWithParams = {
   queryParams?: Record<string, any>;
 };
 
-const createEvenBill = async ({ body, queryParams }: EventBillCreateReqWithParams): Promise<void> => {
+const createEventBill = async ({ body, queryParams }: EventBillCreateReqWithParams): Promise<void> => {
   const config = {
     params: queryParams,
   };
@@ -22,5 +22,5 @@ const classifiedEventBill = async (eventBillId: string, body: EventBilClassified
     return data;
 };
 
-export { classifiedEventBill, createEvenBill };
+export { classifiedEventBill, createEventBill };
 

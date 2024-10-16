@@ -20,7 +20,7 @@ function useMutateCreateEventBill(
   mutationOptions?: UseMutationCustomOptions
 ) {
   return useMutation({
-    mutationFn: createEvenBill,
+    mutationFn: createEventBill,
     ...mutationOptions
   })
 }
