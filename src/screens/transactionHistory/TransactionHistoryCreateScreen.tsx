@@ -11,7 +11,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import TransactionHistoryDepositCreate from '../../components/TransactionHistoryDepositCreate';
 import TransactionHistoryWithdrawCreate from '../../components/TransactionHistoryWithdrawCreate';
 import { mainNavigations } from '../../constants/navigations';
-import { useGetEventMemberList } from '../../hooks/useEventMember';
+import { useQueryGetEventMemberList } from '../../hooks/useEventMember';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 
 type TransactionHistoryCreateScreenProps = StackScreenProps<
@@ -22,7 +22,7 @@ type TransactionHistoryCreateScreenProps = StackScreenProps<
 const TransactionHistoryCreateScreen = ({ route, navigation }: TransactionHistoryCreateScreenProps) => {
   const [isDepositView, setIsDepositView] = useState(true);
   const { clubId, eventId } = route.params;
-  const { data: eventMemberGetListRes, isLoading, isError } = useGetEventMemberList(eventId);
+  const { data: eventMemberGetListRes, isLoading, isError } = useQueryGetEventMemberList(eventId);
 
   const handleDepositViewToggle = () => {
     setIsDepositView(!isDepositView);

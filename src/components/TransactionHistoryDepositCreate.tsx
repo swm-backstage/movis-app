@@ -25,12 +25,7 @@ const TransactionHistoryDepositCreate: React.FC<TransactionHistoryDepositCreateP
   navigateGoBack,
 }) => {
   const [form] = Form.useForm();
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const createFee = useMutateCreateFee();
-
-  console.log(clubId, eventId);
-  console.log(eventMemberGetListRes);
 
   const onFinish = (data: any) => {
     const values: FeeCreateReq = {
@@ -81,7 +76,7 @@ const TransactionHistoryDepositCreate: React.FC<TransactionHistoryDepositCreateP
                 {eventMemberGetListRes
                   ? eventMemberGetListRes.eventMemberList.map((eventMember) => (
                       <Radio key={eventMember.eventMemberId} value={eventMember.eventMemberId} style={styles.checkbox}>
-                        {eventMember.eventMemberId}
+                        {eventMember.name}
                       </Radio>
                     ))
                   : undefined}

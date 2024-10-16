@@ -26,7 +26,7 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
   const onFinish = (data: any) => {
     const values: EventBillCreateReq = {
       image: form.getFieldValue("image"),
-      paidAmount: form.getFieldValue("paidAmount"),
+      paidAmount: -form.getFieldValue("paidAmount"),
       paidAt: form.getFieldValue("paidAt"),
       name: form.getFieldValue("name"),
       explanation: form.getFieldValue("explanation"),
@@ -34,7 +34,6 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
     const queryParams = {
       eventId: eventId,
     }
-    console.log(values);
     createEventBill.mutate(
       { body: values, queryParams },
       {
