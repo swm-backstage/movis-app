@@ -1,15 +1,13 @@
-// HeaderTitle.tsx
-import { Input, View } from '@ant-design/react-native';
+import { Input, View, Icon } from '@ant-design/react-native';
 import React, { useState } from 'react';
-import { Text, StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
-type DateTImePickerWithAntdDInputProps = {
+type DateTimePickerWithAntdDInputProps = {
   setFormFieldsValue: (paidAt: string) => void;
 };
 
-const DateTimePickerWithAntdDInput: React.FC<DateTImePickerWithAntdDInputProps> = ({ setFormFieldsValue }) => {
+const DateTimePickerWithAntdDInput: React.FC<DateTimePickerWithAntdDInputProps> = ({ setFormFieldsValue }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
@@ -25,18 +23,22 @@ const DateTimePickerWithAntdDInput: React.FC<DateTImePickerWithAntdDInputProps> 
     const isoDateString = date.toISOString();
     setSelectedDate(isoDateString);
     setFormFieldsValue(isoDateString);
+    hideDatePicker();
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={showDatePicker} style={styles.inputWrapper}>
-        <Input
-          value={selectedDate ? new Date(selectedDate).toLocaleString('ko-KR') : ''}
-          placeholder="날짜를 선택하세요"
-          style={styles.input}
-          editable={false}
-        />
-      </TouchableOpacity>
+      <Input
+        value={selectedDate ? new Date(selectedDate).toLocaleString('ko-KR') : ''}
+        placeholder="날짜를 선택하세요"
+        style={styles.input}
+        editable={false}
+        suffix={
+          <TouchableOpacity onPress={showDatePicker} style={styles.iconButton}>
+            <Icon name="calendar" style={styles.calendarIcon} />
+          </TouchableOpacity>
+        }
+      />
       <DateTimePicker
         isVisible={isDatePickerVisible}
         mode="datetime"
@@ -46,17 +48,13 @@ const DateTimePickerWithAntdDInput: React.FC<DateTImePickerWithAntdDInputProps> 
         maximumDate={new Date()}
         locale="ko-KR"
       />
-    </View>  
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-  },
-  inputWrapper: {
-    justifyContent: 'center',
-    height: '100%',
   },
   input: {
     paddingHorizontal: 10,
@@ -65,6 +63,13 @@ const styles = StyleSheet.create({
     borderColor: '#d9d9d9',
     borderWidth: 1,
     color: 'black',
+  },
+  iconButton: {
+    padding: 5,
+  },
+  calendarIcon: {
+    fontSize: 24,
+    color: '#5F47F1',
   },
 });
 
