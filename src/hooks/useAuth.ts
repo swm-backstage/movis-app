@@ -67,11 +67,6 @@ function useLogout(mutationOptions?: UseMutationCustomOptions){
         onSuccess:()=>{
             removeHeader('Authorization');
             removeEncryptStorage('refreshToken');
-            
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Login' }],
-            });
         },
         onSettled:()=>{
             queryClient.invalidateQueries({queryKey:['auth']})
