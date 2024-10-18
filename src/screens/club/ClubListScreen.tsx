@@ -1,19 +1,19 @@
-import { Button, Icon } from '@ant-design/react-native';
+import { Icon } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import queryClient from '../../api/queryClient';
+import AntdWithStyleButton from '../../components/AntdWithStyleButton';
 import CustomLoader from '../../components/Loader';
+import { queryKeys } from '../../constants/key';
 import { mainNavigations } from '../../constants/navigations';
 import useAuth from '../../hooks/useAuth';
 import { useGetClubList } from '../../hooks/useClub';
+import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
-import AntdWithStyleButton from '../../components/AntdWithStyleButton';
-import queryClient from '../../api/queryClient';
-import { queryKeys } from '../../constants/key';
-
 
 type ClubHomeScreenProps = StackScreenProps<
   MainStackParamList,
@@ -24,8 +24,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
   const { data: data, isLoading, isError } = useGetClubList();
   const { logoutMutation } = useAuth();
   const [isRefreshing, setIsRefreshing] = useState(false);
-
-
+  
   const handlePressClubDetailScreen = (club: ClubGetRes) => {
     navigation.navigate(mainNavigations.CLUB_DETAIL, { club });
   };
@@ -48,7 +47,6 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
     );
   };
 
-
   const handleRefresh = async () => {
     try {
       setIsRefreshing(true);
@@ -66,15 +64,13 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
     return <CustomLoader />
   }
 
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        {/* <Text style={styles.userName}>
-          백진암
-        </Text> */}
         <Icon
           name="alert"
-          style={styles.alerIcon}
+          style={styles.alertIcon}
           onPress={() => {
             navigation.navigate(mainNavigations.NOTIFICATION);
           }}
@@ -82,21 +78,23 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
         <AntDesign
           name="logout"
           style={styles.logoutIcon}
-          onPress={() => {
-            showLogoutAlert();
-          }}
+          onPress={showLogoutAlert}
         />
       </View>
-      <ScrollView 
+
+      <ScrollView
         style={styles.clubListContainer}
         refreshControl={
-          <RefreshControl 
-            refreshing={isRefreshing} 
+          <RefreshControl
+            refreshing={isRefreshing}
             onRefresh={handleRefresh}
           />}
       >
         {data ? data.clubGetListDto.map((club: ClubGetRes) => (
-          <TouchableOpacity key={club.clubId} onPress={() => navigation.navigate(mainNavigations.WEBVIEW, { clubId: club.clubId })}>
+          <TouchableOpacity
+            key={club.clubId}
+            onPress={() => navigation.navigate(mainNavigations.WEBVIEW, { clubId: club.clubId })}
+          >
             <View style={styles.clubContainer}>
               <View style={styles.clubSettingContainer}>
                 <View style={styles.iconView}>
@@ -146,13 +144,20 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
         </AntdWithStyleButton>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  bottomSheetBackground: {
+    backgroundColor: 'white',
   },
   headerContainer: {
     paddingVertical: 8,
@@ -162,21 +167,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5, // Android용 그림자
     backgroundColor: 'white',
+    elevation: 5,
   },
-  userName: {
-    fontSize: 18,
-    color: 'black',
-  },
-  alerIcon:{
+  alertIcon: {
     fontSize: 30,
     color: 'rgba(153, 102, 255, 1)',
   },
