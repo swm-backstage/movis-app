@@ -4,7 +4,6 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import queryClient from '../../api/queryClient';
-import AntdWithStyleButton from '../../components/AntdWithStyleButton';
 import CustomLoader from '../../components/Loader';
 import SettingEntry from '../../components/SettingEntry';
 import { queryKeys } from '../../constants/key';
@@ -22,16 +21,20 @@ type ClubHomeScreenProps = StackScreenProps<
 >;
 
 function ClubListScreen({ navigation }: ClubHomeScreenProps) {
-  const { data: clubList, isLoading: clubListIsLoading, isError: clubListIsError } = useGetClubList();
-  const { data: user, isLoading: userIsLoading, isError: userIsError } = useGetUser();
+  const { data: clubList, isLoading: clubListIsLoading } = useGetClubList();
+  const { data: user, isLoading: userIsLoading } = useGetUser();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { logoutMutation } = useAuth();
-  const { openCustomBottomSheet, closeCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
+  const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
     snapPoints: useMemo(() => ['80%'], []),
   });
-  
+
   const handlePressClubDetailScreen = (club: ClubGetRes) => {
     navigation.navigate(mainNavigations.CLUB_DETAIL, { club });
+  };
+
+  const handlePressWebView = (clubId: number) => {
+    navigation.navigate(mainNavigations.WEBVIEW, { clubId });
   };
 
   const handleRefresh = async () => {
@@ -47,91 +50,71 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
     }
   };
 
-  
   if (clubListIsLoading) {
-    return <CustomLoader />
+    return <CustomLoader />;
   }
+
   return (
     <View style={styles.container}>
-      <CustomBottomSheet>
-        <SettingEntry 
-          user={user}
-          logout={() => (logoutMutation.mutate())}
-        />
-      </CustomBottomSheet>
-
       <View style={styles.headerContainer}>
-        <Text>
-          {user?.name}
-        </Text>
-        <AntDesign
-          name="setting"
-          onPress={openCustomBottomSheet}
-          style={styles.settingIcon}
-        />
+        <View>
+          <Text style={styles.welcomeText}>반가워요!</Text>
+          <Text style={styles.userName}>{user?.name}님.</Text>
+        </View>
+        <View style={styles.iconContainer}>
+          <AntDesign
+            name="setting"
+            onPress={openCustomBottomSheet}
+            style={styles.settingIcon}
+          />
+          <AntDesign
+            name="pluscircle"
+            onPress={() => navigation.navigate(mainNavigations.CLUB_CREATE)}
+            style={styles.addIcon}
+          />
+        </View>
       </View>
-
+      <Text style={styles.sectionTitle}>내가 속한 모임</Text>
       <ScrollView
-        style={styles.clubListContainer}
+        style={styles.bodyContainer}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={handleRefresh}
-          />}
+          />
+        }
       >
-        {clubList ? clubList.clubGetListDto.map((club: ClubGetRes) => (
+        {clubList?.clubGetListDto.map((club: ClubGetRes) => (
           <TouchableOpacity
             key={club.clubId}
-            onPress={() => navigation.navigate(mainNavigations.WEBVIEW, { clubId: club.clubId })}
+            onPress={() => handlePressWebView(club.clubId)}
           >
             <View style={styles.clubContainer}>
-              <View style={styles.clubSettingContainer}>
-                <View style={styles.iconView}>
-                  <AntDesign
-                    name="setting"
-                    onPress={() => handlePressClubDetailScreen(club)}
-                    style={styles.settingIcon}
-                  />
+              <View style={styles.clubInfo}>
+                <View>
+                  <Text style={styles.clubName}>{club.name}</Text>
+                  <Text style={styles.clubDescription}>{club.description}</Text>
                 </View>
               </View>
-              <View style={styles.clubInfoContainer}>
-                <View style={styles.clubMainInfo}>
-                  <Text style={styles.name}>
-                    {club.name}
-                  </Text>
-                  <Text style={styles.description}>
-                    {club.description}
-                  </Text>
-                </View>
-                <View style={styles.clubSubInfo}>
-                  <View style={styles.memberInfo}>
-                    <AntDesign
-                      name="user"
-                      style={styles.memberIcon}
-                    />
-                    <Text style={styles.memberNum}>
-                      {club.memberCnt}
-                    </Text>
-                  </View>
-                  <View style={styles.balanceInfo}>
-                    <Text style={styles.balance}>{new Intl.NumberFormat('ko-KR').format(club.balance) + '원'}</Text>
-                  </View>
-                </View>
-              </View>
+              <Text style={styles.balanceText}>
+                {new Intl.NumberFormat('ko-KR').format(club.balance)}원
+              </Text>
+              <TouchableOpacity
+                style={styles.detailButton}
+                onPress={() => handlePressClubDetailScreen(club)}
+              >
+                <AntDesign name="arrowright" style={styles.detailIcon} />
+              </TouchableOpacity>
             </View>
           </TouchableOpacity>
-        )) : undefined}
+        ))}
       </ScrollView>
-      <View style={styles.buttonContainer}>
-        <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.UNCLASSIFIED)}>
-          <AntDesign name="book" style={styles.submitButtonIcon} />
-        </AntdWithStyleButton>
-      </View>
-      <View style={styles.buttonContainer}>
-        <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.CLUB_CREATE)}>
-          <AntDesign name="plus" style={styles.submitButtonIcon} />
-        </AntdWithStyleButton>
-      </View>
+      <CustomBottomSheet>
+        <SettingEntry 
+          user={user}
+          logout={() => logoutMutation.mutate()}
+        />
+      </CustomBottomSheet>
     </View>
   );
 }
@@ -139,115 +122,91 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
-  },
-  contentContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  bottomSheetBackground: {
-    backgroundColor: 'white',
+    backgroundColor: '#F5F5F5',
   },
   headerContainer: {
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    marginBottom: 20,
-    flex: 0.08,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'white',
-    elevation: 5,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    backgroundColor: '#FFFFFF',
+    elevation: 4,
   },
-  alertIcon: {
-    fontSize: 30,
-    color: 'rgba(153, 102, 255, 1)',
+  welcomeText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
   },
-  logoutIcon: {
-    fontSize: 30,
-    color: 'rgba(153, 102, 255, 1)',
+  userName: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#000',
   },
-  clubListContainer: {
-    flex: 0.92,
-    marginHorizontal: 20,
-    backgroundColor: 'white',
-  },
-  clubContainer: {
-    borderWidth: 0.3,
-    borderRadius: 5,
-    marginBottom: 30,
-    padding: 6,
-    height: 220,
-    justifyContent: 'space-between',
-  },
-  clubSettingContainer: {
+  iconContainer: {
     flexDirection: 'row',
-    height: 40,
-    justifyContent: 'flex-end',
-  },
-  iconView: {
-    position: 'absolute',
+    alignItems: 'center',
   },
   settingIcon: {
-    fontSize: 25,
-    padding: 5,
-    color: 'rgba(153, 102, 255, 1)',
+    fontSize: 24,
+    color: '#9999FF',
+    marginRight: 15,
   },
-  clubInfoContainer: {
-    backgroundColor: 'rgba(128, 128, 128, 0.15)',
-    height: 100,
-    borderRadius: 5,
-    flexDirection: 'row',
+  addIcon: {
+    fontSize: 28,
+    color: '#6C63FF',
   },
-  clubMainInfo: {
-    flex: 0.7,
-    marginVertical: 18,
-    marginHorizontal: 10,
-  },
-  name: {
+  sectionTitle: {
     fontSize: 18,
-    color: 'black',
-    fontWeight: "800",
-  },
-  description: {
-    fontSize: 14,
-  },
-  clubSubInfo: {
-    flex: 0.3,
+    fontWeight: '700',
+    paddingHorizontal: 20,
     marginVertical: 10,
-    marginHorizontal: 10,
+    color: '#333',
   },
-  memberInfo: {
-    backgroundColor: 'white',
-    paddingHorizontal: 10,
-    borderRadius: 8,
+  bodyContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  clubContainer: {
+    backgroundColor: '#FFF',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 15,
+    elevation: 2,
     flexDirection: 'row',
-    alignSelf: 'flex-end',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  memberIcon: {
-    paddingTop: 4,
-    color: 'rgba(153, 102, 255, 1)',
-    fontSize: 15,
+  clubInfo: {
+    flex: 1,
   },
-  memberNum: {
-    marginLeft: 4,
-    fontSize: 17,
+  clubName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
   },
-  balanceInfo: {
+  clubDescription: {
+    fontSize: 14,
+    color: '#777',
+    marginVertical: 5,
+  },
+  balanceText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
     marginTop: 10,
-    alignSelf: 'flex-end',
+    textAlign: 'right',
+    position: 'absolute', // 아이콘과 정렬되도록 위치 조정
+    right: 50,
   },
-  balance: {
-    fontSize: 13,
+  detailButton: {
+    padding: 8,
+    backgroundColor: '#6C63FF',
+    borderRadius: 20,
   },
-  buttonContainer: {
-    marginHorizontal: 20,
-    borderRadius: 5,
-    marginBottom: 30,
-  },
-  submitButtonIcon: {
-    color: 'white',
-    fontSize: 30,
+  detailIcon: {
+    fontSize: 20,
+    color: '#FFF',
   },
 });
 
