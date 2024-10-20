@@ -1,37 +1,40 @@
-import { Button } from '@ant-design/react-native';
-import Input from '@ant-design/react-native/lib/input-item/Input';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import React, { useRef, useState } from 'react';
+import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthStackParamList } from '../../navigations/AuthStackNavigator';
 import { StackScreenProps } from '@react-navigation/stack';
-import HeaderTitle from '../../components/HeaderTitle';
 import useAuth from '../../hooks/useAuth';
 import { RequestLogin } from '../../api/auth';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 type AuthHomeScreenProps = StackScreenProps<AuthStackParamList>;
 
-function LoginScreen({navigation} : AuthHomeScreenProps) {
+function LoginScreen({ navigation }: AuthHomeScreenProps) {
 
-  const {loginMutation}=useAuth();
+  const passwordInputRef = useRef<TextInput>(null);
+  const { loginMutation, isLogin } = useAuth();
 
-  const [values,setValues] = useState({
+  const [values, setValues] = useState({
     identifier: '',
     password: ''
   })
 
-  const handleSubmit = ()=>{
-    const body: RequestLogin={
-      identifier: values.identifier, 
+  const handleSubmit = () => {
+    const body: RequestLogin = {
+      identifier: values.identifier,
       password: values.password,
     }
-    console.log('login.values', values.identifier,values.password)
-    loginMutation.mutate(body);
+    loginMutation.mutate(body, {
+      onError: (error) => {
+        Alert.alert(
+          '로그인 실패',
+          error?.response?.data?.message || '아이디 또는 비밀번호가 일치하지 않습니다.',
+          [{ text: '확인' }])
+      }
+    });
+
   }
 
-  const handleChangeText=(name: string, text:string)=>{
+  const handleChangeText = (name: string, text: string) => {
     setValues({
       ...values,
       [name]: text,
@@ -40,38 +43,67 @@ function LoginScreen({navigation} : AuthHomeScreenProps) {
 
 
   return (
-    <LinearGradient
-      colors={['#9369E0', '#D9CCFF']}
-      style={styles.gradient}
-    >
-      <SafeAreaView style={styles.container}>
-        <View style={styles.textContainer}>
-          <HeaderTitle/>
-          <Text style={styles.endTitle}>더 나은 경험을 위한 로그인</Text>
-        </View>
 
-        <View style={styles.inputContainer}>
-          <Input style={styles.input} placeholder='아이디' 
-          value={values.identifier} 
-          onChangeText={(text)=>handleChangeText('identifier',text)}></Input>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image source={require('../../assets/loginLogo.png')} style={styles.logoImage} />
+      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="아이디 입력"
+        placeholderTextColor="#c7c7c7"
+        value={values.identifier}
+        onChangeText={(text) => handleChangeText('identifier', text)}
+        onSubmitEditing={() => passwordInputRef.current?.focus()}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="비밀번호 입력"
+        placeholderTextColor="#c7c7c7"
+        value={values.password}
+        onChangeText={(text) => handleChangeText('password', text)}
+        secureTextEntry
+        ref={passwordInputRef}
+        onSubmitEditing={handleSubmit}
+        returnKeyType="done"
+      />
+      {/* <View style={styles.inputContainer}>
+        <Input style={styles.input} placeholder='아이디'
+          value={values.identifier}
+          onChangeText={(text) => handleChangeText('identifier', text)}></Input>
 
-          <Input style={styles.input} placeholder='비밀번호' 
-          value={values.password} 
-          onChangeText={(text)=>handleChangeText('password',text)}
+        <Input style={styles.input} placeholder='비밀번호'
+          value={values.password}
+          onChangeText={(text) => handleChangeText('password', text)}
           secureTextEntry></Input>
-        </View>
+      </View> */}
 
-        <View style={styles.buttonContainer}>
-          <Button style={styles.greenButton} activeStyle={{backgroundColor:'#B799FF'}} onPress={()=>handleSubmit()}>
-            <Text style={styles.textColorWhite}>로그인</Text>
-          </Button>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.loginButton} onPress={() => handleSubmit()}>
+          <Text style={styles.loginButtonText}>로그인</Text>
+        </TouchableOpacity>
+      </View>
 
-          <Button style={styles.grayButton} onPress={() =>navigation.navigate('Signup')}>
-            <Text style={styles.textColorBlack}>회원가입</Text>
-          </Button>
-          
-        </View>
-        {/* <View style={styles.lineContainer}>
+      <View style={styles.linksContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('CreateId')}>
+          <Text style={styles.linkText}>회원가입</Text>
+        </TouchableOpacity>
+        {/* <TouchableOpacity>
+          <Text style={styles.linkText}>비밀번호 찾기</Text>
+        </TouchableOpacity> */}
+      </View>
+
+      {/* <View style={styles.buttonContainer}>
+        <Button style={styles.greenButton} activeStyle={{ backgroundColor: '#B799FF' }} onPress={() => handleSubmit()}>
+          <Text style={styles.textColorWhite}>로그인</Text>
+        </Button>
+
+        <Button style={styles.grayButton} onPress={() => navigation.navigate('Signup')}>
+          <Text style={styles.textColorBlack}>회원가입</Text>
+        </Button>
+
+      </View> */}
+      {/* <View style={styles.lineContainer}>
           <View style={styles.line} />
           <Text style={styles.text}>또는</Text>
           <View style={styles.line} />
@@ -83,86 +115,73 @@ function LoginScreen({navigation} : AuthHomeScreenProps) {
           </Button>
         </View> */}
 
-      </SafeAreaView>
-    </LinearGradient >
+    </SafeAreaView>
+
   )
 }
 
 const styles = StyleSheet.create({
-  gradient: {
-    flex: 1,
-  },
   container: {
+    marginTop: -100,
     flex: 1,
-    margin: 40,
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 40,
-
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 20,
   },
-  textContainer: {
-    alignItems: 'center',
+  logoContainer: {
+    alignItems: 'center'
   },
   buttonContainer: {
     gap: 20,
-    width: 300,
+    width: '100%',
     height: 60,
     fontSize: 20,
   },
-  inputContainer: {
-    gap: 20,
-    width: 300,
+  logoImage: {
+    marginBottom: 50,
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
   },
-  lineContainer:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 29,
-    marginBottom: -10,
-    marginVertical: 20,
-  },
-  endTitle: {
-    fontSize: 24,
-    color: '#fff',
+  logo: {
+    fontSize: 32,
     fontWeight: 'bold',
-    marginTop: 131,
-    marginBottom: -10
+    color: '#4B4B4B',
   },
   input: {
+    width: '100%',
+    height: 50,
+    borderColor: '#e0e0e0',
     borderWidth: 1,
-    backgroundColor: '#fff',
-    borderColor: '#818181',
-    borderRadius: 5,
-    height:39,
+    borderRadius: 8,
     paddingHorizontal: 15,
-    color: '#000'
+    marginBottom: 15,
   },
-  greenButton: {
-    backgroundColor: '#9966FF',
-    borderRadius: 5,
-    borderColor: '#9966FF',
-    borderWidth: 0,
+  loginButton: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#5E3AE2',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 12,
+    marginBottom: 20,
   },
-  grayButton:{
-    backgroundColor: '#E8E8E8',
-    borderRadius: 5,
-    borderColor: '#E8E8E8'
-  },
-  textColorWhite: {
+  loginButtonText: {
+    color: '#ffffff',
     fontSize: 16,
-    color: '#FFF'
   },
-  textColorBlack: {
-    fontSize: 16,
-    color: '#000'
+  linksContainer: {
+    marginTop: 20,
+    flexDirection: 'row',
+    //justifyContent: 'space-between',
+    justifyContent: 'center',
+    width: '80%',
   },
-  line: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#C6C6C6',
-  },
-  text: {
-    marginHorizontal: 10,
-    color: '#C6C6C6',
-    fontSize: 16,
+  linkText: {
+    color: '#000000',
+    textDecorationLine: 'underline',
+    fontSize: 14,
   },
 });
 
