@@ -1,12 +1,12 @@
-import { Icon } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useMemo, useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import queryClient from '../../api/queryClient';
 import AntdWithStyleButton from '../../components/AntdWithStyleButton';
 import CustomLoader from '../../components/Loader';
+import SettingEntry from '../../components/SettingEntry';
 import { queryKeys } from '../../constants/key';
 import { mainNavigations } from '../../constants/navigations';
 import useAuth from '../../hooks/useAuth';
@@ -22,29 +22,14 @@ type ClubHomeScreenProps = StackScreenProps<
 
 function ClubListScreen({ navigation }: ClubHomeScreenProps) {
   const { data: data, isLoading, isError } = useGetClubList();
-  const { logoutMutation } = useAuth();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { logoutMutation } = useAuth();
+  const { openCustomBottomSheet, closeCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
+    snapPoints: useMemo(() => ['80%'], []),
+  });
   
   const handlePressClubDetailScreen = (club: ClubGetRes) => {
     navigation.navigate(mainNavigations.CLUB_DETAIL, { club });
-  };
-
-  const showLogoutAlert = () => {
-    Alert.alert(
-      "로그아웃",
-      "로그아웃 하시겠습니까?",
-      [
-        {
-          text: "아니오",
-          style: "cancel"
-        },
-        {
-          text: "예",
-          onPress: () => logoutMutation.mutate()
-        }
-      ],
-      { cancelable: false }
-    );
   };
 
   const handleRefresh = async () => {
@@ -60,25 +45,23 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
     }
   };
 
+  
   if (isLoading) {
     return <CustomLoader />
   }
-
-
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Icon
-          name="alert"
-          style={styles.alertIcon}
-          onPress={() => {
-            navigation.navigate(mainNavigations.NOTIFICATION);
-          }}
+      <CustomBottomSheet>
+        <SettingEntry 
+          logout={() => (logoutMutation.mutate())}
         />
+      </CustomBottomSheet>
+
+      <View style={styles.headerContainer}>
         <AntDesign
-          name="logout"
-          style={styles.logoutIcon}
-          onPress={showLogoutAlert}
+          name="setting"
+          onPress={openCustomBottomSheet}
+          style={styles.settingIcon}
         />
       </View>
 

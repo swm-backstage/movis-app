@@ -14,7 +14,7 @@ interface UseCustomBottomSheetProps {
 }
 
 const useCustomBottomSheet = ({
-  snapPoints = useMemo(() => ['50%'], []),
+  snapPoints,
   contentContainerStyle,
 }: UseCustomBottomSheetProps) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -74,7 +74,7 @@ const useCustomBottomSheet = ({
     </BottomSheetModal>
   );
 
-  return { openCustomBottomSheet, CustomBottomSheet };
+  return { openCustomBottomSheet, closeCustomBottomSheet, CustomBottomSheet };
 };
 
 const styles = StyleSheet.create({
