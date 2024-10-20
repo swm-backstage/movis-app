@@ -45,6 +45,12 @@ function SetPasswordScreen({ route, navigation }: SetPasswordScreenProps) {
         }
     };
 
+    const isValidPassword = (password: string) => {
+        const regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,20}$/;
+        return regex.test(password);
+    };
+
+
     const handleFocus = (field: 'first' | 'second') => {
         field === 'first' ? setIsFirstFocused(true) : setIsSecondFocused(true)
     }
@@ -61,24 +67,41 @@ function SetPasswordScreen({ route, navigation }: SetPasswordScreenProps) {
                 <Text style={styles.text}>비밀번호를{'\n'}설정해 주세요</Text>
 
                 <View style={styles.inputLayout}>
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="비밀번호 입력"
-                            value={password}
-                            onChangeText={(text) => handleChangeText('password', text)}
-                            onFocus={() => handleFocus('first')}
-                            onBlur={() => handleBlur('first')}
-                            secureTextEntry
-                            onSubmitEditing={() => passwordInputRef.current?.focus()}
-                            returnKeyType="next"
-                        />
-                        {isFirstFocused && (
-                            <TouchableOpacity onPress={() => setPassword('')} >
-                                <Image source={require('../../../assets/delete.png')} style={styles.clearIcon} />
-                            </TouchableOpacity>
-                        )}
+
+                    <View style={styles.inputWithText}>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="비밀번호 입력"
+                                value={password}
+                                onChangeText={(text) => handleChangeText('password', text)}
+                                onFocus={() => handleFocus('first')}
+                                onBlur={() => handleBlur('first')}
+                                secureTextEntry
+                                onSubmitEditing={() => passwordInputRef.current?.focus()}
+                                returnKeyType="next"
+                            />
+                            {isFirstFocused && (
+                                <TouchableOpacity onPress={() => setPassword('')} >
+                                    <Image source={require('../../../assets/delete.png')} style={styles.clearIcon} />
+                                </TouchableOpacity>
+                            )}
+                        </View>
+                        <View style={styles.checkInput}>
+                            {password.length > 0 && !isValidPassword(password) && (
+                                <Image
+                                    source={require('../../../assets/remove_circle.png')}
+                                    style={styles.textIcon}
+                                />
+                            )}
+                            {password.length > 0 && !isValidPassword(password) && (
+                                <Text style={[styles.availabilityText, styles.unavailable]}>
+                                    {'비밀번호는 8-20자이며, 숫자, 대문자, 소문자,\n특수 문자를 포함해야 합니다.'}
+                                </Text>
+                            )}
+                        </View>
                     </View>
+
 
                     <View style={styles.inputWithText}>
                         <View style={styles.inputContainer}>
@@ -123,7 +146,7 @@ function SetPasswordScreen({ route, navigation }: SetPasswordScreenProps) {
 
 
             </View>
-            {password.length > 0 && confirmPassword.length > 0 && password === confirmPassword && (
+            {password.length > 0 && confirmPassword.length > 0 && password === confirmPassword && isValidPassword(password) && (
                 <TouchableOpacity
                     style={isKeyboardVisible ? styles.nextButtonWithKeyboard : styles.nextButton}
                     onPress={() => navigation.navigate('VerifyPhoneNumber', { identifier: identifier, password: password })}
