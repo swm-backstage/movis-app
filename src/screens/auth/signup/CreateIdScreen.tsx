@@ -2,6 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { Alert, Image, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AuthStackParamList } from '../../../navigations/AuthStackNavigator';
+import { useCheckIdentifier } from '../../../hooks/useUser';
 
 type CreadtedIdScreenProps = StackScreenProps<AuthStackParamList>;
 
@@ -11,6 +12,15 @@ function CreateIdScreen({ navigation }: CreadtedIdScreenProps) {
     const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
+    const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
+
+    const { data, refetch } = useCheckIdentifier(identifier);
+    const isIdentifierAvailable = data?.exists ?? null;
+
+    const isValidIdentifier = (text: string) => {
+        const regex = /^[a-zA-Z0-9]{4,20}$/;
+        return regex.test(text);
+    };
 
     useEffect(() => {
 
@@ -34,18 +44,32 @@ function CreateIdScreen({ navigation }: CreadtedIdScreenProps) {
         };
     }, []);
 
-    const checkUsernameAvailability = (text: string) => {
-        if (text.length >= 5) {
-            setIsAvailable(true);
+    useEffect(() => {
+        if (typingTimeout) {
+            clearTimeout(typingTimeout);
         }
-        else {
-            setIsAvailable(false);
+
+        if (isValidIdentifier(identifier)) {
+            const timeout = setTimeout(() => {
+                refetch();
+                setIsAvailable(!isIdentifierAvailable);
+            }, 1000);
+
+            setTypingTimeout(timeout);
+        } else {
+            setIsAvailable(null);
         }
-    };
+
+        return () => {
+            if (typingTimeout) {
+                clearTimeout(typingTimeout); // 컴포넌트가 언마운트될 때 타이머 정리
+            }
+        };
+    }, [identifier, isIdentifierAvailable]);
+
 
     const handleChangeText = (text: string) => {
         setIdentifier(text);
-        checkUsernameAvailability(text);
     };
 
     const handleFocus = () => setIsFocused(true);
@@ -77,23 +101,37 @@ function CreateIdScreen({ navigation }: CreadtedIdScreenProps) {
                         )}
                     </View>
                     <View style={styles.checkInput}>
-                        {identifier.length > 0 && isAvailable !== null && (
-                            <Image
-                                source={isAvailable
-                                    ? require('../../../assets/check_circle.png')
-                                    : require('../../../assets/remove_circle.png')}
-                                style={styles.textIcon}
-                            />
-                        )}
-                        {identifier.length > 0 && isAvailable !== null && (
-                            <Text style={[
-                                styles.availabilityText,
-                                isAvailable ? styles.available : styles.unavailable,
-                            ]}>
-                                {isAvailable ? '사용 가능한 아이디입니다' : '이미 사용 중인 아이디입니다'}
-                            </Text>
+                        {identifier.length > 0 && !isValidIdentifier(identifier) && (
+                            <>
+                                <Image
+                                    source={require('../../../assets/remove_circle.png')}
+                                    style={styles.textIcon}
+                                />
+                                <Text style={[
+                                    styles.availabilityText,
+                                    styles.unavailable,
+                                ]}>
+                                    {'4~20자리의 영문자와 숫자만 가능합니다.'}
+                                </Text>
+                            </>
                         )}
 
+                        {isValidIdentifier(identifier) && isAvailable !== null && (
+                            <>
+                                <Image
+                                    source={isAvailable
+                                        ? require('../../../assets/check_circle.png')
+                                        : require('../../../assets/remove_circle.png')}
+                                    style={styles.textIcon}
+                                />
+                                <Text style={[
+                                    styles.availabilityText,
+                                    isAvailable ? styles.available : styles.unavailable,
+                                ]}>
+                                    {isAvailable ? '사용 가능한 아이디입니다' : '이미 사용 중인 아이디입니다'}
+                                </Text>
+                            </>
+                        )}
                     </View>
                 </View>
 
