@@ -14,6 +14,7 @@ import { useGetClubList } from '../../hooks/useClub';
 import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
+import { useGetUser } from '../../hooks/useUser';
 
 type ClubHomeScreenProps = StackScreenProps<
   MainStackParamList,
@@ -21,7 +22,8 @@ type ClubHomeScreenProps = StackScreenProps<
 >;
 
 function ClubListScreen({ navigation }: ClubHomeScreenProps) {
-  const { data: data, isLoading, isError } = useGetClubList();
+  const { data: clubList, isLoading: clubListIsLoading, isError: clubListIsError } = useGetClubList();
+  const { data: user, isLoading: userIsLoading, isError: userIsError } = useGetUser();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { logoutMutation } = useAuth();
   const { openCustomBottomSheet, closeCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
@@ -46,18 +48,22 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
   };
 
   
-  if (isLoading) {
+  if (clubListIsLoading) {
     return <CustomLoader />
   }
   return (
     <View style={styles.container}>
       <CustomBottomSheet>
         <SettingEntry 
+          user={user}
           logout={() => (logoutMutation.mutate())}
         />
       </CustomBottomSheet>
 
       <View style={styles.headerContainer}>
+        <Text>
+          {user?.name}
+        </Text>
         <AntDesign
           name="setting"
           onPress={openCustomBottomSheet}
@@ -73,7 +79,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
             onRefresh={handleRefresh}
           />}
       >
-        {data ? data.clubGetListDto.map((club: ClubGetRes) => (
+        {clubList ? clubList.clubGetListDto.map((club: ClubGetRes) => (
           <TouchableOpacity
             key={club.clubId}
             onPress={() => navigation.navigate(mainNavigations.WEBVIEW, { clubId: club.clubId })}
