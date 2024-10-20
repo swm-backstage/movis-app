@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import HeaderTitle from '../../components/HeaderTitle';
 import { TextInput } from 'react-native';
 import useAuth from '../../hooks/useAuth';
 import { RequestCreateUser, RequestLogin } from '../../api/auth';
 import { StackScreenProps } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../navigations/AuthStackNavigator';
-import { validate} from '../../utils/validate';
+import { validate } from '../../utils/validate';
 
 type AuthHomeScreenProps = StackScreenProps<AuthStackParamList>;
 
@@ -79,7 +78,7 @@ function SignupScreen({ navigation }: AuthHomeScreenProps) {
       password: values.password,
     }
     console.log('start')
-    if(values.password === values.passwordConfirm){
+    if (values.password === values.passwordConfirm) {
       signupMutation.mutate(signupBody, {
         onSuccess: () => {
           Alert.alert("회원 가입 완료", "로그인 하시겠습니다?",
@@ -98,9 +97,9 @@ function SignupScreen({ navigation }: AuthHomeScreenProps) {
         onError: (error) => {
           console.log(error.response?.data)
         },
-      })  
+      })
     }
-    else{
+    else {
       Alert.alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.')
     }
   }
@@ -113,7 +112,6 @@ function SignupScreen({ navigation }: AuthHomeScreenProps) {
       <SafeAreaView style={styles.container}>
 
         <View style={styles.textContainer}>
-          <HeaderTitle />
           <Text style={styles.firstContent}>회원가입</Text>
         </View>
 
