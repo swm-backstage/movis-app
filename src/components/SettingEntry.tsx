@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 import SettingList from './SettingList';
 import SettingListItem from './SettingListItem';
+import { UserGetRes } from '../types/user/UserGetRes';
 
 type SettingEntryProps = {
+    user: UserGetRes | undefined,
     logout: () => void;
 };
 
-const SettingEntry: React.FC<SettingEntryProps> = ({ logout }) => {
+const SettingEntry: React.FC<SettingEntryProps> = ({ user, logout }) => {
     const [isNotificationSet, setIsNotificationSet] = useState(false);
 
     const handleNotificationPress = () => {
@@ -40,7 +42,17 @@ const SettingEntry: React.FC<SettingEntryProps> = ({ logout }) => {
                     source={{ uri: 'https://via.placeholder.com/50' }}
                     style={styles.profileImage}
                 />
-                <Text style={styles.profileName}>백진암(Mock)</Text>
+                <View>
+                    <Text style={styles.profileName}>
+                        {user?.name}
+                    </Text>
+                    <Text style={styles.profileDetail}>
+                        사용자ID: {user?.identifier}
+                    </Text>
+                    <Text style={styles.profileDetail}>
+                        전화번호: {user?.phoneNo}
+                    </Text>
+                </View>
             </View>
 
             <SettingList title="권한 설정">
@@ -80,6 +92,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
+        backgroundColor: '#f9f9f9',
+        borderRadius: 10,
+        padding: 15,
+        // Android의 그림자 효과
+        elevation: 3,
     },
     profileImage: {
         width: 50,
@@ -91,6 +108,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: '#333',
+    },
+    profileDetail: {
+        fontSize: 14,
+        color: '#666',
     },
 });
 
