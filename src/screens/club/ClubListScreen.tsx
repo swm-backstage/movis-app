@@ -14,6 +14,7 @@ import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
 import { useGetUser } from '../../hooks/useUser';
+import colors from '../../assets/colors/colors';
 
 type ClubHomeScreenProps = StackScreenProps<
   MainStackParamList,
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   clubContainer: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.Gray100,
     padding: 15,
     borderRadius: 10,
     marginBottom: 15,
