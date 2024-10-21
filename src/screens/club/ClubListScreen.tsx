@@ -21,9 +21,9 @@ type ClubHomeScreenProps = StackScreenProps<
 >;
 
 function ClubListScreen({ navigation }: ClubHomeScreenProps) {
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const { data: clubList, isLoading: clubListIsLoading } = useGetClubList();
   const { data: user, isLoading: userIsLoading } = useGetUser();
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const { logoutMutation } = useAuth();
   const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
     snapPoints: useMemo(() => ['80%'], []),
@@ -58,8 +58,10 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <View>
-          <Text style={styles.welcomeText}>반가워요!</Text>
-          <Text style={styles.userName}>{user?.name}님.</Text>
+          <Text style={styles.welcomeText}>
+            반가워요!
+            {"\n" + user?.name}님.
+          </Text>
         </View>
         <View style={styles.iconContainer}>
           <AntDesign
