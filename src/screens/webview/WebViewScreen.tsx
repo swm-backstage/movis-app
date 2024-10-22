@@ -59,9 +59,11 @@ function WebViewScreen({ route, navigation }: WebViewScreenProps) {
     } else if (data.type === 'eventCreate') {
       navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: data.clubId });
     } else if (data.type === 'eventConfig') {
-      
+
     } else if (data.type === 'transactionHistoryCreate') {
       navigation.navigate(mainNavigations.TRANSACTIONHISTORY_CREATE, { clubId: data.clubId, eventId: data.eventId });
+    } else if (data.type === 'unClassifiedTransaction') {
+      navigation.navigate(mainNavigations.UNCLASSIFIED, { clubId: data.clubId });
     }
   };
   const onLoad = () => {
