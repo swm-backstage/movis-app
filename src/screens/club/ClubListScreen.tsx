@@ -50,17 +50,15 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
           >
             <AntDesign
               name="setting"
-              onPress={openCustomBottomSheet}
               style={styles.settingIcon}
             />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.addButton}
-            onPress={openCustomBottomSheet}
+            onPress={handlePressClubCreateScreen}
           >
             <AntDesign
               name="plus"
-              onPress={handlePressClubCreateScreen}
               style={styles.addIcon}
             />
           </TouchableOpacity>
