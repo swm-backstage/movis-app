@@ -46,7 +46,7 @@ const ClubList: React.FC<SettingEntryProps> = ({ handlePressClubCreateScreen, ha
 	}
 	return (
 		<View>
-			{clubListData?.clubGetListDto.length ? (
+			{clubListData && clubListData?.clubGetListDto.length ? (
 				<>
 					<Text style={styles.sectionTitle}>내가 속한 모임</Text>
 					<ScrollView
