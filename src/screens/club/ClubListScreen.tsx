@@ -23,6 +23,9 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
   const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
     snapPoints: useMemo(() => ['80%'], []),
   });
+  const handlePressClubCreateScreen = () => {
+    navigation.navigate(mainNavigations.CLUB_CREATE);
+  };  
   const handlePressClubDetailScreen = (club: ClubGetRes) => {
     navigation.navigate(mainNavigations.CLUB_DETAIL, { club });
   };
@@ -57,15 +60,15 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
           >
             <AntDesign
               name="plus"
-              onPress={() => navigation.navigate(mainNavigations.CLUB_CREATE)}
+              onPress={handlePressClubCreateScreen}
               style={styles.addIcon}
             />
           </TouchableOpacity>
         </View>
       </View>
       <View style={styles.bodyContainer}>
-        <Text style={styles.sectionTitle}>내가 속한 모임</Text>
         <ClubList
+          handlePressClubCreateScreen={handlePressClubCreateScreen}
           handlePressClubDetailScreen={handlePressClubDetailScreen}
           handlePressWebView={handlePressWebView}>
         </ClubList>
@@ -120,12 +123,6 @@ const styles = StyleSheet.create({
   addIcon: {
     fontSize: 20,
     color: colors.White,
-  },
-  sectionTitle: {
-    fontSize: 17,
-    fontWeight: '500',
-    color: colors.Black,
-    marginBottom: 20,
   },
   bodyContainer: {
     flex: 0.85,

@@ -13,13 +13,14 @@ import { ClubGetRes } from '../types/club/response/ClubGetRes';
 import CustomLoader from './Loader';
 
 type SettingEntryProps = {
+	handlePressClubCreateScreen: () => void;
 	handlePressClubDetailScreen: (club: ClubGetRes) => void;
 	handlePressWebView: (clubId: string) => void;
 };
 
-const ClubList: React.FC<SettingEntryProps> = ({ handlePressClubDetailScreen, handlePressWebView }) => {
+const ClubList: React.FC<SettingEntryProps> = ({ handlePressClubCreateScreen, handlePressClubDetailScreen, handlePressWebView }) => {
 	const [isRefreshing, setIsRefreshing] = useState(false);
-	const { data: clubList, isLoading: clubListIsLoading } = useGetClubList();
+	const { data: clubListData, isLoading: clubListIsLoading } = useGetClubList();
 	// MockData
 	const images = [
 		require('../assets/welcom.png'),
@@ -27,7 +28,6 @@ const ClubList: React.FC<SettingEntryProps> = ({ handlePressClubDetailScreen, ha
 		require('../assets/deposit.png'),
 		require('../assets/deposit.png'),
 	];
-
 	const handleRefresh = async () => {
 		try {
 			setIsRefreshing(true);
@@ -40,71 +40,101 @@ const ClubList: React.FC<SettingEntryProps> = ({ handlePressClubDetailScreen, ha
 			setIsRefreshing(false);
 		}
 	};
-	if (clubListIsLoading) {
+
+	if (clubListIsLoading || !clubListData) {
 		return <CustomLoader />;
 	}
 	return (
-		<ScrollView
-			style={styles.scrollContrainer}
-			refreshControl={
-				<RefreshControl
-					refreshing={isRefreshing}
-					onRefresh={handleRefresh}
-				/>
-			}
-		>
-			{clubList?.clubGetListDto.map((club: ClubGetRes) => (
-				<TouchableOpacity
-					key={club.clubId}
-					onPress={() => handlePressWebView(club.clubId)}
-				>
-					<View style={styles.clubContainer}>
-						<View style={styles.clubInfo}>
-							<View style={styles.clubNameDescription}>
-								<Text style={styles.clubName} numberOfLines={1}>{club.name}</Text>
-								<Text style={styles.clubDescription} numberOfLines={1}>{club.description}</Text>
-							</View>
-							{/* 회원 정보 API수정 후 프로필 이미지 받아오기 */}
-							<View style={styles.clubMembersProfiles}>
-								{images.map((img, index) => (
-									index < 3 && (
-										<Image
-											key={index}
-											source={img}
-											style={styles.profileImage}
-										/>
-									)
-								))}
-								{images.length > 3 && (
-									<View style={[styles.profileImage, { backgroundColor: colors.Gray300, justifyContent: 'center', alignItems: 'center' }]}>
-										<Text style={{ fontSize: 12, color: colors.Black }}>+{4 - 3}</Text>
+		<View>
+			{clubListData?.clubGetListDto.length ? (
+				<>
+					<Text style={styles.sectionTitle}>내가 속한 모임</Text>
+					<ScrollView
+						style={styles.scrollContrainer}
+						refreshControl={
+							<RefreshControl
+								refreshing={isRefreshing}
+								onRefresh={handleRefresh}
+							/>
+						}
+					>
+						{clubListData?.clubGetListDto.map((club: ClubGetRes) => (
+							<TouchableOpacity
+								key={club.clubId}
+								onPress={() => handlePressWebView(club.clubId)}
+							>
+								<View style={styles.clubContainer}>
+									<View style={styles.clubInfo}>
+										<View style={styles.clubNameDescription}>
+											<Text style={styles.clubName} numberOfLines={1} ellipsizeMode="tail">{club.name}</Text>
+											<Text style={styles.clubDescription} numberOfLines={1} ellipsizeMode="tail">{club.description}</Text>
+										</View>
+										{/* 회원 정보 API수정 후 프로필 이미지 받아오기 */}
+										<View style={styles.clubMembersProfiles}>
+											{images.map((img, index) => (
+												index < 3 && (
+													<Image
+														key={index}
+														source={img}
+														style={styles.profileImage}
+													/>
+												)
+											))}
+											{images.length > 3 && (
+												<View style={[styles.profileImage, { backgroundColor: colors.Gray300, justifyContent: 'center', alignItems: 'center' }]}>
+													<Text style={{ fontSize: 12, color: colors.Black }}>+{images.length - 3}</Text>
+												</View>
+											)}
+										</View>
 									</View>
-								)}
-							</View>
+									<View style={styles.clubComplex}>
+										<View style={styles.clubDetailButton}>
+											<TouchableOpacity
+												style={styles.detailButton}
+												onPress={() => handlePressClubDetailScreen(club)}
+											>
+												<AntDesign name="arrowright" style={styles.detailIcon} />
+											</TouchableOpacity>
+										</View>
+										<View style={styles.clubBalanceText}>
+											<Text style={styles.balanceText} numberOfLines={1}>
+												{new Intl.NumberFormat('ko-KR').format(club.balance)}원
+											</Text>
+										</View>
+									</View>
+								</View>
+							</TouchableOpacity>
+						))}
+					</ScrollView>
+				</>
+			) : (
+				<View style={styles.noClubContainer}>
+					<View style={styles.noClubCard}>
+						<View style={styles.noClubTextContainer}>
+							<Text style={styles.noClubText}>아직 내가 속한 {'\n'}모임이 없어요 :{'('}</Text>
+							<Text style={styles.noClubSubText}>모임을 만들어 볼까요?</Text>
 						</View>
-						<View style={styles.clubComplex}>
-							<View style={styles.clubDetailButton}>
-								<TouchableOpacity
-									style={styles.detailButton}
-									onPress={() => handlePressClubDetailScreen(club)}
-								>
-									<AntDesign name="arrowright" style={styles.detailIcon} />
-								</TouchableOpacity>
-							</View>
-							<View style={styles.clubBalanceText}>
-								<Text style={styles.balanceText} numberOfLines={1}>
-									{new Intl.NumberFormat('ko-KR').format(club.balance)}원
-								</Text>
-							</View>
+						<View style={styles.noClubButtonContainer}>
+							<TouchableOpacity style={styles.noClubButton} onPress={handlePressClubCreateScreen}>
+								<AntDesign name="plus" style={styles.noClubButtonIcon} />
+							</TouchableOpacity>
 						</View>
 					</View>
-				</TouchableOpacity>
-			))}
-		</ScrollView>
+					<View style={styles.noClubCardNestedFirst} />
+					<View style={styles.noClubCardNestedSecond} />
+				</View>
+			)}
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
+	sectionTitle: {
+		fontSize: 17,
+		fontWeight: '500',
+		color: colors.Black,
+		marginBottom: 20,
+	},
 	scrollContrainer: {
 
 	},
@@ -170,6 +200,64 @@ const styles = StyleSheet.create({
 		fontSize: 17,
 		fontWeight: '600',
 		color: colors.Black,
+	},
+	noClubContainer: {
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	noClubCard: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		width: '100%',
+		aspectRatio: 1.1,
+		borderRadius: 12,
+		padding: 30,
+		backgroundColor: colors.Primary,
+		zIndex: 3,
+	},
+	noClubTextContainer: {
+		justifyContent: 'center',
+	},
+	noClubButtonContainer: {
+		justifyContent: 'flex-end',
+	},
+	noClubText: {
+		fontSize: 20,
+		fontWeight: '900',
+		color: colors.White,
+		marginBottom: 3,
+	},
+	noClubSubText: {
+		fontSize: 12,
+		color: colors.Gray200,
+	},
+	noClubButton: {
+		width: 40,
+		height: 40,
+		borderRadius: 20,
+		backgroundColor: colors.White,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	noClubButtonIcon: {
+		fontSize: 28,
+		color: colors.Black,
+	},
+	noClubCardNestedFirst: {
+		width: '93%',
+		aspectRatio: 1.1,
+		borderRadius: 12,
+		backgroundColor: colors.Gray300,
+		marginTop: -280,
+		zIndex: 2,
+	},
+	noClubCardNestedSecond: {
+		width: '86%',
+		aspectRatio: 1.1,
+		borderRadius: 12,
+		backgroundColor: colors.Gray200,
+		marginTop: -258,
+		zIndex: 1,
 	},
 });
 
