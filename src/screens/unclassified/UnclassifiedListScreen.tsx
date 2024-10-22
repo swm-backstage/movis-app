@@ -44,7 +44,7 @@ const renderTransactionItem = ({ item, handleCheckboxToggle, selectedItems, isDe
     </View>
 );
 
-const DepositScreen = ({ handleCheckboxToggle, selectedItems, handleEditButtonPress, deposits }: any) => (
+const DepositScreen = ({ handleCheckboxToggle, selectedItems, handleEditButtonPress, deposits, refreshing, onRefresh }: any) => (
 
 
 
@@ -54,6 +54,8 @@ const DepositScreen = ({ handleCheckboxToggle, selectedItems, handleEditButtonPr
             renderItem={({ item }) => renderTransactionItem({ item, handleCheckboxToggle, selectedItems, isDeposit: true })}
             keyExtractor={item => item.elementId}
             style={styles.list}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
         />
         <TouchableOpacity style={styles.editButton} onPress={handleEditButtonPress}>
             <Text style={styles.editButtonText}>내역 수정</Text>
@@ -61,13 +63,15 @@ const DepositScreen = ({ handleCheckboxToggle, selectedItems, handleEditButtonPr
     </View>
 
 );
-const WithdrawalScreen = ({ handleCheckboxToggle, selectedItems, handleEditButtonPress, withdrawals }: any) => (
+const WithdrawalScreen = ({ handleCheckboxToggle, selectedItems, handleEditButtonPress, withdrawals, refreshing, onRefresh }: any) => (
     <View style={styles.screenBackground}>
         <FlatList
             data={withdrawals}
             renderItem={({ item }) => renderTransactionItem({ item, handleCheckboxToggle, selectedItems, isDeposit: false })}
             keyExtractor={item => item.elementId}
             style={styles.list}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
         />
 
         <TouchableOpacity style={styles.editButton} onPress={handleEditButtonPress}>
@@ -79,10 +83,17 @@ const WithdrawalScreen = ({ handleCheckboxToggle, selectedItems, handleEditButto
 function UnclassifiedListScreen({ route, navigation }: UnclassifiedListScreenProps) {
 
     const [selectedItems, setSelectedItems] = useState<TransactionHistoryGetRes[]>([]); // 선택된 항목들을 저장하는 배열
+    const [refreshing, setRefreshing] = useState(false);
 
-    const clubId = '01JA4N3AT4K4W3GEHBTVWFAV3B'
+    const clubId = route.params.clubId
 
     const { data, refetch } = useGetUnclassifiedTransaction(clubId);
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await refetch();
+        setRefreshing(false);
+    };
 
     useFocusEffect(
         React.useCallback(() => {
@@ -152,7 +163,14 @@ function UnclassifiedListScreen({ route, navigation }: UnclassifiedListScreenPro
                         }
                     }
                 )}>
-                    {() => <DepositScreen handleCheckboxToggle={handleCheckboxToggle} selectedItems={selectedItems} handleEditButtonPress={handleDepositEditButtonPress} deposits={deposits} />}
+                    {() => <DepositScreen
+                        handleCheckboxToggle={handleCheckboxToggle}
+                        selectedItems={selectedItems}
+                        handleEditButtonPress={handleDepositEditButtonPress}
+                        deposits={deposits}
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />}
                 </Tab.Screen>
 
                 <Tab.Screen name="출금" listeners={() => ({
@@ -160,7 +178,14 @@ function UnclassifiedListScreen({ route, navigation }: UnclassifiedListScreenPro
                         setSelectedItems([]);
                     }
                 })}>
-                    {() => <WithdrawalScreen handleCheckboxToggle={handleCheckboxToggle} selectedItems={selectedItems} handleEditButtonPress={handleWithdrawalEditButtonPress} withdrawals={withdrawals} />}
+                    {() => <WithdrawalScreen
+                        handleCheckboxToggle={handleCheckboxToggle}
+                        selectedItems={selectedItems}
+                        handleEditButtonPress={handleWithdrawalEditButtonPress}
+                        withdrawals={withdrawals}
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />}
                 </Tab.Screen>
             </Tab.Navigator>
 

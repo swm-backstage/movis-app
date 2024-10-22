@@ -27,15 +27,15 @@ export type MainStackParamList = {
   [mainNavigations.CLUB_DETAIL]: { club: ClubGetRes };
   [mainNavigations.CLUB_CREATE]: undefined;
 
-  [mainNavigations.CLUB_USER_UPDATE]: {clubId: string};
+  [mainNavigations.CLUB_USER_UPDATE]: { clubId: string };
 
   [mainNavigations.EVENT_CREATE]: { clubId: string };
 
-  [mainNavigations.TRANSACTIONHISTORY_CREATE]: { clubId: string, eventId: string};
+  [mainNavigations.TRANSACTIONHISTORY_CREATE]: { clubId: string, eventId: string };
 
   [mainNavigations.WEBVIEW]: { clubId: string };
   [mainNavigations.NOTIFICATION]: undefined,
-  [mainNavigations.UNCLASSIFIED]: undefined,
+  [mainNavigations.UNCLASSIFIED]: { clubId: string },
   [mainNavigations.WITHDRAWAL]: { selectedWithdrawals: any[], clubId: string },
   [mainNavigations.DEPOSIT]: { selectedDeposits: any[], clubId: string }
 }

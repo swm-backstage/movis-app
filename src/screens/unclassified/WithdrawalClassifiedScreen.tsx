@@ -30,7 +30,7 @@ function WithdrawalClassifiedScreen({ route, navigation }: WithdrawalClassifiedS
                 [
                     {
                         text: '확인',
-                        onPress: () => navigation.navigate(mainNavigations.UNCLASSIFIED),
+                        onPress: () => navigation.navigate(mainNavigations.UNCLASSIFIED, { clubId }),
                     },
                 ]
             );
@@ -43,7 +43,7 @@ function WithdrawalClassifiedScreen({ route, navigation }: WithdrawalClassifiedS
                 [
                     {
                         text: '확인',
-                        onPress: () => navigation.navigate(mainNavigations.UNCLASSIFIED),
+                        onPress: () => navigation.navigate(mainNavigations.UNCLASSIFIED, { clubId }),
                     },
                 ]
             );
