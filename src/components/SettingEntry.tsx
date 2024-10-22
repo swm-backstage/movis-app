@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 import SettingList from './SettingList';
 import SettingListItem from './SettingListItem';
+import RNAndroidNotificationListener from 'react-native-android-notification-listener'
 import { UserGetRes } from '../types/user/UserGetRes';
 
 type SettingEntryProps = {
@@ -10,28 +11,49 @@ type SettingEntryProps = {
 };
 
 const SettingEntry: React.FC<SettingEntryProps> = ({ user, logout }) => {
-    const [isNotificationSet, setIsNotificationSet] = useState(false);
+    const [hasPermission, setHasPermission] = useState(false)
 
-    const handleNotificationPress = () => {
-        setIsNotificationSet(true);
-        Alert.alert("알림 설정이 완료되었습니다.");
-    };
+    const handleOnPressPermissionButton = async () => {
+        /**
+         * Open the notification settings so the user
+         * so the user can enable it
+         */
+        RNAndroidNotificationListener.requestPermission()
+    }
+
+    const handleAppStateChange = async (nextAppState: string, force = false) => {
+        if (nextAppState === 'active' || force) {
+            const status = await RNAndroidNotificationListener.getPermissionStatus()
+            setHasPermission(status !== 'denied')
+        }
+    }
+
+    useEffect(() => {
+        console.log('권한 추적')
+
+        handleAppStateChange('', true)
+
+        return () => {
+            console.log('권한 추적 끝')
+        }
+    }, [])
+
 
     const showLogoutAlert = () => {
         Alert.alert(
-          "로그아웃",
-          "로그아웃 하시겠습니까?",
-          [
-            {
-              text: "아니오",
-              style: "cancel"
-            },
-            {
-              text: "예",
-              onPress: () => logout()
-            }
-          ],
-          { cancelable: false }
+            "로그아웃",
+            "로그아웃 하시겠습니까?",
+            [
+                {
+                    text: "아니오",
+                    style: "cancel"
+                },
+                {
+                    text: "예",
+                    onPress: () => logout()
+                }
+            ],
+            { cancelable: false }
         );
     };
 
@@ -56,26 +78,25 @@ const SettingEntry: React.FC<SettingEntryProps> = ({ user, logout }) => {
             </View>
 
             <SettingList title="권한 설정">
-                <SettingListItem 
-                    text="알림(개발중)" 
-                    onPress={handleNotificationPress} 
-                    disabled={isNotificationSet}
+                <SettingListItem
+                    text={hasPermission ? "알림: 허용됨" : "알림: 허용되지 않음"}
+                    onPress={handleOnPressPermissionButton}
                 />
             </SettingList>
 
             <SettingList title="로그인 정보">
-                <SettingListItem 
-                    text="비밀번호 변경(추가 예정)" 
-                    onPress={() => Alert.alert("추가 예정입니다.")} 
+                <SettingListItem
+                    text="비밀번호 변경(추가 예정)"
+                    onPress={() => Alert.alert("추가 예정입니다.")}
                     disabled={true}
                 />
-                <SettingListItem 
-                    text="로그아웃" 
-                    onPress={showLogoutAlert} 
+                <SettingListItem
+                    text="로그아웃"
+                    onPress={showLogoutAlert}
                 />
-                <SettingListItem 
-                    text="회원 탈퇴(추가 예정)" 
-                    onPress={() => Alert.alert("추가 예정입니다.")} 
+                <SettingListItem
+                    text="회원 탈퇴(추가 예정)"
+                    onPress={() => Alert.alert("추가 예정입니다.")}
                     disabled={true}
                 />
             </SettingList>
