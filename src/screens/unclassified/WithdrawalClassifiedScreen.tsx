@@ -147,11 +147,12 @@ const styles = StyleSheet.create({
     transactionItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 8,
+        alignItems: 'center'
     },
     transactionName: {
         fontSize: 16,
         color: 'black',
+        width: '80%'
     },
     transactionAmount: {
         fontSize: 16,
