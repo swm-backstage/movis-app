@@ -19,11 +19,13 @@ const Tab = createMaterialTopTabNavigator();
 const renderTransactionItem = ({ item, handleCheckboxToggle, selectedItems, isDeposit }: any) => (
 
     <View style={styles.transactionItem}>
-        <Image
-            source={item.status === 'FEE' ? require('../../assets/deposit.png') : require('../../assets/withdrawal.png')}  // 입금/출금에 따라 이미지 설정
-            style={styles.icon}
-        />
-        <Text style={styles.transactionName}>{item.name}</Text>
+        <View style={styles.iconName}>
+            <Image
+                source={item.status === 'FEE' ? require('../../assets/deposit.png') : require('../../assets/withdrawal.png')}  // 입금/출금에 따라 이미지 설정
+                style={styles.icon}
+            />
+            <Text style={styles.transactionName}>{item.name}</Text>
+        </View>
         <View style={styles.amountAndCheckbox}>
             <Text style={styles.transactionAmount}>{item.amount}</Text>
             <TouchableOpacity
@@ -153,6 +155,7 @@ function UnclassifiedListScreen({ route, navigation }: UnclassifiedListScreenPro
                     },
                     tabBarStyle: {
                         backgroundColor: 'white',
+                        borderBottomWidth: 0, // 아래 테두리 제거
                     },
                 })}
             >
@@ -224,21 +227,25 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     list: {
-        borderBottomWidth: 1,
         borderBottomColor: '#ccc',
     },
     transactionItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 12,
+        padding: 16,
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
+    },
+    iconName: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8
     },
     transactionName: {
         fontSize: 16,
         color: 'black',
-        marginTop: 8,
         textAlign: 'left',
+        width: '66%'
     },
     transactionAmount: {
         fontSize: 16,
@@ -259,15 +266,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     editButton: {
-        backgroundColor: '#D4BFFF',
+        backgroundColor: '#5F47F1',
         padding: 16,
         borderRadius: 8,
         alignItems: 'center',
+        alignSelf: 'center',
+        width: '90%',
     },
     editButtonText: {
-        color: '#5B4BCF',
+        color: 'white',
         fontSize: 16,
-        fontWeight: 'bold',
+        fontStyle: 'normal',
+        fontWeight: '500',
+        lineHeight: 18.88,
+        letterSpacing: -0.32
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -293,7 +305,6 @@ const styles = StyleSheet.create({
     icon: {
         width: 40,
         height: 40,
-        marginRight: -150
     },
     checkmark: {
         width: 11,
