@@ -12,13 +12,15 @@ function useGetClub(
   return useQuery({
     queryFn: () => getClub(clubId),
     queryKey: [queryKeys.CLUB, queryKeys.GET_CLUB, clubId]
+
   })
 }
 
 function useGetClubList() {
   return useQuery({
     queryFn: () => getClubList(),
-    queryKey: [queryKeys.CLUB, queryKeys.GET_CLUBLIST]
+    queryKey: [queryKeys.CLUB, queryKeys.GET_CLUBLIST],
+
   })
 }
 
