@@ -39,7 +39,7 @@ function DepositClassifiedScreen({ route, navigation }: DepositClassifiedScreenP
                 [
                     {
                         text: '확인',
-                        onPress: () => navigation.navigate(mainNavigations.UNCLASSIFIED),
+                        onPress: () => navigation.navigate(mainNavigations.UNCLASSIFIED, { clubId }),
                     },
                 ]
             );
@@ -51,7 +51,7 @@ function DepositClassifiedScreen({ route, navigation }: DepositClassifiedScreenP
                 [
                     {
                         text: '확인',
-                        onPress: () => navigation.navigate(mainNavigations.UNCLASSIFIED),
+                        onPress: () => navigation.navigate(mainNavigations.UNCLASSIFIED, { clubId }),
                     },
                 ]
             );

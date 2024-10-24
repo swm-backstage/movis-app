@@ -20,7 +20,8 @@ type SettingEntryProps = {
 
 const ClubList: React.FC<SettingEntryProps> = ({ handlePressClubCreateScreen, handlePressClubDetailScreen, handlePressWebView }) => {
 	const [isRefreshing, setIsRefreshing] = useState(false);
-	const { data: clubListData, isLoading: clubListIsLoading } = useGetClubList();
+	const { data: clubListData, isLoading: clubListIsLoading, isSuccess, isError } = useGetClubList();
+	console.log(isSuccess, isError, clubListIsLoading)
 	// MockData
 	const images = [
 		require('../assets/welcom.png'),

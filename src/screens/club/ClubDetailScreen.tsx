@@ -65,9 +65,9 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
       duration: 0,
       easing: Easing.inOut(Easing.ease),
     });
-  
+
     createClubUser.mutate(
-      {'clubId': club.clubId, 'identifier': values.identifier},
+      { 'clubId': club.clubId, 'identifier': values.identifier },
       {
         onError: (error) => {
           console.error(error, error.response?.data);
@@ -144,7 +144,7 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
             </AntdWithStyleButton>
           </Animated.View>
           <View>
-            <ClubUserScrollView clubId={club.clubId}/>
+            <ClubUserScrollView clubId={club.clubId} />
           </View>
           <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.CLUB_USER_UPDATE, { clubId: club.clubId })}>
             운영진 수정

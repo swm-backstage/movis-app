@@ -9,12 +9,12 @@ import Toast from 'react-native-toast-message';
 
 
 function RootNavigator() {
+  console.log('RootNavigator Screen');
   const { isLogin } = useAuth();
   const [modalVisible, setModalVisible] = useState(false);
   const [depositCount, setDepositCount] = useState(0);
   const [withdrawCount, setWithdrawCount] = useState(0);
 
-  console.log('isLogin:', isLogin);
 
   useEffect(() => {
     if (!isLogin) return;
@@ -37,7 +37,7 @@ function RootNavigator() {
         // 앱이 백그라운드로 전환될 때 AsyncStorage 값을 0으로 초기화
         await AsyncStorage.setItem('@depositCount', '0');
         await AsyncStorage.setItem('@withdrawCount', '0');
-    }
+      }
     };
 
     const subscription = AppState.addEventListener('change', handleAppStateChange);

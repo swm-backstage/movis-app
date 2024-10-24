@@ -11,9 +11,11 @@ import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { useGetUser } from '../../hooks/useUser';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
+import { AuthStackParamList } from '../../navigations/AuthStackNavigator';
 
 type ClubHomeScreenProps = StackScreenProps<
   MainStackParamList,
+
   typeof mainNavigations.CLUB_LIST
 >;
 
@@ -25,7 +27,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
   });
   const handlePressClubCreateScreen = () => {
     navigation.navigate(mainNavigations.CLUB_CREATE);
-  };  
+  };
   const handlePressClubDetailScreen = (club: ClubGetRes) => {
     navigation.navigate(mainNavigations.CLUB_DETAIL, { club });
   };
@@ -74,7 +76,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
       <CustomBottomSheet>
         <SettingEntry
           user={user}
-          logout={() => logoutMutation.mutate()}
+          logout={() => logoutMutation.mutate(undefined)}
         />
       </CustomBottomSheet>
     </View>
