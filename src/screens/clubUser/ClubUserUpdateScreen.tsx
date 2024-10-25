@@ -1,14 +1,13 @@
+import { Form, Provider, Radio } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { Form, Picker, Button, Radio, Provider } from '@ant-design/react-native';
 
-import { mainNavigations } from '../../constants/navigations';
-import { MainStackParamList } from '../../navigations/MainStackNavigator';
-import { useGetClubUserList, useMutateCreateClubUser, useMutateDelegateClubUser } from '../../hooks/useClubUser';
-import AntdWithStyleButton from '../../components/AntdWithStyleButton';
 import { ScrollView } from 'react-native-gesture-handler';
-import { ClubUserDelegateReq } from '../../types/clubUser/request/ClubUserReq';
+import AntdWithStyleButton from '../../components/AntdWithStyleButton';
+import { mainNavigations } from '../../constants/navigations';
+import { useGetClubUserList, useMutateDelegateClubUser } from '../../hooks/useClubUser';
+import { MainStackParamList } from '../../navigations/MainStackNavigator';
 
 type ClubUserUpdateScreenProps = StackScreenProps<
   MainStackParamList,

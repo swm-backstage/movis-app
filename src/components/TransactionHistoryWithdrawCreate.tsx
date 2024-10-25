@@ -1,12 +1,11 @@
+import { Form, Input, Provider, View } from "@ant-design/react-native";
 import React, { useState } from 'react';
-import { StyleSheet, Image } from "react-native";
-import { DatePicker, Form, Input, Provider, View } from "@ant-design/react-native";
+import { Image, StyleSheet } from "react-native";
 import { launchImageLibrary } from "react-native-image-picker";
+import { getPresignedUrl } from "../api/aws";
+import { useMutateCreateEventBill, useMutateUpdateEventBill } from '../hooks/useEventBill';
+import { EventBillCreateReq } from '../types/eventBill/EventBillCreateReq';
 import AntdWithStyleButton from "./AntdWithStyleButton";
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import DateTimePicker from 'react-native-modal-datetime-picker';
-import { useMutateCreateEventBill } from '../hooks/useEventBill';
-import { EventBillCreateReq } from '../types/eventBill/request/EventBillCreateReq';
 import DateTimePickerWithAntdDInput from './DateTimePickerWithAntDInput';
 
 interface TransactionHistoryWithdrawCreateProps {
@@ -22,10 +21,11 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
 }) => {
   const [form] = Form.useForm();
   const createEventBill = useMutateCreateEventBill();
+  const updateEventBill = useMutateUpdateEventBill();
+  const [image, setImage] = useState<any>(null);
 
-  const onFinish = (data: any) => {
-    const values: EventBillCreateReq = {
-      image: form.getFieldValue("image"),
+  const onFinish = async () => {
+    const eventBillCreateReqData: EventBillCreateReq = {
       paidAmount: -form.getFieldValue("paidAmount"),
       paidAt: form.getFieldValue("paidAt"),
       name: form.getFieldValue("name"),
@@ -34,16 +34,44 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
     const queryParams = {
       eventId: eventId,
     }
-    createEventBill.mutate(
-      { body: values, queryParams },
-      {
-        onSuccess: navigateGoBack,
-        onError: (error) => {
-          console.error('Error creating fee:', error,
-            error.message, error.name, error.response?.data);
-        }
-      }
-    );
+
+    try {
+      // 1. 이벤트 빌 생성
+      const eventBill = await createEventBill.mutateAsync(
+        { body: eventBillCreateReqData, queryParams }
+      );
+  
+      // 2. Presigned URL 요청
+      const extension = image.type.split('/')[1];
+      const url = await getPresignedUrl({
+        billUid: eventBill.eventBillId, 
+        extension: extension,
+      });
+  
+      // 3. 이미지 URI를 Blob으로 변환
+      const response = await fetch(image.uri);
+      const imageBlob = await response.blob();
+  
+      // 4. Presigned URL로 이미지 업로드
+      await fetch(url.toString(), {
+        method: 'PUT',
+        body: imageBlob,
+        headers: {
+          'Content-Type': image.type,
+        },
+      });
+  
+      // 5. EventBill의 image를 presigendUrl로 업데이트
+      updateEventBill.mutate({
+        body: {image: url, ...eventBillCreateReqData}, 
+        queryParams: {eventBillId: eventBill.eventBillId},
+      });
+
+      // 6. 웹 페이지로 이동
+      navigateGoBack();
+    } catch (error) {
+      console.error('Error creating bill:', error);
+    }
   }
 
   const setFormFieldsValue = (data: string) => {
@@ -58,14 +86,7 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
         console.log('ImagePicker Error: ', res.errorMessage);
       } else if (res.assets && res.assets.length > 0) {
         const selectedImage = res.assets[0];
-        const formdata = new FormData();
-        formdata.append('file', {
-          uri: selectedImage.uri,
-          type: selectedImage.type,
-          name: selectedImage.fileName,
-        });
-        console.log(res);
-        form.setFieldsValue({ image: selectedImage.uri });
+        setImage(selectedImage);
       }
     })
   }
@@ -86,9 +107,9 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
         >
           <View>
             <View style={styles.uploadedImageContainer}>
-              {form.getFieldValue("image") && (
+              {image && (
                 <Image
-                  source={{ uri: form.getFieldValue("image") }}
+                  source={{ uri: image.uri }}
                   style={styles.uploadedImage}
                 />
               )}
@@ -102,7 +123,7 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
           label="금액"
           name="paidAmount"
           rules={[
-            { pattern: /^.{2,30}$/, message: '필수 항목입니다. ' },
+            { pattern: /^.{2,30}$/, message: '필수 항목입니다.' },
             { required: true, message: '필수 항목입니다.' },
           ]}
           style={styles.formItem}
@@ -132,7 +153,7 @@ const TransactionHistoryWithdrawCreate: React.FC<TransactionHistoryWithdrawCreat
           label="상세 내역"
           name="explanation"
           rules={[
-            { pattern: /^.{0,30}$/, message: '300글자 이하로 입력해주세요.' },
+            { pattern: /^.{0,300}$/, message: '300글자 이하로 입력해주세요.' },
             { required: true, message: '필수 항목입니다.' },
           ]}
           style={styles.formItem}
