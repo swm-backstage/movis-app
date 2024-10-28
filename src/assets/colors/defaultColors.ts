@@ -13,7 +13,6 @@ const colors = {
     Gray950: "#131415", 
     Black: "#000000",
     White: "#FFFFFF",
-
 }
 
 export default colors;

@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import React, { useMemo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import colors from '../../assets/colors/colors';
+import colors from '../../assets/colors/defaultColors';
 import ClubList from '../../components/ClubList';
 import SettingEntry from '../../components/SettingEntry';
 import { mainNavigations } from '../../constants/navigations';
