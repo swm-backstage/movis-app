@@ -111,9 +111,12 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.clubName}>
+        <Text 
+          style={styles.clubName}
+          numberOfLines={1}
+          ellipsizeMode="tail">
           {club.name}
         </Text>
         <View style={styles.iconContainer}>
@@ -231,7 +234,7 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
           deleteClub={deleteClub}
         />
       </CustomBottomSheet>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -252,6 +255,12 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     backgroundColor: colors.White,
   },
+  clubName: {
+    flex: 0.7,
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.Black,
+  },
   iconContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -269,7 +278,7 @@ const styles = StyleSheet.create({
     flex: 0.9,
   },
   form: {
-    backgroundColor: 'white',
+    backgroundColor: colors.Black,
     borderColor: '#d9d9d9',
     borderWidth: 1,
     borderRadius: 5,
@@ -289,12 +298,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: '#d9d9d9',
     borderWidth: 1,
-
-    color: 'black',
-  },
-  clubName: {
-    fontSize: 24,
-    fontWeight: 'bold',
     color: 'black',
   },
   clubSettingIcon: {
