@@ -7,7 +7,6 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from '
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AntdWithStyleButton from '../../components/AntdWithStyleButton';
 import ClubMemberCreateForm from '../../components/ClubMemberCreateForm';
-import ClubUserScrollView from '../../components/ClubUserScrollView';
 import MemberScrollView from '../../components/MemberScrollView';
 import { bankMap } from '../../constants/mockData';
 import { mainNavigations } from '../../constants/navigations';
@@ -20,6 +19,9 @@ import ClubDetailSettingEntry from '../../components/customBottomSheet/ClubDetai
 import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import colors from '../../assets/colors/defaultColors';
 import { useMutateDeleteClub } from '../../hooks/useClub';
+import ItemList from '../../components/ItemList/ItemList';
+import Item from '../../components/ItemList/Item';
+import ClubUserItemList from '../../components/ItemList/ClubUserItemList';
 
 type ClubDetailScreenProps = StackScreenProps<
   MainStackParamList,
@@ -166,9 +168,7 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
               운영진 등록
             </AntdWithStyleButton>
           </Animated.View>
-          <View>
-            <ClubUserScrollView clubId={club.clubId} />
-          </View>
+          <ClubUserItemList clubId={club.clubId} />
           <AntdWithStyleButton onPress={() => navigation.navigate(mainNavigations.CLUB_USER_UPDATE, { clubId: club.clubId })}>
             운영진 수정
           </AntdWithStyleButton>
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     flex: 0.9,
   },
   form: {
-    backgroundColor: colors.Black,
+    backgroundColor: 'white',
     borderColor: '#d9d9d9',
     borderWidth: 1,
     borderRadius: 5,
