@@ -3,14 +3,16 @@ import { BillType } from '../constants/billType'
 
 function parseNotification(notification: any) {
     const billType = notification.title.includes('입금') ? BillType.DEPOSIT : BillType.WITHDRAW
-    
+
     // title에서 금액과 거래 유형 추출
     const title = notification.title;
-    const cash = title.match(/^(\d+)원/)[1]; // 원 앞까지만 추출
+    const match = title.match(/(\d{1,3}(?:,\d{3})*)원/);
+    const cash = match ? match[1].replace(/,/g, '') : null; // 쉼표 제거
     const time = unixToLocalDateTime(notification.time)
     const bigText: string = notification.bigText;
+
     if (billType === BillType.DEPOSIT) {
-        
+
 
         const name = bigText.toString().split(' ')[0];
         const accountNumberMatch = bigText.match(/\((\d+)\)$/);
@@ -25,13 +27,13 @@ function parseNotification(notification: any) {
             billType
         };
     }
-    else{
+    else {
         console.log(bigText)
         const name = bigText.toString().split(' ').pop();
         const accountNumberMatch = bigText.match(/\d+/);
         const accountNumber = accountNumberMatch ? accountNumberMatch[0] : '';
 
-        
+
         console.log("witdraw: ", name, accountNumber, cash, time)
         return {
             name,
