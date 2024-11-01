@@ -1,4 +1,3 @@
-// useCustomBottomSheet.tsx
 import React, { useRef, useCallback, useEffect, useState, ReactNode, useMemo } from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 import {

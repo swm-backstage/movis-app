@@ -14,6 +14,8 @@ const queryKeys = {
 
   EVENT_MEMBER: 'eventMember',
   GET_EVENT_MEMBERLIST: 'getEventMemberList',
+
+  AWS: 'aws',
 } as const;
 
 const storageKeys = {

@@ -1,7 +1,7 @@
 import AuthStackNavigator from './AuthStackNavigator';
 import useAuth from '../hooks/useAuth';
 import MainStackNavigator from './MainStackNavigator';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppState, Modal, StyleSheet, Text } from 'react-native';
 import { Button, View } from '@ant-design/react-native';
@@ -14,10 +14,12 @@ function RootNavigator() {
   const [modalVisible, setModalVisible] = useState(false);
   const [depositCount, setDepositCount] = useState(0);
   const [withdrawCount, setWithdrawCount] = useState(0);
-
+  const backgroundTime = useRef<number | null>(null);
 
   useEffect(() => {
     if (!isLogin) return;
+
+
 
     const checkBackgroundData = async () => {
       const deposit = parseInt(await AsyncStorage.getItem('@depositCount') || '0', 10);
@@ -30,10 +32,20 @@ function RootNavigator() {
     };
 
     const handleAppStateChange = async (nextAppState: string) => {
+
+
+
       if (nextAppState === 'active') {
-        checkBackgroundData();
+        if (backgroundTime.current !== null) {
+          const timeInBackground = Date.now() - backgroundTime.current;
+          if (timeInBackground >= 30000) { // 30,000밀리초 = 30초
+            await checkBackgroundData();
+          }
+        }
+        backgroundTime.current = null; // 시간 초기화
       }
       else if (nextAppState === 'background') {
+        backgroundTime.current = Date.now();
         // 앱이 백그라운드로 전환될 때 AsyncStorage 값을 0으로 초기화
         await AsyncStorage.setItem('@depositCount', '0');
         await AsyncStorage.setItem('@withdrawCount', '0');

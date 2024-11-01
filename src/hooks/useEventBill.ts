@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import { UseMutationCustomOptions } from "../types/common";
 import { EventBilClassifiedReq } from "../types/eventBill/EventBIllClassifiedReq";
-import { classifiedEventBill, createEventBill } from "../api/eventBill";
+import { classifiedEventBill, createEventBill, updateEventBill } from "../api/eventBill";
 
 type EventBillClassifiedMutationVariables = {
     eventBillId: string;
@@ -16,6 +16,13 @@ function useClassifiedEventBill(mutationOptions?: UseMutationCustomOptions) {
     })
 }
 
+function useMutateUpdateEventBill(mutationOptions?: UseMutationCustomOptions) {
+  return useMutation({
+    mutationFn: updateEventBill,
+    ...mutationOptions
+  })
+}
+
 function useMutateCreateEventBill(
   mutationOptions?: UseMutationCustomOptions
 ) {
@@ -25,4 +32,4 @@ function useMutateCreateEventBill(
   })
 }
 
-export { useClassifiedEventBill, useMutateCreateEventBill };
+export { useClassifiedEventBill, useMutateUpdateEventBill, useMutateCreateEventBill };
