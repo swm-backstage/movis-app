@@ -39,8 +39,8 @@ function useGetRefreshToken() {
     const { data, isSuccess, isError, isLoading } = useQuery({
         queryKey: ['auth', 'getAccessToken'],
         queryFn: getAccessToken,
-        staleTime: 1000 * 60 * 28,
-        refetchInterval: 1000 * 60 * 28,
+        staleTime: 1000 * 60 * 30,
+        refetchInterval: 1000 * 60 * 27,
         refetchOnReconnect: true,
         refetchIntervalInBackground: true, // 앱이 백그라운드일 때도 다시 가져옴
     })

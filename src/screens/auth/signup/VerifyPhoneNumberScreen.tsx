@@ -5,6 +5,8 @@ import { AuthStackParamList } from '../../../navigations/AuthStackNavigator';
 import { useSendSms, useVerifyCode } from '../../../hooks/useSms';
 import useAuth from '../../../hooks/useAuth';
 import { RequestCreateUser } from '../../../api/auth';
+import CancelButtonWithText from '../../../components/CancelButtonWithInput';
+import ErrorMessageWithInput from '../../../components/ErrorMessageWithIInput';
 
 
 type VerifyPhoneNumberScreenProps = StackScreenProps<AuthStackParamList>;
@@ -170,6 +172,7 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
     };
 
     const handleSingUp = () => {
+        console.log(data, phoneNo, name)
         const signupBody: RequestCreateUser = {
             identifier: data.identifier,
             password: data.password,
@@ -178,6 +181,7 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
         }
         signupMutation.mutate(signupBody, {
             onSuccess: () => {
+                console.log("hello")
                 navigation.navigate('Welcome', { identifier: signupBody.identifier, password: signupBody.password, name: name })
             },
             onError: (error) => {
@@ -192,27 +196,23 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
                 <Text style={styles.text}>휴대폰 번호를{'\n'}인증해 주세요</Text>
 
                 <View style={styles.inputLayout}>
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="이름 입력"
-                            value={name}
-                            onChangeText={(text) => handleChangeText('name', text)}
-                            onFocus={() => handleFocus('first')}
-                            onBlur={() => handleBlur('first')}
-                        />
-                        {isFirstFocused && (
-                            <TouchableOpacity onPress={() => setName('')} >
-                                <Image source={require('../../../assets/delete.png')} style={styles.clearIcon} />
-                            </TouchableOpacity>
-                        )}
-                    </View>
+                    <CancelButtonWithText
+                        placeholder="이름 입력"
+                        placeholderTextColor="#ACB2B5"
+                        value={name}
+                        onChangeText={(text) => handleChangeText('name', text)}
+                        onFocus={() => handleFocus('first')}
+                        onBlur={() => handleBlur('first')}
+                        onClear={() => setName('')}
+                        isFocused={isFirstFocused}
+                    />
 
                     <View style={styles.inputContainerWithButton}>
                         <View style={styles.inputContainer}>
                             <TextInput
-                                style={styles.smallInput}
+                                style={[styles.smallInput, check ? styles.closedText : styles.openText]}
                                 placeholder="휴대폰번호 입력"
+                                placeholderTextColor="#ACB2B5"
                                 value={phoneNo}
                                 onChangeText={(text) => handleChangeText('phoneNo', text)}
                                 maxLength={13}
@@ -221,50 +221,29 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
                         </View>
 
                         <TouchableOpacity
-                            onPress={handleSendCode} style={styles.codeButton} >
-                            <Text>코드 발송</Text>
+                            onPress={handleSendCode} style={styles.codeButton} disabled={check}>
+                            <Text style={check ? styles.closedText : styles.openText}>코드 발송</Text>
                         </TouchableOpacity>
                     </View>
 
-                    <View style={styles.inputWithText}>
-                        <View style={styles.inputContainer}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="인증번호 4자리 입력"
-                                value={code}
-                                onChangeText={(text) => handleChangeText('code', text)}
-                                onFocus={() => handleFocus('second')}
-                                onBlur={() => handleBlur('second')}
-                                maxLength={4}
-                                editable={!check}
-                            />
-                            {isSecondFocused && (
-                                <TouchableOpacity
-                                    onPress={() => setCode('')} >
-                                    <Image source={require('../../../assets/delete.png')} style={styles.clearIcon} />
-                                </TouchableOpacity>
-                            )}
-                        </View>
-                        <View style={styles.checkInput}>
-                            {flag === true && (
-                                <Image
-                                    source={check === true
-                                        ? require('../../../assets/check_circle.png')
-                                        : require('../../../assets/remove_circle.png')}
-                                    style={styles.textIcon}
-                                />
-                            )}
-                            {flag === true && (
-                                <Text style={[
-                                    styles.availabilityText,
-                                    check === true ? styles.available : styles.unavailable,
-                                ]}>
-                                    {check === true ? '인증되었습니다.' : '인증코드가 올바르지 않습니다.'}
-                                </Text>
-                            )}
-
-                        </View>
-                    </View>
+                    <ErrorMessageWithInput
+                        placeholder='인증번호 4자리 입력'
+                        placeholderTextColor="#ACB2B5"
+                        value={code}
+                        onChangeText={setCode}
+                        onFocus={() => handleFocus('second')}
+                        onBlur={() => handleBlur('second')}
+                        onClear={() => setCode('')}
+                        isFocused={isSecondFocused}
+                        type='SuccessError'
+                        condition1={flag === true}
+                        condition2={check === true}
+                        successText='인증되었습니다.'
+                        errorText='인증코드가 올바르지 않습니다.'
+                        maxLength={4}
+                        editable={!check}
+                        isClosed={check}
+                    />
                 </View>
             </View>
             {check === true && (
@@ -363,12 +342,13 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         lineHeight: 16.52,
         letterSpacing: -0.28,
+        color: 'black'
     },
     smallInput: {
         flex: 0.65,
         fontSize: 14,
         fontStyle: 'normal',
-        fontWeight: '500',
+        fontWeight: '400',
         lineHeight: 16.52,
         letterSpacing: -0.28,
     },
@@ -432,6 +412,12 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         lineHeight: 18.88,
         letterSpacing: -0.32
+    },
+    closedText: {
+        color: 'gray', // isClosed가 true일 때 글씨 색상
+    },
+    openText: {
+        color: 'black', // isClosed가 false일 때 글씨 색상
     },
 });
 

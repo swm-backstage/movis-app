@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Image, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AuthStackParamList } from '../../../navigations/AuthStackNavigator';
 import { useCheckIdentifier } from '../../../hooks/useUser';
+import colors from '../../../assets/colors/colors'
 
 type CreadtedIdScreenProps = StackScreenProps<AuthStackParamList>;
 
@@ -89,6 +90,7 @@ function CreateIdScreen({ navigation }: CreadtedIdScreenProps) {
                         <TextInput
                             style={styles.input}
                             placeholder="아이디"
+                            placeholderTextColor="#ACB2B5"
                             value={identifier}
                             onChangeText={handleChangeText}
                             onFocus={handleFocus}
@@ -205,6 +207,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         lineHeight: 16.52,
         letterSpacing: -0.28,
+        color: 'black'
     },
     availabilityText: {
         fontFamily: 'Pretendard',
