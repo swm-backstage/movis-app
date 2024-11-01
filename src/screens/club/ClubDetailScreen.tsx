@@ -19,6 +19,7 @@ import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import ClubDetailSettingEntry from '../../components/customBottomSheet/ClubDetailSettingEntry';
 import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import colors from '../../assets/colors/defaultColors';
+import { useMutateDeleteClub } from '../../hooks/useClub';
 
 type ClubDetailScreenProps = StackScreenProps<
   MainStackParamList,
@@ -31,6 +32,7 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
   const { club } = route.params;
   const createMemberList = useMutateCreateMemberList();
   const createClubUser = useMutateCreateClubUser();
+  const deleteClub = useMutateDeleteClub();
   const [isAddMemberVisible, setIsAddMemberVisible] = useState<boolean>(false);
   const [isAddClubUserVisible, setIsAddClubUserVisible] = useState<boolean>(false);
   const addMemberHeight = useSharedValue(0);
@@ -225,7 +227,8 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
       <CustomBottomSheet>
         <ClubDetailSettingEntry
           clubId={club.clubId}
-          deleteClub={console.log}
+          navigationGoBack={navigation.goBack}
+          deleteClub={deleteClub}
         />
       </CustomBottomSheet>
     </SafeAreaView>

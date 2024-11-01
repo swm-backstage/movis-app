@@ -22,7 +22,13 @@ const getClub = async (clubId: string): Promise<ClubGetRes> => {
   return data;
 };
 
+const deleteClub = async (queryParams: Record<string, any>): Promise<void> => {
+  const config = {
+		params: queryParams,
+	};
+  const { data } = await axiosHost.delete('/api/v1/clubs', config);
 
+  return data;
+}
 
-
-export { createClub, getClub, getClubList };
+export { createClub, getClub, getClubList, deleteClub };

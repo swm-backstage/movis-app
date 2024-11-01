@@ -2,13 +2,15 @@ import React from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import SettingList from './SettingList';
 import SettingListItem from './SettingListItem';
+import { UseMutationResult } from '@tanstack/react-query';
 
 type ClubDetailSettingEntryProps = {
     clubId: String,
-    deleteClub: (clubId: String) => void;
+    navigationGoBack: () => void,
+    deleteClub: UseMutationResult<void, unknown, Record<string, any>, unknown>;
 };
 
-const ClubDetailSettingEntry: React.FC<ClubDetailSettingEntryProps> = ({ clubId, deleteClub }) => {
+const ClubDetailSettingEntry: React.FC<ClubDetailSettingEntryProps> = ({ clubId, navigationGoBack, deleteClub }) => {
 
     const showClubDeleteAlert = () => {
         Alert.alert(
@@ -21,7 +23,16 @@ const ClubDetailSettingEntry: React.FC<ClubDetailSettingEntryProps> = ({ clubId,
                 },
                 {
                     text: "예",
-                    onPress: () => deleteClub(clubId)
+                    onPress: () => deleteClub.mutate(
+                        { clubId: clubId },
+                        {
+                            onSuccess: () => navigationGoBack(),
+                            // TODO: 팝업 컴포넌트를 생서하여 띄우기
+                            onError: (error: any) => {
+                              console.error('Error deleting club:', error, error.message, error.name, error.response.data);
+                            }
+                          }
+                        )
                 }
             ],
             { cancelable: false }
