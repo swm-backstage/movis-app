@@ -5,8 +5,8 @@ import { AuthStackParamList } from '../../../navigations/AuthStackNavigator';
 import { useSendSms, useVerifyCode } from '../../../hooks/useSms';
 import useAuth from '../../../hooks/useAuth';
 import { RequestCreateUser } from '../../../api/auth';
-import CancelButtonWithText from '../../../components/CancelButtonWithInput';
-import ErrorMessageWithInput from '../../../components/ErrorMessageWithIInput';
+import CancelButtonWithText from '../../../components/customInput/CancelButtonWithInput';
+import ErrorMessageWithInput from '../../../components/customInput/ErrorMessageWithInput';
 
 
 type VerifyPhoneNumberScreenProps = StackScreenProps<AuthStackParamList>;

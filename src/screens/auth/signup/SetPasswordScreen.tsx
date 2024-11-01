@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useRef, useState } from 'react';
 import { Image, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AuthStackParamList } from '../../../navigations/AuthStackNavigator';
-import ErrorMessageWithInput from '../../../components/ErrorMessageWithIInput';
+import ErrorMessageWithInput from '../../../components/customInput/ErrorMessageWithInput';
 
 type SetPasswordScreenProps = StackScreenProps<AuthStackParamList>;
 
