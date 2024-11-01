@@ -4,14 +4,13 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../../assets/colors/defaultColors';
 import ClubList from '../../components/ClubList';
-import SettingEntry from '../../components/SettingEntry';
+import ClubListSettingEntry from '../../components/customBottomSheet/ClubListSettingEntry';
 import { mainNavigations } from '../../constants/navigations';
 import useAuth from '../../hooks/useAuth';
 import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { useGetUser } from '../../hooks/useUser';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
-import { AuthStackParamList } from '../../navigations/AuthStackNavigator';
 
 type ClubHomeScreenProps = StackScreenProps<
   MainStackParamList,
@@ -74,7 +73,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
         </ClubList>
       </View>
       <CustomBottomSheet>
-        <SettingEntry
+        <ClubListSettingEntry
           user={user}
           logout={() => logoutMutation.mutate(undefined)}
         />

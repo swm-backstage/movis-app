@@ -3,14 +3,14 @@ import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 import SettingList from './SettingList';
 import SettingListItem from './SettingListItem';
 import RNAndroidNotificationListener from 'react-native-android-notification-listener'
-import { UserGetRes } from '../types/user/UserGetRes';
+import { UserGetRes } from '../../types/user/UserGetRes';
 
-type SettingEntryProps = {
+type ClubListSettingEntryProps = {
     user: UserGetRes | undefined,
     logout: () => void;
 };
 
-const SettingEntry: React.FC<SettingEntryProps> = ({ user, logout }) => {
+const ClubListSettingEntry: React.FC<ClubListSettingEntryProps> = ({ user, logout }) => {
     const [hasPermission, setHasPermission] = useState(false)
 
     const handleOnPressPermissionButton = async () => {
@@ -136,4 +136,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SettingEntry;
+export default ClubListSettingEntry;

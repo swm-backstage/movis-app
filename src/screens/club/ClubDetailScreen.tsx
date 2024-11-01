@@ -1,6 +1,6 @@
 import { Form, Input } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -15,6 +15,10 @@ import { useMutateCreateClubUser } from '../../hooks/useClubUser';
 import { useMutateCreateMemberList } from '../../hooks/useMember';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { MemberCreateListReq } from '../../types/member/request/MemberCreateReq';
+import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
+import ClubDetailSettingEntry from '../../components/customBottomSheet/ClubDetailSettingEntry';
+import { TouchableOpacity } from '@gorhom/bottom-sheet';
+import colors from '../../assets/colors/defaultColors';
 
 type ClubDetailScreenProps = StackScreenProps<
   MainStackParamList,
@@ -31,6 +35,9 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
   const [isAddClubUserVisible, setIsAddClubUserVisible] = useState<boolean>(false);
   const addMemberHeight = useSharedValue(0);
   const addClubUserHeight = useSharedValue(0);
+  const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
+    snapPoints: useMemo(() => ['80%'], []),
+  });
 
   const handleToggleAddClubUser = () => {
     setIsAddClubUserVisible(!isAddClubUserVisible);
@@ -107,6 +114,17 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
         <Text style={styles.clubName}>
           {club.name}
         </Text>
+        <View style={styles.iconContainer}>
+          <TouchableOpacity
+            style={styles.settingButton}
+            onPress={openCustomBottomSheet}
+          >
+            <AntDesign
+              name="setting"
+              style={styles.settingIcon}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       <ScrollView style={styles.scrollContainer} nestedScrollEnabled={true}>
         <View style={styles.clubInfoContainer}>
@@ -204,6 +222,12 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
           거래내역 생성(테스트)
         </AntdWithStyleButton>
       </ScrollView>
+      <CustomBottomSheet>
+        <ClubDetailSettingEntry
+          clubId={club.clubId}
+          deleteClub={console.log}
+        />
+      </CustomBottomSheet>
     </SafeAreaView>
   );
 };
@@ -215,17 +239,31 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: colors.White,
+    padding: 25,
   },
   headerContainer: {
-    paddingTop: 20,
     flex: 0.1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 30,
+    paddingTop: 20,
+    backgroundColor: colors.White,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  settingButton: {
+    padding: 8,
+    backgroundColor: colors.Gray100,
+    borderRadius: 20,
+  },
+  settingIcon: {
+    fontSize: 25,
+    color: colors.Black,
   },
   scrollContainer: {
     flex: 0.9,
-    paddingHorizontal: 30,
   },
   form: {
     backgroundColor: 'white',
