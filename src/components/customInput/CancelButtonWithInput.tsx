@@ -1,14 +1,14 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
-    View,
-    TextInput,
-    TouchableOpacity,
     Image,
     StyleSheet,
+    TextInput,
     TextInputProps,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import colors from '../assets/colors/colors';
-import { isEnabled } from 'react-native/Libraries/Performance/Systrace';
+
+import colors from '../../assets/colors/defaultColors';
 
 interface NameInputProps extends TextInputProps {
     onClear?: () => void;
@@ -32,7 +32,7 @@ const CancelButtonWithInput: React.FC<NameInputProps> = ({
             {isFocused && (
                 <TouchableOpacity onPress={() => onClear}>
                     <Image
-                        source={require('../assets/delete.png')}
+                        source={require('../../assets/delete.png')}
                         style={styles.clearIcon}
                     />
                 </TouchableOpacity>

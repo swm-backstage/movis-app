@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
-import { View, TextInput, TouchableOpacity, Image, Text, StyleSheet, TextInputProps } from 'react-native';
-import colors from '../assets/colors/colors';
+import React from 'react';
+import { Image, StyleSheet, Text, TextInputProps, View } from 'react-native';
+
+import colors from '../../assets/colors/defaultColors';
 import CancelButtonWithInput from './CancelButtonWithInput';
 
 interface InputProps extends Omit<TextInputProps, 'value'> {
@@ -42,7 +43,7 @@ const ErrorMessageWithInput: React.FC<InputProps> = ({
                 {type === 'error' && props.value.length > 0 && !isValidText(props.value) && (
                     <>
                         <Image
-                            source={require('../assets/remove_circle.png')}
+                            source={require('../../assets/remove_circle.png')}
                             style={styles.textIcon}
                         />
                         <Text style={[styles.availabilityText, styles.unavailable]}>
@@ -57,8 +58,8 @@ const ErrorMessageWithInput: React.FC<InputProps> = ({
                                 <Image
                                     source={
                                         condition2
-                                            ? require('../assets/check_circle.png')
-                                            : require('../assets/remove_circle.png')
+                                            ? require('../../assets/check_circle.png')
+                                            : require('../../assets/remove_circle.png')
                                     }
                                     style={styles.textIcon}
                                 />
