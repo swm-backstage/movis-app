@@ -70,7 +70,8 @@ function MainStackNavigator() {
         name={mainNavigations.CLUB_DETAIL}
         component={ClubDetailScreen}
         options={{
-          headerTitle: '',
+          // headerTitle: '',
+          headerShown: false,
         }}
       />
       <Stack.Screen
