@@ -2,6 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useRef, useState } from 'react';
 import { Image, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AuthStackParamList } from '../../../navigations/AuthStackNavigator';
+import ErrorMessageWithInput from '../../../components/ErrorMessageWithIInput';
 
 type SetPasswordScreenProps = StackScreenProps<AuthStackParamList>;
 
@@ -46,7 +47,7 @@ function SetPasswordScreen({ route, navigation }: SetPasswordScreenProps) {
     };
 
     const isValidPassword = (password: string) => {
-        const regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,20}$/;
+        const regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*+=])(?=\S+$).{8,20}$/;
         return regex.test(password);
     };
 
@@ -66,81 +67,44 @@ function SetPasswordScreen({ route, navigation }: SetPasswordScreenProps) {
 
                 <Text style={styles.text}>비밀번호를{'\n'}설정해 주세요</Text>
 
+
+
                 <View style={styles.inputLayout}>
 
-                    <View style={styles.inputWithText}>
-                        <View style={styles.inputContainer}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="비밀번호 입력"
-                                value={password}
-                                onChangeText={(text) => handleChangeText('password', text)}
-                                onFocus={() => handleFocus('first')}
-                                onBlur={() => handleBlur('first')}
-                                secureTextEntry
-                                onSubmitEditing={() => passwordInputRef.current?.focus()}
-                                returnKeyType="next"
-                            />
-                            {isFirstFocused && (
-                                <TouchableOpacity onPress={() => setPassword('')} >
-                                    <Image source={require('../../../assets/delete.png')} style={styles.clearIcon} />
-                                </TouchableOpacity>
-                            )}
-                        </View>
-                        <View style={styles.checkInput}>
-                            {password.length > 0 && !isValidPassword(password) && (
-                                <Image
-                                    source={require('../../../assets/remove_circle.png')}
-                                    style={styles.textIcon}
-                                />
-                            )}
-                            {password.length > 0 && !isValidPassword(password) && (
-                                <Text style={[styles.availabilityText, styles.unavailable]}>
-                                    {'비밀번호는 8-20자이며, 숫자, 대문자, 소문자,\n특수 문자를 포함해야 합니다.'}
-                                </Text>
-                            )}
-                        </View>
-                    </View>
+                    <ErrorMessageWithInput
+                        placeholder='비밀번호입력'
+                        placeholderTextColor="#ACB2B5"
+                        value={password}
+                        onChangeText={(text) => handleChangeText('password', text)}
+                        onFocus={() => handleFocus('first')}
+                        onBlur={() => handleBlur('first')}
+                        secureTextEntry
+                        onSubmitEditing={() => passwordInputRef.current?.focus()}
+                        returnKeyType="next"
+                        onClear={() => setPassword('')}
+                        isValidText={isValidPassword}
+                        isFocused={isFirstFocused}
+                        errorText='비밀번호는 8-20자이며, 특수 문자, 대문자, 소문자, 숫자를 포함해야 합니다.'
+                    />
 
-
-                    <View style={styles.inputWithText}>
-                        <View style={styles.inputContainer}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="비밀번호 재입력"
-                                value={confirmPassword}
-                                onChangeText={(text) => handleChangeText('confirmPassword', text)}
-                                onFocus={() => handleFocus('second')}
-                                onBlur={() => handleBlur('second')}
-                                secureTextEntry
-                                ref={passwordInputRef}
-                            />
-                            {isSecondFocused && (
-                                <TouchableOpacity onPress={() => setConfirmPassword('')} >
-                                    <Image source={require('../../../assets/delete.png')} style={styles.clearIcon} />
-                                </TouchableOpacity>
-                            )}
-                        </View>
-                        <View style={styles.checkInput}>
-                            {password.length > 0 && confirmPassword.length > 0 && (
-                                <Image
-                                    source={password === confirmPassword
-                                        ? require('../../../assets/check_circle.png')
-                                        : require('../../../assets/remove_circle.png')}
-                                    style={styles.textIcon}
-                                />
-                            )}
-                            {password.length > 0 && confirmPassword.length > 0 && (
-                                <Text style={[
-                                    styles.availabilityText,
-                                    password === confirmPassword ? styles.available : styles.unavailable,
-                                ]}>
-                                    {password === confirmPassword ? '비밀번호가 일치합니다.' : '비밀번호가 일치하지 않습니다.'}
-                                </Text>
-                            )}
-
-                        </View>
-                    </View>
+                    <ErrorMessageWithInput
+                        placeholder='비밀번호 재입력'
+                        placeholderTextColor="#ACB2B5"
+                        value={confirmPassword}
+                        onChangeText={(text) => handleChangeText('confirmPassword', text)}
+                        onFocus={() => handleFocus('second')}
+                        onBlur={() => handleBlur('second')}
+                        secureTextEntry
+                        onSubmitEditing={() => passwordInputRef.current?.focus()}
+                        returnKeyType="done"
+                        onClear={() => setConfirmPassword('')}
+                        isFocused={isSecondFocused}
+                        type='SuccessError'
+                        condition1={password.length > 0 && confirmPassword.length > 0}
+                        condition2={password === confirmPassword}
+                        successText='비밀번호가 일치합니다.'
+                        errorText='비밀번호가 일치하지 않습니다.'
+                    />
 
                 </View>
 
@@ -205,6 +169,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         lineHeight: 16.52,
         letterSpacing: -0.28,
+        color: 'black'
     },
     clearIcon: {
         width: 24,

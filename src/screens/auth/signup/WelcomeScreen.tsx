@@ -70,9 +70,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 88
     },
     textContainer: {
-
         gap: 8,
-
     },
     nextButton: {
         alignSelf: 'center',

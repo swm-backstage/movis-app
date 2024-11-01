@@ -126,6 +126,19 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 0.85,
   },
+  availabilityText: {
+    fontFamily: 'Pretendard',
+    fontSize: 14,
+    fontStyle: 'normal',
+    fontWeight: '500',
+    lineHeight: 18.2,
+  },
+  available: {
+    color: '#5F47F1',
+  },
+  unavailable: {
+    color: '#E42838',
+  },
 });
 
 export default ClubListScreen;
