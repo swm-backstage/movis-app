@@ -21,7 +21,6 @@ const Item: React.FC<ItemProps> = ({
     itemId,
     buttonHandler,
 }) => {
-
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
@@ -68,15 +67,18 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginBottom: 24,
+        height: 52,
     },
     imageContainer: {
         flex: 0.15,
-        // backgroundColor: 'red',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     contentContainer: {
         flex: 0.7,
-        height: 52,
         justifyContent: 'space-between',
+        marginLeft: 16,
+        marginVertical: 4,
     },
     upperContentContainer: {
         flexDirection: 'row',
