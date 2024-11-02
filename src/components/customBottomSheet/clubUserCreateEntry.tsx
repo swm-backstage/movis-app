@@ -3,6 +3,8 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import useCustomInput from '../../hooks/useCustomInput';
 import CustomInput from '../customInput/CustomInput';
+import { FormatPhoneNumber } from '../../utils/formator';
+import { EmailValidator, PhoneNumberValidator } from '../../utils/validator';
 
 
 type ClubUserCreateEntryProps = {
@@ -14,24 +16,18 @@ const ClubUserCreateEntry: React.FC<ClubUserCreateEntryProps> = ({
     clubId,
     createClubUser,
 }) => {
-
-    const emailValidator = (text: string) => {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailPattern.test(text);
-    };
-
     const {
         value: email,
         isValid: isEmailValid,
         onChangeText: onEmailChangeText,
         clearInput: clearEmailInput,
-    } = useCustomInput({ validator: emailValidator });
+    } = useCustomInput({ validator: EmailValidator });
     const {
         value: phone,
         isValid: isPhoneValid,
         onChangeText: onPhoneChangeText,
         clearInput: clearPhoneInput,
-    } = useCustomInput({ validator: emailValidator });
+    } = useCustomInput({ validator: PhoneNumberValidator, formatText: FormatPhoneNumber });
 
     const handleCreateClubUser = async (targetIdentifier: string) => {
         const data = {
@@ -53,8 +49,8 @@ const ClubUserCreateEntry: React.FC<ClubUserCreateEntryProps> = ({
                 isValid={isEmailValid}
                 onChangeText={onEmailChangeText}
                 clearInput={clearEmailInput}
-                errorMessage="유효한 이메일 주소를 입력하세요."
-                placeholder="이메일을 입력하세요"
+                errorMessage="유효한 이메일 주소를 입력하세요. "
+                placeholder="이메일을 입력하세요. "
                 keyboardType="email-address"
                 autoCapitalize="none"
             />
@@ -63,9 +59,9 @@ const ClubUserCreateEntry: React.FC<ClubUserCreateEntryProps> = ({
                 isValid={isPhoneValid}
                 onChangeText={onPhoneChangeText}
                 clearInput={clearPhoneInput}
-                errorMessage="유효한 이메일 주소를 입력하세요."
-                placeholder="이메일을 입력하세요"
-                keyboardType="email-address"
+                errorMessage="유효한 전화번호를 입력하세요. "
+                placeholder="전화번호 입력하세요. "
+                keyboardType="phone-pad"
                 autoCapitalize="none"
             />
         </View>
