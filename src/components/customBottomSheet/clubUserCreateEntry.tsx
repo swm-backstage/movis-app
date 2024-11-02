@@ -1,9 +1,9 @@
+import { UseMutationResult } from '@tanstack/react-query';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useMutateCreateClubUser } from '../../hooks/useClubUser';
-import { UseMutationResult } from '@tanstack/react-query';
-import CancelButtonWithInput from '../customInput/CancelButtonWithInput';
 import useCustomInput from '../../hooks/useCustomInput';
+import CustomInput from '../customInput/CustomInput';
+
 
 type ClubUserCreateEntryProps = {
     clubId: string,
@@ -15,11 +15,23 @@ const ClubUserCreateEntry: React.FC<ClubUserCreateEntryProps> = ({
     createClubUser,
 }) => {
 
+    const emailValidator = (text: string) => {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(text);
+    };
 
     const {
         value: email,
-        CustomInput: EmailInput,
-    } = useCustomInput();
+        isValid: isEmailValid,
+        onChangeText: onEmailChangeText,
+        clearInput: clearEmailInput,
+    } = useCustomInput({ validator: emailValidator });
+    const {
+        value: phone,
+        isValid: isPhoneValid,
+        onChangeText: onPhoneChangeText,
+        clearInput: clearPhoneInput,
+    } = useCustomInput({ validator: emailValidator });
 
     const handleCreateClubUser = async (targetIdentifier: string) => {
         const data = {
@@ -36,9 +48,23 @@ const ClubUserCreateEntry: React.FC<ClubUserCreateEntryProps> = ({
 
     return (
         <View style={styles.container}>
-            <EmailInput
-                placeholder="이메일을 입력하세요"
+            <CustomInput
+                value={email}
+                isValid={isEmailValid}
+                onChangeText={onEmailChangeText}
+                clearInput={clearEmailInput}
                 errorMessage="유효한 이메일 주소를 입력하세요."
+                placeholder="이메일을 입력하세요"
+                keyboardType="email-address"
+                autoCapitalize="none"
+            />
+            <CustomInput
+                value={phone}
+                isValid={isPhoneValid}
+                onChangeText={onPhoneChangeText}
+                clearInput={clearPhoneInput}
+                errorMessage="유효한 이메일 주소를 입력하세요."
+                placeholder="이메일을 입력하세요"
                 keyboardType="email-address"
                 autoCapitalize="none"
             />
