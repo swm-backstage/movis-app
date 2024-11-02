@@ -1,20 +1,19 @@
-import { Form } from '@ant-design/react-native';
 import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../../assets/colors/defaultColors';
+import ClubBankItemList from '../../components/ItemList/ClubBankItemList';
+import ClubMemberItemList from '../../components/ItemList/ClubMemberItemList';
 import ClubUserItemList from '../../components/ItemList/ClubUserItemList';
 import ClubDetailSettingEntry from '../../components/customBottomSheet/ClubDetailSettingEntry';
 import { mainNavigations } from '../../constants/navigations';
 import { useMutateDeleteClub } from '../../hooks/useClub';
-import { useMutateCreateClubUser } from '../../hooks/useClubUser';
 import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { useMutateCreateMemberList } from '../../hooks/useMember';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { MemberCreateListReq } from '../../types/member/request/MemberCreateReq';
-import ClubMemberItemList from '../../components/ItemList/ClubMemberItemList';
 
 type ClubDetailScreenProps = StackScreenProps<
   MainStackParamList,
@@ -71,6 +70,7 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
       <View style={styles.bodyContainer}>
         <ClubUserItemList clubId={club.clubId} />
         <ClubMemberItemList clubId={club.clubId} />
+        <ClubBankItemList club={club} />
       </View>
       <View style={styles.footerContainer}>
         <CustomBottomSheet>
