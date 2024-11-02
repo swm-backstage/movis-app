@@ -1,15 +1,18 @@
 import { UseMutationResult } from '@tanstack/react-query';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-paper';
+import colors from '../../assets/colors/defaultColors';
 import useCustomInput from '../../hooks/useCustomInput';
+import { ClubUserCreateReq } from '../../types/clubUser/request/ClubUserReq';
+import { ResponseError } from '../../types/common';
+import ExpandedButton from '../Button/ExpandedButton';
 import CustomInput from '../customInput/CustomInput';
-import { FormatPhoneNumber } from '../../utils/formator';
-import { EmailValidator, PhoneNumberValidator } from '../../utils/validator';
 
 
 type ClubUserCreateEntryProps = {
     clubId: string,
-    createClubUser?: UseMutationResult<void, unknown, Record<string, any>, unknown>;
+    createClubUser: UseMutationResult<void, ResponseError, ClubUserCreateReq, unknown>;
 };
 
 const ClubUserCreateEntry: React.FC<ClubUserCreateEntryProps> = ({
@@ -17,53 +20,49 @@ const ClubUserCreateEntry: React.FC<ClubUserCreateEntryProps> = ({
     createClubUser,
 }) => {
     const {
-        value: email,
-        isValid: isEmailValid,
-        onChangeText: onEmailChangeText,
-        clearInput: clearEmailInput,
-    } = useCustomInput({ validator: EmailValidator });
-    const {
-        value: phone,
-        isValid: isPhoneValid,
-        onChangeText: onPhoneChangeText,
-        clearInput: clearPhoneInput,
-    } = useCustomInput({ validator: PhoneNumberValidator, formatText: FormatPhoneNumber });
+        value: identifier,
+        isValid: isIdentifierValid,
+        onChangeText: onIdentifierChangeText,
+        clearInput: clearIdentifierInput,
+    } = useCustomInput({});
 
-    const handleCreateClubUser = async (targetIdentifier: string) => {
+    const handleCreateClubUser = async () => {
         const data = {
             clubId: clubId,
-            identifier: targetIdentifier,
+            identifier: identifier,
         }
-        // createClubUser.mutate(
-        //     data,
-        //     {
-        //         onError: (error) => { console.error(error) }
-        //     }
-        // );
+        createClubUser.mutate(
+            data,
+            {
+                onError: (error) => { console.error(error) }
+            }
+        );
     };
 
     return (
         <View style={styles.container}>
-            <CustomInput
-                value={email}
-                isValid={isEmailValid}
-                onChangeText={onEmailChangeText}
-                clearInput={clearEmailInput}
-                errorMessage="유효한 이메일 주소를 입력하세요. "
-                placeholder="이메일을 입력하세요. "
-                keyboardType="email-address"
-                autoCapitalize="none"
-            />
-            <CustomInput
-                value={phone}
-                isValid={isPhoneValid}
-                onChangeText={onPhoneChangeText}
-                clearInput={clearPhoneInput}
-                errorMessage="유효한 전화번호를 입력하세요. "
-                placeholder="전화번호 입력하세요. "
-                keyboardType="phone-pad"
-                autoCapitalize="none"
-            />
+            <View style={styles.headerContainer}>
+                <Text style={styles.headerText}>
+                    운영진 추가
+                </Text>
+
+            </View>
+            <View style={styles.bodyContainer}>
+                <CustomInput
+                    value={identifier}
+                    isValid={isIdentifierValid}
+                    onChangeText={onIdentifierChangeText}
+                    clearInput={clearIdentifierInput}
+                    placeholder="사용자 아이디를 입력하세요. "
+                    autoCapitalize="none"
+                />
+            </View>
+            <View style={styles.footerContainer}>
+                <ExpandedButton
+                    onPress={handleCreateClubUser}
+                    buttonText='추가'
+                />
+            </View>
         </View>
     );
 };
@@ -71,7 +70,20 @@ const ClubUserCreateEntry: React.FC<ClubUserCreateEntryProps> = ({
 const styles = StyleSheet.create({
     container: {
         padding: 20,
-        backgroundColor: 'white',
+        backgroundColor: colors.White,
+    },
+    headerContainer: {
+        marginBottom: 28,
+    },
+    headerText: {
+        fontSize: 18,
+        fontWeight: '800'
+    },
+    bodyContainer: {
+
+    },
+    footerContainer: {
+        marginTop: 24,
     },
 });
 

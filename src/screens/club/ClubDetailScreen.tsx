@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
 
   },
   footerContainer: {
-    
+
   }
 });
 

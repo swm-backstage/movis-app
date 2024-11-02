@@ -5,14 +5,14 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors/defaultColors';
 import profileColors from '../../assets/colors/profileColors';
-import { useGetClubUserList } from '../../hooks/useClubUser';
+import { useGetClubUserList, useMutateCreateClubUser } from '../../hooks/useClubUser';
 import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { ClubUserGetRes } from '../../types/clubUser/response/ClubUserGetRes';
 import CustomLoader from '../Loader';
 import ProfileIcon from '../ProfileIcon';
+import ClubUserCreateEntry from '../customBottomSheet/clubUserCreateEntry';
 import Item from './Item';
 import ItemList from './ItemList';
-import ClubUserCreateEntry from '../customBottomSheet/clubUserCreateEntry';
 
 
 interface ClubInfoItemListProps {
@@ -21,21 +21,22 @@ interface ClubInfoItemListProps {
 
 const ClubInfoItemList: React.FC<ClubInfoItemListProps> = ({ clubId }) => {
     const { data, isLoading, isError } = useGetClubUserList(clubId);
+    const createClubUser = useMutateCreateClubUser();
     const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
         snapPoints: useMemo(() => ['80%'], []),
-      });
+    });
     const getRandomProfileColor = (): string => {
         const profileColorValues = Object.values(profileColors) as string[];
         const randomIndex = Math.floor(Math.random() * profileColorValues.length);
         return profileColorValues[randomIndex];
-      };
+    };
     const roleMap: Record<string, string> = {
         'ROLE_MANAGER': '총무',
         'ROLE_EXECUTIVE': '운영진',
     };
 
     if (isLoading) {
-      return <CustomLoader />
+        return <CustomLoader />
     }
     return (
         <View style={styles.container}>
@@ -68,7 +69,7 @@ const ClubInfoItemList: React.FC<ClubInfoItemListProps> = ({ clubId }) => {
                 </TouchableOpacity>
             </View>
             <CustomBottomSheet>
-                <ClubUserCreateEntry clubId={clubId} />
+                <ClubUserCreateEntry clubId={clubId} createClubUser={createClubUser} />
             </CustomBottomSheet>
         </View>
     );
