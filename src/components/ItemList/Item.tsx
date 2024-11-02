@@ -9,8 +9,7 @@ interface ItemProps {
     mainText: string;
     subText: string;
     labelText?: string;
-    itemId?: string;
-    buttonHandler?: ((id: string) => void);
+    buttonHandler?: () => void;
 }
 
 const Item: React.FC<ItemProps> = ({ 
@@ -18,7 +17,6 @@ const Item: React.FC<ItemProps> = ({
     mainText, 
     subText, 
     labelText, 
-    itemId,
     buttonHandler,
 }) => {
     return (
@@ -51,7 +49,8 @@ const Item: React.FC<ItemProps> = ({
             </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                    style={styles.deleteButton}>
+                    style={styles.deleteButton}
+                    onPress={buttonHandler}>
                     <Image
                         source={require('../../assets/delete.png')}
                         style={styles.deleteButtonImage}

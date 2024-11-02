@@ -1,11 +1,11 @@
 import { View } from '@ant-design/react-native';
 import React, { useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors/defaultColors';
 import profileColors from '../../assets/colors/profileColors';
-import { useGetClubUserList, useMutateCreateClubUser } from '../../hooks/useClubUser';
+import { useGetClubUserList, useMutateCreateClubUser, useMutateDeleteClub } from '../../hooks/useClubUser';
 import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { ClubUserGetRes } from '../../types/clubUser/response/ClubUserGetRes';
 import CustomLoader from '../Loader';
@@ -15,13 +15,14 @@ import Item from './Item';
 import ItemList from './ItemList';
 
 
-interface ClubInfoItemListProps {
+interface ClubUserItemListProps {
     clubId: string;
 }
 
-const ClubInfoItemList: React.FC<ClubInfoItemListProps> = ({ clubId }) => {
+const ClubUserItemList: React.FC<ClubUserItemListProps> = ({ clubId }) => {
     const { data, isLoading, isError } = useGetClubUserList(clubId);
     const createClubUser = useMutateCreateClubUser();
+    const deleteClubUser = useMutateDeleteClub();
     const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
         snapPoints: useMemo(() => ['80%'], []),
     });
@@ -34,6 +35,35 @@ const ClubInfoItemList: React.FC<ClubInfoItemListProps> = ({ clubId }) => {
         'ROLE_MANAGER': '총무',
         'ROLE_EXECUTIVE': '운영진',
     };
+    const handleDeleteClubUser = (identifier: string) => {
+        const values = {
+            queryParams: {clubId: clubId},
+            identifier: identifier,
+        }
+        return () => {
+            Alert.alert(
+                "운영진 내보내기",
+                "해당 운영진을 모임에서 내보내시겠습니까? ",
+                [
+                    {
+                        text: "아니오",
+                        style: "cancel"
+                    },
+                    {
+                        text: "예",
+                        onPress: () => deleteClubUser.mutate(
+                            values,
+                            {
+                                onError: (error: any) => {
+                                  console.error('Error deleting club:', error, error.message, error.name, error.response.data);
+                                }
+                            }
+                        )
+                    }
+                ],
+            );
+        }
+    }
 
     if (isLoading) {
         return <CustomLoader />
@@ -54,13 +84,14 @@ const ClubInfoItemList: React.FC<ClubInfoItemListProps> = ({ clubId }) => {
                             mainText={clubUser.identifier}
                             subText={clubUser.identifier}
                             labelText={roleMap[clubUser.role]}
+                            buttonHandler={handleDeleteClubUser(clubUser.identifier)}
                         />
                     ))}
                 </ItemList>
             </View>
             <View style={styles.footerContainer}>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText} onPress={openCustomBottomSheet}>
+                <TouchableOpacity style={styles.button} onPress={openCustomBottomSheet}>
+                    <Text style={styles.buttonText}>
                         운영진 추가
                     </Text>
                     <Text style={styles.buttonTextPlus}>
@@ -111,4 +142,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ClubInfoItemList;
+export default ClubUserItemList;

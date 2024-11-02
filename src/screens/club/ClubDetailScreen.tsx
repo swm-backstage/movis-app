@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../../assets/colors/defaultColors';
-import ClubInfoItemList from '../../components/ItemList/ClubInfoItemList';
+import ClubUserItemList from '../../components/ItemList/ClubUserItemList';
 import ClubDetailSettingEntry from '../../components/customBottomSheet/ClubDetailSettingEntry';
 import { mainNavigations } from '../../constants/navigations';
 import { useMutateDeleteClub } from '../../hooks/useClub';
@@ -73,7 +73,7 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
         </View>
       </View>
       <View style={styles.bodyContainer}>
-        <ClubInfoItemList clubId={club.clubId} />
+        <ClubUserItemList clubId={club.clubId} />
       </View>
       <View style={styles.footerContainer}>
         <CustomBottomSheet>
