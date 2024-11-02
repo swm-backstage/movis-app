@@ -12,6 +12,7 @@ import CustomLoader from '../Loader';
 import ProfileIcon from '../ProfileIcon';
 import Item from './Item';
 import ItemList from './ItemList';
+import ClubUserCreateEntry from '../customBottomSheet/clubUserCreateEntry';
 
 
 interface ClubInfoItemListProps {
@@ -58,7 +59,7 @@ const ClubInfoItemList: React.FC<ClubInfoItemListProps> = ({ clubId }) => {
             </View>
             <View style={styles.footerContainer}>
                 <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>
+                    <Text style={styles.buttonText} onPress={openCustomBottomSheet}>
                         운영진 추가
                     </Text>
                     <Text style={styles.buttonTextPlus}>
@@ -67,8 +68,7 @@ const ClubInfoItemList: React.FC<ClubInfoItemListProps> = ({ clubId }) => {
                 </TouchableOpacity>
             </View>
             <CustomBottomSheet>
-                <View>
-                </View>
+                <ClubUserCreateEntry />
             </CustomBottomSheet>
         </View>
     );

@@ -31,19 +31,6 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
     snapPoints: useMemo(() => ['80%'], []),
   });
 
-
-  const handleAddClubUser = async (values: string) => {
-    createClubUser.mutate(
-      { 'clubId': club.clubId, 'identifier': values.identifier },
-      {
-        onError: (error) => {
-          console.error(error, error.response?.data);
-        }
-      }
-    );
-
-    clubUserForm.resetFields();
-  };
   const handleAddMember = async (values: MemberCreateListReq) => {
     if (values.memberList === null)
       return;
