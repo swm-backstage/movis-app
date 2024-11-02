@@ -33,11 +33,14 @@ const Item: React.FC<ItemProps> = ({
                             {mainText}
                         </Text>
                     </View>
+                    {
+                    labelText && 
                     <View style={styles.labelContainer}>
                         <Text style={styles.labelText}>
                             {labelText}
                         </Text>
-                    </View>
+                    </View> 
+                    }
                 </View>
                 <View style={styles.lowerContentContainer}>
                     <View style={styles.subTextContainer}>
@@ -47,6 +50,8 @@ const Item: React.FC<ItemProps> = ({
                     </View>
                 </View>
             </View>
+            {
+            buttonHandler &&
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={styles.deleteButton}
@@ -57,6 +62,7 @@ const Item: React.FC<ItemProps> = ({
                     />  
                 </TouchableOpacity>
             </View>
+            }
         </View>
     );
 };

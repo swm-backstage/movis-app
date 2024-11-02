@@ -1,28 +1,24 @@
 import { View } from '@ant-design/react-native';
 import React, { useMemo } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors/defaultColors';
 import profileColors from '../../assets/colors/profileColors';
-import { useGetClubUserList, useMutateCreateClubUser, useMutateDeleteClub } from '../../hooks/useClubUser';
 import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
-import { ClubUserGetRes } from '../../types/clubUser/response/ClubUserGetRes';
+import { useGetMemberList, useMutateCreateMemberList } from '../../hooks/useMember';
 import CustomLoader from '../Loader';
 import ProfileIcon from '../ProfileIcon';
-import ClubUserCreateEntry from '../customBottomSheet/clubUserCreateEntry';
 import Item from './Item';
 import ItemList from './ItemList';
 
 
-interface ClubUserItemListProps {
+interface ClubMemberItemListProps {
     clubId: string;
 }
 
-const ClubUserItemList: React.FC<ClubUserItemListProps> = ({ clubId }) => {
-    const { data, isLoading, isError } = useGetClubUserList(clubId);
-    const createClubUser = useMutateCreateClubUser();
-    const deleteClubUser = useMutateDeleteClub();
+const ClubMemberItemList: React.FC<ClubMemberItemListProps> = ({ clubId }) => {
+    const { data, isLoading, isError } = useGetMemberList(clubId);
     const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
         snapPoints: useMemo(() => ['80%'], []),
     });
@@ -31,39 +27,6 @@ const ClubUserItemList: React.FC<ClubUserItemListProps> = ({ clubId }) => {
         const randomIndex = Math.floor(Math.random() * profileColorValues.length);
         return profileColorValues[randomIndex];
     };
-    const roleMap: Record<string, string> = {
-        'ROLE_MANAGER': '총무',
-        'ROLE_EXECUTIVE': '운영진',
-    };
-    const handleDeleteClubUser = (identifier: string) => {
-        const values = {
-            queryParams: {clubId: clubId},
-            identifier: identifier,
-        }
-        return () => {
-            Alert.alert(
-                "운영진 내보내기",
-                "해당 운영진을 모임에서 내보내시겠습니까? ",
-                [
-                    {
-                        text: "아니오",
-                        style: "cancel"
-                    },
-                    {
-                        text: "예",
-                        onPress: () => deleteClubUser.mutate(
-                            values,
-                            {
-                                onError: (error: any) => {
-                                  console.error('Error deleting club:', error, error.message, error.name, error.response.data);
-                                }
-                            }
-                        )
-                    }
-                ],
-            );
-        }
-    }
 
     if (isLoading) {
         return <CustomLoader />
@@ -72,19 +35,17 @@ const ClubUserItemList: React.FC<ClubUserItemListProps> = ({ clubId }) => {
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <Text style={styles.labelText}>
-                    운영진
+                    회원
                 </Text>
             </View>
             <View style={styles.bodyContainer}>
                 <ItemList>
-                    {data && data.clubUserGetResDtoList.map((clubUser: ClubUserGetRes) => (
+                    {data && data.members.map((member) => (
                         <Item
-                            key={clubUser.identifier}
+                            key={member.memberId}
                             imageNode={<ProfileIcon backgroundColor={getRandomProfileColor()} />}
-                            mainText={clubUser.identifier}
-                            subText={clubUser.identifier}
-                            labelText={roleMap[clubUser.role]}
-                            buttonHandler={handleDeleteClubUser(clubUser.identifier)}
+                            mainText={member.name}
+                            subText={member.phoneNo}
                         />
                     ))}
                 </ItemList>
@@ -92,7 +53,7 @@ const ClubUserItemList: React.FC<ClubUserItemListProps> = ({ clubId }) => {
             <View style={styles.footerContainer}>
                 <TouchableOpacity style={styles.button} onPress={openCustomBottomSheet}>
                     <Text style={styles.buttonText}>
-                        운영진 추가
+                        회원 추가
                     </Text>
                     <Text style={styles.buttonTextPlus}>
                         +
@@ -100,7 +61,8 @@ const ClubUserItemList: React.FC<ClubUserItemListProps> = ({ clubId }) => {
                 </TouchableOpacity>
             </View>
             <CustomBottomSheet>
-                <ClubUserCreateEntry clubId={clubId} createClubUser={createClubUser} />
+                <></>
+                {/* <ClubUserCreateEntry clubId={clubId} createClubUser={createClubUser} /> */}
             </CustomBottomSheet>
         </View>
     );
@@ -142,4 +104,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ClubUserItemList;
+export default ClubMemberItemList;

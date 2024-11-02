@@ -14,6 +14,7 @@ import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { useMutateCreateMemberList } from '../../hooks/useMember';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { MemberCreateListReq } from '../../types/member/request/MemberCreateReq';
+import ClubMemberItemList from '../../components/ItemList/ClubMemberItemList';
 
 type ClubDetailScreenProps = StackScreenProps<
   MainStackParamList,
@@ -21,11 +22,8 @@ type ClubDetailScreenProps = StackScreenProps<
 >;
 
 const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
-  const [clubUserForm] = Form.useForm();
-  const [memberForm] = Form.useForm();
   const { club } = route.params;
   const createMemberList = useMutateCreateMemberList();
-  const createClubUser = useMutateCreateClubUser();
   const deleteClub = useMutateDeleteClub();
   const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
     snapPoints: useMemo(() => ['80%'], []),
@@ -46,8 +44,6 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
         }
       }
     );
-
-    memberForm.resetFields();
   };
 
   return (
@@ -74,6 +70,7 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
       </View>
       <View style={styles.bodyContainer}>
         <ClubUserItemList clubId={club.clubId} />
+        <ClubMemberItemList clubId={club.clubId} />
       </View>
       <View style={styles.footerContainer}>
         <CustomBottomSheet>
@@ -85,8 +82,6 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
         </CustomBottomSheet>
       </View>
     </View>
-
-
   );
 };
 
@@ -97,10 +92,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   headerContainer: {
-    flex: 0.1,
+    flex: 0.15,
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 44,
     backgroundColor: colors.White,
   },
   clubName: {
@@ -110,8 +105,9 @@ const styles = StyleSheet.create({
     color: colors.Black,
   },
   iconContainer: {
+    flex: 0.3,
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    justifyContent: 'flex-end',
   },
   settingButton: {
     padding: 8,
@@ -123,7 +119,7 @@ const styles = StyleSheet.create({
     color: colors.Black,
   },
   bodyContainer: {
-
+    flex: 0.85,
   },
   footerContainer: {
 
