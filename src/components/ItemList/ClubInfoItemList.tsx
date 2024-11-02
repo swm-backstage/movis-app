@@ -68,7 +68,7 @@ const ClubInfoItemList: React.FC<ClubInfoItemListProps> = ({ clubId }) => {
                 </TouchableOpacity>
             </View>
             <CustomBottomSheet>
-                <ClubUserCreateEntry />
+                <ClubUserCreateEntry clubId={clubId}/>
             </CustomBottomSheet>
         </View>
     );

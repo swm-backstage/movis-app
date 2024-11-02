@@ -25,7 +25,6 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
   const [memberForm] = Form.useForm();
   const { club } = route.params;
   const createMemberList = useMutateCreateMemberList();
-  const createClubUser = useMutateCreateClubUser();
   const deleteClub = useMutateDeleteClub();
   const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
     snapPoints: useMemo(() => ['80%'], []),
