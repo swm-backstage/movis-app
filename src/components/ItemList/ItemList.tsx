@@ -16,8 +16,7 @@ const ItemList: React.FC<ItemListProps> = ({ children }) => {
 
 const styles = StyleSheet.create({
   scrollViewContainer: {
-    flex: 1,
-    height: 150,
+
   },
 });
 
