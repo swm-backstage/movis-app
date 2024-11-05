@@ -1,14 +1,15 @@
 import { View } from '@ant-design/react-native';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors/defaultColors';
 import profileColors from '../../assets/colors/profileColors';
 import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { useGetMemberList, useMutateCreateMemberList } from '../../hooks/useMember';
+import ItemListButton from '../Button/ItemListButton';
 import CustomLoader from '../Loader';
 import ProfileIcon from '../ProfileIcon';
+import ClubMemberListCreateForm from '../customInput/ClubMemberListCreateForm';
 import Item from './Item';
 import ItemList from './ItemList';
 
@@ -19,9 +20,8 @@ interface ClubMemberItemListProps {
 
 const ClubMemberItemList: React.FC<ClubMemberItemListProps> = ({ clubId }) => {
     const { data, isLoading, isError } = useGetMemberList(clubId);
-    const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
-        snapPoints: useMemo(() => ['80%'], []),
-    });
+    const createMemberList = useMutateCreateMemberList();
+    const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({});
     const getProfileColor = (identifier: string): string => {
         const profileColorValues = Object.values(profileColors) as string[];
         let hash = 0;
@@ -55,18 +55,14 @@ const ClubMemberItemList: React.FC<ClubMemberItemListProps> = ({ clubId }) => {
                 </ItemList>
             </View>
             <View style={styles.footerContainer}>
-                <TouchableOpacity style={styles.button} onPress={openCustomBottomSheet}>
-                    <Text style={styles.buttonText}>
-                        회원 추가
-                    </Text>
-                    <Text style={styles.buttonTextPlus}>
-                        +
-                    </Text>
-                </TouchableOpacity>
+                <ItemListButton
+                    onPress={() => {
+                        openCustomBottomSheet();
+                    }}
+                    buttonText="회원 추가" />
             </View>
             <CustomBottomSheet>
-                <></>
-                {/* <ClubUserCreateEntry clubId={clubId} createClubUser={createClubUser} /> */}
+                <ClubMemberListCreateForm createMemberList={createMemberList} clubId={clubId}/>
             </CustomBottomSheet>
         </View>
     );

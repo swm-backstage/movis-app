@@ -11,9 +11,7 @@ import ClubDetailSettingEntry from '../../components/customBottomSheet/ClubDetai
 import { mainNavigations } from '../../constants/navigations';
 import { useMutateDeleteClub } from '../../hooks/useClub';
 import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
-import { useMutateCreateMemberList } from '../../hooks/useMember';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
-import { MemberCreateListReq } from '../../types/member/request/MemberCreateReq';
 
 type ClubDetailScreenProps = StackScreenProps<
   MainStackParamList,
@@ -22,28 +20,10 @@ type ClubDetailScreenProps = StackScreenProps<
 
 const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
   const { club } = route.params;
-  const createMemberList = useMutateCreateMemberList();
   const deleteClub = useMutateDeleteClub();
   const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
     snapPoints: useMemo(() => ['80%'], []),
   });
-
-
-  const handleAddMember = async (values: MemberCreateListReq) => {
-    if (values.memberList === null)
-      return;
-
-    values.clubId = club.clubId;
-
-    createMemberList.mutate(
-      values,
-      {
-        onError: (error) => {
-          console.error(error, error.response?.data);
-        }
-      }
-    );
-  };
 
   return (
     <View style={styles.container}>

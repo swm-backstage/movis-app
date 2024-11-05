@@ -7,29 +7,26 @@ import useCustomInput from '../../hooks/useCustomInput';
 import { ClubUserCreateReq } from '../../types/clubUser/request/ClubUserReq';
 import { ResponseError } from '../../types/common';
 import ExpandedButton from '../Button/ExpandedButton';
-import CustomInput from '../customInput/CustomInput';
+import CustomInput from './CustomInput';
 
-
-type ClubUserCreateEntryProps = {
+type ClubUserCreateFormProps = {
     clubId: string,
     createClubUser: UseMutationResult<void, ResponseError, ClubUserCreateReq, unknown>;
 };
 
-const ClubUserCreateEntry: React.FC<ClubUserCreateEntryProps> = ({
+const ClubUserCreateForm: React.FC<ClubUserCreateFormProps> = ({
     clubId,
     createClubUser,
 }) => {
-    const {
-        value: identifier,
-        isValid: isIdentifierValid,
-        onChangeText: onIdentifierChangeText,
-        clearInput: clearIdentifierInput,
-    } = useCustomInput({});
+    const identifierInput = useCustomInput({
+        required: true,
+        requiredMessage: '필수 항목입니다.',
+    });
 
     const handleCreateClubUser = async () => {
         const data = {
             clubId: clubId,
-            identifier: identifier,
+            identifier: identifierInput.value,
         }
         createClubUser.mutate(
             data,
@@ -49,11 +46,13 @@ const ClubUserCreateEntry: React.FC<ClubUserCreateEntryProps> = ({
             </View>
             <View style={styles.bodyContainer}>
                 <CustomInput
-                    value={identifier}
-                    isValid={isIdentifierValid}
-                    onChangeText={onIdentifierChangeText}
-                    clearInput={clearIdentifierInput}
-                    placeholder="사용자 아이디를 입력하세요. "
+                    value={identifierInput.value}
+                    isValid={identifierInput.isValid}
+                    errorMessage={identifierInput.errorMessage}
+                    onChangeText={identifierInput.onChangeText}
+                    onBlur={identifierInput.onBlur}
+                    clearInput={identifierInput.clearInput}
+                    placeholder="이름"
                     autoCapitalize="none"
                 />
             </View>
@@ -87,4 +86,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ClubUserCreateEntry;
+export default ClubUserCreateForm;

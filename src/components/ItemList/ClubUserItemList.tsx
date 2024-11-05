@@ -1,16 +1,16 @@
 import { View } from '@ant-design/react-native';
 import React, { useMemo } from 'react';
 import { Alert, StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors/defaultColors';
 import profileColors from '../../assets/colors/profileColors';
 import { useGetClubUserList, useMutateCreateClubUser, useMutateDeleteClub } from '../../hooks/useClubUser';
 import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { ClubUserGetRes } from '../../types/clubUser/response/ClubUserGetRes';
+import ItemListButton from '../Button/ItemListButton';
 import CustomLoader from '../Loader';
 import ProfileIcon from '../ProfileIcon';
-import ClubUserCreateEntry from '../customBottomSheet/clubUserCreateEntry';
+import ClubUserCreateForm from '../customInput/ClubUserCreateForm';
 import Item from './Item';
 import ItemList from './ItemList';
 
@@ -41,7 +41,7 @@ const ClubUserItemList: React.FC<ClubUserItemListProps> = ({ clubId }) => {
     };
     const handleDeleteClubUser = (identifier: string) => {
         const values = {
-            queryParams: {clubId: clubId},
+            queryParams: { clubId: clubId },
             identifier: identifier,
         }
         return () => {
@@ -59,7 +59,7 @@ const ClubUserItemList: React.FC<ClubUserItemListProps> = ({ clubId }) => {
                             values,
                             {
                                 onError: (error: any) => {
-                                  console.error('Error deleting club:', error, error.message, error.name, error.response.data);
+                                    console.error('Error deleting club:', error, error.message, error.name, error.response.data);
                                 }
                             }
                         )
@@ -94,17 +94,14 @@ const ClubUserItemList: React.FC<ClubUserItemListProps> = ({ clubId }) => {
                 </ItemList>
             </View>
             <View style={styles.footerContainer}>
-                <TouchableOpacity style={styles.button} onPress={openCustomBottomSheet}>
-                    <Text style={styles.buttonText}>
-                        운영진 추가
-                    </Text>
-                    <Text style={styles.buttonTextPlus}>
-                        +
-                    </Text>
-                </TouchableOpacity>
+                <ItemListButton
+                    onPress={() => {
+                        openCustomBottomSheet();
+                    }}
+                    buttonText="운영진 추가" />
             </View>
             <CustomBottomSheet>
-                <ClubUserCreateEntry clubId={clubId} createClubUser={createClubUser} />
+                <ClubUserCreateForm clubId={clubId} createClubUser={createClubUser} />
             </CustomBottomSheet>
         </View>
     );
@@ -126,23 +123,7 @@ const styles = StyleSheet.create({
         maxHeight: 130,
     },
     footerContainer: {
-        alignItems: 'flex-end',
-    },
-    button: {
-        flexDirection: 'row',
-        backgroundColor: colors.Gray100,
-        paddingVertical: 6,
-        paddingHorizontal: 12,
-        borderRadius: 18,
-    },
-    buttonText: {
-        fontSize: 14,
-        fontWeight: '600',
-        textAlignVertical: 'center',
-    },
-    buttonTextPlus: {
-        fontSize: 22,
-        marginLeft: 4,
+
     },
 });
 

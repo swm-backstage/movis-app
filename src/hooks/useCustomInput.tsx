@@ -1,44 +1,107 @@
 import { useState, useCallback } from 'react';
 
 interface UseCustomInputProps {
-  validator?: (text: string) => boolean;
-  formatText?: (text: string) => string;
+  validator?: (text: string) => { valid: boolean; errorMessage?: string };
+  formator?: (text: string) => string;
+  required?: boolean;
+  requiredMessage?: string;
 }
 
 interface UseCustomInputReturn {
   value: string;
   isValid: boolean;
+  errorMessage: string;
   clearInput: () => void;
   onChangeText: (text: string) => void;
+  onBlur: () => void;
+  setError: (msg: string) => void;
+  validate: () => void;
 }
 
-const useCustomInput = ({ validator, formatText }: UseCustomInputProps): UseCustomInputReturn => {
+const useCustomInput = ({
+  validator,
+  formator,
+  required = false,
+  requiredMessage = '필수 항목',
+}: UseCustomInputProps): UseCustomInputReturn => {
   const [value, setValue] = useState<string>('');
   const [isValid, setIsValid] = useState<boolean>(true);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [touched, setTouched] = useState<boolean>(false);
+
+  const setError = useCallback((msg: string) => {
+    setErrorMessage(msg);
+    setIsValid(false);
+  }, []);
+
+  const validateInput = useCallback(() => {
+    if (required && value.trim() === '') {
+      setErrorMessage(requiredMessage);
+      setIsValid(false);
+    } else if (validator) {
+      const validation = validator(value);
+      if (!validation.valid) {
+        setErrorMessage(validation.errorMessage || '옳바르지 않은 형식');
+        setIsValid(false);
+      } else {
+        setErrorMessage('');
+        setIsValid(true);
+      }
+    } else {
+      setErrorMessage('');
+      setIsValid(true);
+    }
+  }, [value, required, validator, requiredMessage]);
 
   const onChangeText = useCallback(
     (text: string) => {
       let formattedText = text;
-      if (formatText) {
-        formattedText = formatText(text);
+      if (formator) {
+        formattedText = formator(text);
       }
       setValue(formattedText);
-      if (validator) {
-        const valid = validator(formattedText);
-        setIsValid(valid);
+
+      if (!touched) {
+        setTouched(true);
+      }
+
+      if (formattedText.trim() !== '' && validator) {
+        const validation = validator(formattedText);
+        if (!validation.valid) {
+          setErrorMessage(validation.errorMessage || '옳바르지 않은 형식');
+          setIsValid(false);
+        } else {
+          setErrorMessage('');
+          setIsValid(true);
+        }
+      } else if (required && formattedText.trim() === '') {
+        setErrorMessage(requiredMessage);
+        setIsValid(false);
       } else {
+        setErrorMessage('');
         setIsValid(true);
       }
     },
-    [validator, formatText]
+    [formator, validator, touched, required, requiredMessage]
   );
+
+  const onBlur = useCallback(() => {
+    setTouched(true);
+    validateInput();
+  }, [validateInput]);
 
   const clearInput = useCallback(() => {
     setValue('');
-    setIsValid(true);
-  }, []);
+    setTouched(true);
+    validateInput();
+  }, [validateInput]);
 
-  return { value, isValid, clearInput, onChangeText };
+  const validate = useCallback(() => {
+    setTouched(true);
+    validateInput();
+  }, [validateInput]);
+
+  return { value, isValid, errorMessage, clearInput, onChangeText, onBlur, setError, validate };
 };
 
-export default useCustomInput
+export default useCustomInput;
