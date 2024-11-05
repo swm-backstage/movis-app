@@ -12,6 +12,7 @@ import ProfileIcon from '../ProfileIcon';
 import ClubMemberListCreateForm from '../customInput/ClubMemberListCreateForm';
 import Item from './Item';
 import ItemList from './ItemList';
+import ItemListButton from '../Button/\bItemListButton';
 
 
 interface ClubMemberItemListProps {
@@ -56,17 +57,14 @@ const ClubMemberItemList: React.FC<ClubMemberItemListProps> = ({ clubId }) => {
                 </ItemList>
             </View>
             <View style={styles.footerContainer}>
-                <TouchableOpacity style={styles.button} onPress={openCustomBottomSheet}>
-                    <Text style={styles.buttonText}>
-                        회원 추가
-                    </Text>
-                    <Text style={styles.buttonTextPlus}>
-                        +
-                    </Text>
-                </TouchableOpacity>
+                <ItemListButton
+                    onPress={() => {
+                        openCustomBottomSheet();
+                    }}
+                    buttonText="운영진 추가" />
             </View>
             <CustomBottomSheet>
-                <ClubMemberListCreateForm/>
+                <ClubMemberListCreateForm />
             </CustomBottomSheet>
         </View>
     );
