@@ -22,10 +22,14 @@ const ClubMemberItemList: React.FC<ClubMemberItemListProps> = ({ clubId }) => {
     const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
         snapPoints: useMemo(() => ['80%'], []),
     });
-    const getRandomProfileColor = (): string => {
+    const getProfileColor = (identifier: string): string => {
         const profileColorValues = Object.values(profileColors) as string[];
-        const randomIndex = Math.floor(Math.random() * profileColorValues.length);
-        return profileColorValues[randomIndex];
+        let hash = 0;
+        for (let i = 0; i < identifier.length; i++) {
+            hash = identifier.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const index = Math.abs(hash) % profileColorValues.length;
+        return profileColorValues[index];
     };
 
     if (isLoading) {
@@ -43,7 +47,7 @@ const ClubMemberItemList: React.FC<ClubMemberItemListProps> = ({ clubId }) => {
                     {data && data.members.map((member) => (
                         <Item
                             key={member.memberId}
-                            imageNode={<ProfileIcon backgroundColor={getRandomProfileColor()} />}
+                            imageNode={<ProfileIcon backgroundColor={getProfileColor(member.name)} />}
                             mainText={member.name}
                             subText={member.phoneNo}
                         />
