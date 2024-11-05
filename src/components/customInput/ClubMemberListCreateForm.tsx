@@ -89,10 +89,11 @@ const ClubMemberListCreateForm: React.FC<ClubMemberListCreateFormProps> = ({ clu
 
     // 모든 필드가 유효한지 확인
     const allValid = memberDataList.every(
-      (member) => member.isNameValid && member.isPhoneValid
+      (member) => member.name && member.phoneNo && member.isNameValid && member.isPhoneValid
     );
 
     if (!allValid || hasError) {
+      Alert.alert('오류', '모든 필드를 올바르게 입력해주세요.');
       return;
     }
 
@@ -106,7 +107,9 @@ const ClubMemberListCreateForm: React.FC<ClubMemberListCreateFormProps> = ({ clu
       clubId,
       memberList,
     };
-    console.log(memberCreateListReq);
+
+    console.log('멤버 데이터:', memberCreateListReq);
+
     // 멤버 데이터 전송
     createMemberList.mutate(
       memberCreateListReq,
@@ -142,9 +145,7 @@ const ClubMemberListCreateForm: React.FC<ClubMemberListCreateFormProps> = ({ clu
         <View style={styles.addMemberFormButtonContainer}>
           <ItemListButton onPress={addMember} buttonText='폼 추가' />
         </View>
-        <View style={styles.addMemberListButtonContainer}>
-
-        </View>
+        <View style={styles.addMemberListButtonContainer} />
         <ExpandedButton onPress={handleCreateMembers} buttonText="멤버 추가" />
       </View>
     </View>
@@ -158,15 +159,16 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     maxHeight: 250,
+    marginBottom: 10,
   },
   addMemberFormButtonContainer: {
     alignItems: 'flex-end',
   },
   addMemberListButtonContainer: {
     marginTop: 40,
-
   },
   footerContainer: {
+    marginTop: 24,
   },
 });
 

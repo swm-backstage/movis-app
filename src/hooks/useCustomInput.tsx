@@ -61,23 +61,25 @@ const useCustomInput = ({
       }
       setValue(formattedText);
 
-      if (touched) {
-        if (formattedText.trim() !== '' && validator) {
-          const validation = validator(formattedText);
-          if (!validation.valid) {
-            setErrorMessage(validation.errorMessage || '옳바르지 않은 형식');
-            setIsValid(false);
-          } else {
-            setErrorMessage('');
-            setIsValid(true);
-          }
-        } else if (required && formattedText.trim() === '') {
-          setErrorMessage(requiredMessage);
+      if (!touched) {
+        setTouched(true);
+      }
+
+      if (formattedText.trim() !== '' && validator) {
+        const validation = validator(formattedText);
+        if (!validation.valid) {
+          setErrorMessage(validation.errorMessage || '옳바르지 않은 형식');
           setIsValid(false);
         } else {
           setErrorMessage('');
           setIsValid(true);
         }
+      } else if (required && formattedText.trim() === '') {
+        setErrorMessage(requiredMessage);
+        setIsValid(false);
+      } else {
+        setErrorMessage('');
+        setIsValid(true);
       }
     },
     [formator, validator, touched, required, requiredMessage]
@@ -92,12 +94,12 @@ const useCustomInput = ({
     setValue('');
     setTouched(true);
     validateInput();
-  }, []);
+  }, [validateInput]);
 
   const validate = useCallback(() => {
     setTouched(true);
     validateInput();
-  }, []);
+  }, [validateInput]);
 
   return { value, isValid, errorMessage, clearInput, onChangeText, onBlur, setError, validate };
 };

@@ -4,7 +4,7 @@ export const EmailValidator = (text: string) => {
 };
 
 export const NameValidator = (text: string) => {
-    if (text.trim().length > 10 || text.trim().length < 3) {
+    if (text.trim().length > 10 || text.trim().length < 2) {
         return { valid: false, errorMessage: '2자리 이상 10자리 이하' };
     }
     return { valid: true };

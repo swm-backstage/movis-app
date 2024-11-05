@@ -22,11 +22,13 @@ export interface MemberData {
 const MemberInputRow = forwardRef(({ id, onRemove }: MemberInputRowProps, ref) => {
   const nameInput = useCustomInput({
     required: true,
+    requiredMessage: '이름은 필수 항목',
     validator: NameValidator,
   });
 
   const phoneNoInput = useCustomInput({
     required: true,
+    requiredMessage: '휴대폰 번호는 필수 항목',
     validator: PhoneNumberValidator,
     formator: FormatPhoneNumber,
   });
