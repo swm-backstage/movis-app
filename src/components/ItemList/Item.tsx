@@ -22,9 +22,7 @@ const Item: React.FC<ItemProps> = ({
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
-                <Text>
-                    {imageNode}
-                </Text>
+                {imageNode}
             </View>
             <View style={styles.contentContainer}>
                 <View style={styles.upperContentContainer}>
