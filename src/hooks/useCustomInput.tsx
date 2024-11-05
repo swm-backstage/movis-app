@@ -92,12 +92,12 @@ const useCustomInput = ({
     setValue('');
     setTouched(true);
     validateInput();
-  }, [validateInput]);
+  }, []);
 
   const validate = useCallback(() => {
     setTouched(true);
     validateInput();
-  }, [validateInput]);
+  }, []);
 
   return { value, isValid, errorMessage, clearInput, onChangeText, onBlur, setError, validate };
 };

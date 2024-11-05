@@ -1,12 +1,12 @@
 import { View } from '@ant-design/react-native';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors/defaultColors';
 import profileColors from '../../assets/colors/profileColors';
 import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
-import { useGetMemberList } from '../../hooks/useMember';
-import ItemListButton from '../Button/\bItemListButton';
+import { useGetMemberList, useMutateCreateMemberList } from '../../hooks/useMember';
+import ItemListButton from '../Button/ItemListButton';
 import CustomLoader from '../Loader';
 import ProfileIcon from '../ProfileIcon';
 import ClubMemberListCreateForm from '../customInput/ClubMemberListCreateForm';
@@ -20,9 +20,8 @@ interface ClubMemberItemListProps {
 
 const ClubMemberItemList: React.FC<ClubMemberItemListProps> = ({ clubId }) => {
     const { data, isLoading, isError } = useGetMemberList(clubId);
-    const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
-        snapPoints: useMemo(() => ['80%'], []),
-    });
+    const createMemberList = useMutateCreateMemberList();
+    const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({});
     const getProfileColor = (identifier: string): string => {
         const profileColorValues = Object.values(profileColors) as string[];
         let hash = 0;
@@ -63,7 +62,7 @@ const ClubMemberItemList: React.FC<ClubMemberItemListProps> = ({ clubId }) => {
                     buttonText="회원 추가" />
             </View>
             <CustomBottomSheet>
-                <ClubMemberListCreateForm />
+                <ClubMemberListCreateForm createMemberList={createMemberList} clubId={clubId}/>
             </CustomBottomSheet>
         </View>
     );

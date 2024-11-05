@@ -1,17 +1,24 @@
+import { UseMutationResult } from '@tanstack/react-query';
 import React, { useRef, useState } from 'react';
 import {
   Alert,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../../assets/colors/defaultColors';
+import { ResponseError } from '../../types/common';
+import { MemberCreateListReq, MemberCreateReq } from '../../types/member/request/MemberCreateReq';
 import ExpandedButton from '../Button/ExpandedButton';
+import ItemListButton from '../Button/ItemListButton';
 import MemberInputRow, { MemberData } from './MemberInputRow';
 
-const ClubMemberListCreateForm: React.FC = () => {
+type ClubMemberListCreateFormProps = {
+  clubId: string;
+  createMemberList: UseMutationResult<void, ResponseError, MemberCreateListReq, unknown>;
+};
+
+const ClubMemberListCreateForm: React.FC<ClubMemberListCreateFormProps> = ({ clubId, createMemberList }) => {
   const [memberIds, setMemberIds] = useState<number[]>([Date.now()]);
   const memberRefs = useRef<{ [key: number]: any }>({});
 
@@ -26,7 +33,7 @@ const ClubMemberListCreateForm: React.FC = () => {
   };
 
   const handleCreateMembers = () => {
-    // Validate all inputs
+    // 모든 인풋 필드의 검증을 트리거
     memberIds.forEach((id) => {
       const ref = memberRefs.current[id];
       if (ref && ref.validate) {
@@ -34,6 +41,7 @@ const ClubMemberListCreateForm: React.FC = () => {
       }
     });
 
+    // 모든 멤버 데이터를 수집
     const memberDataList: MemberData[] = memberIds.map((id) => {
       const ref = memberRefs.current[id];
       if (ref && ref.getData) {
@@ -56,20 +64,22 @@ const ClubMemberListCreateForm: React.FC = () => {
     memberDataList.forEach((member) => {
       const { name, phoneNo, id } = member;
 
+      // 이름 중복 체크
       if (name !== '' && nameSet.has(name)) {
         const refObj = memberRefs.current[id];
         if (refObj && refObj.setNameError) {
-          refObj.setNameError('중복된 이름');
+          refObj.setNameError('중복된 이름입니다.');
         }
         hasError = true;
       } else {
         nameSet.add(name);
       }
 
+      // 휴대폰 번호 중복 체크
       if (phoneNo !== '' && phoneSet.has(phoneNo)) {
         const refObj = memberRefs.current[id];
         if (refObj && refObj.setPhoneError) {
-          refObj.setPhoneError('중복된 휴대폰 번호');
+          refObj.setPhoneError('중복된 휴대폰 번호입니다.');
         }
         hasError = true;
       } else {
@@ -77,6 +87,7 @@ const ClubMemberListCreateForm: React.FC = () => {
       }
     });
 
+    // 모든 필드가 유효한지 확인
     const allValid = memberDataList.every(
       (member) => member.isNameValid && member.isPhoneValid
     );
@@ -85,13 +96,37 @@ const ClubMemberListCreateForm: React.FC = () => {
       return;
     }
 
-    console.log('멤버 데이터:', memberDataList);
-    Alert.alert('성공', '모든 멤버가 올바르게 입력되었습니다.');
+    // MemberCreateListReq 객체 생성
+    const memberList: MemberCreateReq[] = memberDataList.map((member) => ({
+      name: member.name,
+      phoneNo: member.phoneNo,
+    }));
+
+    const memberCreateListReq: MemberCreateListReq = {
+      clubId,
+      memberList,
+    };
+    console.log(memberCreateListReq);
+    // 멤버 데이터 전송
+    createMemberList.mutate(
+      memberCreateListReq,
+      {
+        onSuccess: () => {
+          Alert.alert('성공', '모든 멤버가 올바르게 입력되었습니다.');
+          setMemberIds([Date.now()]);
+          memberRefs.current = {};
+        },
+        onError: (error) => {
+          console.error(error, error.response?.data);
+          Alert.alert('오류', '멤버 추가에 실패했습니다.');
+        },
+      }
+    );
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.formScrollContainer}>
+      <ScrollView style={styles.bodyContainer}>
         {memberIds.map((id) => (
           <MemberInputRow
             key={id}
@@ -102,13 +137,14 @@ const ClubMemberListCreateForm: React.FC = () => {
             }}
           />
         ))}
-        <View style={styles.addUserFormIconContainer}>
-          <TouchableOpacity onPress={addMember}>
-            <AntDesign name="pluscircleo" size={28} color="rgba(153, 102, 255, 1)" />
-          </TouchableOpacity>
-        </View>
       </ScrollView>
       <View style={styles.footerContainer}>
+        <View style={styles.addMemberFormButtonContainer}>
+          <ItemListButton onPress={addMember} buttonText='폼 추가' />
+        </View>
+        <View style={styles.addMemberListButtonContainer}>
+
+        </View>
         <ExpandedButton onPress={handleCreateMembers} buttonText="멤버 추가" />
       </View>
     </View>
@@ -120,16 +156,17 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: colors.White,
   },
-  formScrollContainer: {
+  bodyContainer: {
     maxHeight: 250,
-    marginBottom: 10,
   },
-  addUserFormIconContainer: {
-    alignItems: 'center',
-    marginTop: 10,
+  addMemberFormButtonContainer: {
+    alignItems: 'flex-end',
+  },
+  addMemberListButtonContainer: {
+    marginTop: 40,
+
   },
   footerContainer: {
-    marginTop: 24,
   },
 });
 
