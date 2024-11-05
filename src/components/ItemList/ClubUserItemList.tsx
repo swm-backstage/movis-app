@@ -26,10 +26,14 @@ const ClubUserItemList: React.FC<ClubUserItemListProps> = ({ clubId }) => {
     const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
         snapPoints: useMemo(() => ['80%'], []),
     });
-    const getRandomProfileColor = (): string => {
+    const getProfileColor = (identifier: string): string => {
         const profileColorValues = Object.values(profileColors) as string[];
-        const randomIndex = Math.floor(Math.random() * profileColorValues.length);
-        return profileColorValues[randomIndex];
+        let hash = 0;
+        for (let i = 0; i < identifier.length; i++) {
+            hash = identifier.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const index = Math.abs(hash) % profileColorValues.length;
+        return profileColorValues[index];
     };
     const roleMap: Record<string, string> = {
         'ROLE_MANAGER': '총무',
@@ -80,7 +84,7 @@ const ClubUserItemList: React.FC<ClubUserItemListProps> = ({ clubId }) => {
                     {data && data.clubUserGetResDtoList.map((clubUser: ClubUserGetRes) => (
                         <Item
                             key={clubUser.identifier}
-                            imageNode={<ProfileIcon backgroundColor={getRandomProfileColor()} />}
+                            imageNode={<ProfileIcon backgroundColor={getProfileColor(clubUser.identifier)} />}
                             mainText={clubUser.identifier}
                             subText={clubUser.identifier}
                             labelText={roleMap[clubUser.role]}
