@@ -1,3 +1,5 @@
+// components/customInput/CustomInput.tsx
+
 import React from 'react';
 import {
   TextInput,
@@ -13,17 +15,19 @@ import colors from '../../assets/colors/defaultColors';
 interface CustomInputProps extends TextInputProps {
   value: string;
   isValid: boolean;
+  errorMessage: string;
   onChangeText: (text: string) => void;
+  onBlur: () => void;
   clearInput: () => void;
-  errorMessage?: string;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
   value,
   isValid,
-  onChangeText,
-  clearInput,
   errorMessage,
+  onChangeText,
+  onBlur,
+  clearInput,
   ...props
 }) => {
   return (
@@ -33,6 +37,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
           style={styles.input}
           value={value}
           onChangeText={onChangeText}
+          onBlur={onBlur}
           {...props}
         />
         {value.length > 0 && (
@@ -80,6 +85,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   errorText: {
+    fontSize: 13,
     color: colors.Red,
     marginTop: 5,
   },

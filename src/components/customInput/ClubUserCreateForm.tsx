@@ -7,15 +7,15 @@ import useCustomInput from '../../hooks/useCustomInput';
 import { ClubUserCreateReq } from '../../types/clubUser/request/ClubUserReq';
 import { ResponseError } from '../../types/common';
 import ExpandedButton from '../Button/ExpandedButton';
-import CustomInput from '../customInput/CustomInput';
+import CustomInput from './CustomInput';
 
 
-type ClubUserCreateEntryProps = {
+type ClubUserCreateFormProps = {
     clubId: string,
     createClubUser: UseMutationResult<void, ResponseError, ClubUserCreateReq, unknown>;
 };
 
-const ClubUserCreateEntry: React.FC<ClubUserCreateEntryProps> = ({
+const ClubUserCreateForm: React.FC<ClubUserCreateFormProps> = ({
     clubId,
     createClubUser,
 }) => {
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ClubUserCreateEntry;
+export default ClubUserCreateForm;

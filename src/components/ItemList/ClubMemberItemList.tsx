@@ -6,9 +6,10 @@ import { Text } from 'react-native-paper';
 import colors from '../../assets/colors/defaultColors';
 import profileColors from '../../assets/colors/profileColors';
 import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
-import { useGetMemberList, useMutateCreateMemberList } from '../../hooks/useMember';
+import { useGetMemberList } from '../../hooks/useMember';
 import CustomLoader from '../Loader';
 import ProfileIcon from '../ProfileIcon';
+import ClubMemberListCreateForm from '../customInput/ClubMemberListCreateForm';
 import Item from './Item';
 import ItemList from './ItemList';
 
@@ -65,8 +66,7 @@ const ClubMemberItemList: React.FC<ClubMemberItemListProps> = ({ clubId }) => {
                 </TouchableOpacity>
             </View>
             <CustomBottomSheet>
-                <></>
-                {/* <ClubUserCreateEntry clubId={clubId} createClubUser={createClubUser} /> */}
+                <ClubMemberListCreateForm/>
             </CustomBottomSheet>
         </View>
     );

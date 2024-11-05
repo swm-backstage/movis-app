@@ -10,7 +10,7 @@ import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { ClubUserGetRes } from '../../types/clubUser/response/ClubUserGetRes';
 import CustomLoader from '../Loader';
 import ProfileIcon from '../ProfileIcon';
-import ClubUserCreateEntry from '../customBottomSheet/clubUserCreateEntry';
+import ClubUserCreateForm from '../customInput/ClubUserCreateForm';
 import Item from './Item';
 import ItemList from './ItemList';
 
@@ -104,7 +104,7 @@ const ClubUserItemList: React.FC<ClubUserItemListProps> = ({ clubId }) => {
                 </TouchableOpacity>
             </View>
             <CustomBottomSheet>
-                <ClubUserCreateEntry clubId={clubId} createClubUser={createClubUser} />
+                <ClubUserCreateForm clubId={clubId} createClubUser={createClubUser} />
             </CustomBottomSheet>
         </View>
     );
