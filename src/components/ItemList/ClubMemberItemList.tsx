@@ -1,18 +1,17 @@
 import { View } from '@ant-design/react-native';
 import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors/defaultColors';
 import profileColors from '../../assets/colors/profileColors';
 import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { useGetMemberList } from '../../hooks/useMember';
+import ItemListButton from '../Button/\bItemListButton';
 import CustomLoader from '../Loader';
 import ProfileIcon from '../ProfileIcon';
 import ClubMemberListCreateForm from '../customInput/ClubMemberListCreateForm';
 import Item from './Item';
 import ItemList from './ItemList';
-import ItemListButton from '../Button/\bItemListButton';
 
 
 interface ClubMemberItemListProps {
@@ -61,7 +60,7 @@ const ClubMemberItemList: React.FC<ClubMemberItemListProps> = ({ clubId }) => {
                     onPress={() => {
                         openCustomBottomSheet();
                     }}
-                    buttonText="운영진 추가" />
+                    buttonText="회원 추가" />
             </View>
             <CustomBottomSheet>
                 <ClubMemberListCreateForm />

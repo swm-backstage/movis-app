@@ -1,5 +1,3 @@
-// utils/formatPhoneNumber.ts
-
 export const FormatPhoneNumber = (text: string) => {
     const cleaned = text.replace(/\D+/g, '');
     let formatted = '';

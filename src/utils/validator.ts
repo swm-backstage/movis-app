@@ -1,8 +1,6 @@
-// utils/validator.ts
-
 export const EmailValidator = (text: string) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return { valid: emailPattern.test(text), errorMessage: '유효한 이메일 주소를 입력하세요.' };
+    return { valid: emailPattern.test(text), errorMessage: '옳바르지 않은 이메일 형식' };
 };
 
 export const NameValidator = (text: string) => {
@@ -20,7 +18,7 @@ export const PhoneNumberValidator = (text: string) => {
     }
 
     if (!cleaned.startsWith('010')) {
-        return { valid: false, errorMessage: '휴대폰 번호는 010으로 시작' };
+        return { valid: false, errorMessage: '010으로 시작' };
     }
 
     return { valid: true };

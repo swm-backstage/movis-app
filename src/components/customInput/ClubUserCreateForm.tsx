@@ -9,7 +9,6 @@ import { ResponseError } from '../../types/common';
 import ExpandedButton from '../Button/ExpandedButton';
 import CustomInput from './CustomInput';
 
-
 type ClubUserCreateFormProps = {
     clubId: string,
     createClubUser: UseMutationResult<void, ResponseError, ClubUserCreateReq, unknown>;
@@ -19,17 +18,15 @@ const ClubUserCreateForm: React.FC<ClubUserCreateFormProps> = ({
     clubId,
     createClubUser,
 }) => {
-    const {
-        value: identifier,
-        isValid: isIdentifierValid,
-        onChangeText: onIdentifierChangeText,
-        clearInput: clearIdentifierInput,
-    } = useCustomInput({});
+    const identifierInput = useCustomInput({
+        required: true,
+        requiredMessage: '필수 항목입니다.',
+    });
 
     const handleCreateClubUser = async () => {
         const data = {
             clubId: clubId,
-            identifier: identifier,
+            identifier: identifierInput.value,
         }
         createClubUser.mutate(
             data,
@@ -49,11 +46,13 @@ const ClubUserCreateForm: React.FC<ClubUserCreateFormProps> = ({
             </View>
             <View style={styles.bodyContainer}>
                 <CustomInput
-                    value={identifier}
-                    isValid={isIdentifierValid}
-                    onChangeText={onIdentifierChangeText}
-                    clearInput={clearIdentifierInput}
-                    placeholder="사용자 아이디를 입력하세요. "
+                    value={identifierInput.value}
+                    isValid={identifierInput.isValid}
+                    errorMessage={identifierInput.errorMessage}
+                    onChangeText={identifierInput.onChangeText}
+                    onBlur={identifierInput.onBlur}
+                    clearInput={identifierInput.clearInput}
+                    placeholder="이름"
                     autoCapitalize="none"
                 />
             </View>

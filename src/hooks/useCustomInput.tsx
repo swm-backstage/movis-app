@@ -1,5 +1,3 @@
-// hooks/useCustomInput.ts
-
 import { useState, useCallback } from 'react';
 
 interface UseCustomInputProps {
@@ -16,18 +14,25 @@ interface UseCustomInputReturn {
   clearInput: () => void;
   onChangeText: (text: string) => void;
   onBlur: () => void;
+  setError: (msg: string) => void;
+  validate: () => void;
 }
 
 const useCustomInput = ({
   validator,
   formator,
   required = false,
-  requiredMessage = '필수 항목입니다.',
+  requiredMessage = '필수 항목',
 }: UseCustomInputProps): UseCustomInputReturn => {
   const [value, setValue] = useState<string>('');
   const [isValid, setIsValid] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [touched, setTouched] = useState<boolean>(false);
+
+  const setError = useCallback((msg: string) => {
+    setErrorMessage(msg);
+    setIsValid(false);
+  }, []);
 
   const validateInput = useCallback(() => {
     if (required && value.trim() === '') {
@@ -36,7 +41,7 @@ const useCustomInput = ({
     } else if (validator) {
       const validation = validator(value);
       if (!validation.valid) {
-        setErrorMessage(validation.errorMessage || '형식이 올바르지 않습니다.');
+        setErrorMessage(validation.errorMessage || '옳바르지 않은 형식');
         setIsValid(false);
       } else {
         setErrorMessage('');
@@ -60,7 +65,7 @@ const useCustomInput = ({
         if (formattedText.trim() !== '' && validator) {
           const validation = validator(formattedText);
           if (!validation.valid) {
-            setErrorMessage(validation.errorMessage || '형식이 올바르지 않습니다.');
+            setErrorMessage(validation.errorMessage || '옳바르지 않은 형식');
             setIsValid(false);
           } else {
             setErrorMessage('');
@@ -87,9 +92,14 @@ const useCustomInput = ({
     setValue('');
     setTouched(true);
     validateInput();
-  }, []);
+  }, [validateInput]);
 
-  return { value, isValid, errorMessage, clearInput, onChangeText, onBlur };
+  const validate = useCallback(() => {
+    setTouched(true);
+    validateInput();
+  }, [validateInput]);
+
+  return { value, isValid, errorMessage, clearInput, onChangeText, onBlur, setError, validate };
 };
 
 export default useCustomInput;

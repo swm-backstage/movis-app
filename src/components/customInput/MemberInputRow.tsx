@@ -2,9 +2,9 @@ import React, { forwardRef, useImperativeHandle } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import useCustomInput from '../../hooks/useCustomInput';
-import { NameValidator, PhoneNumberValidator } from '../../utils/validator';
-import CustomInput from './CustomInput';
+import { PhoneNumberValidator, NameValidator } from '../../utils/validator';
 import { FormatPhoneNumber } from '../../utils/formator';
+import CustomInput from './CustomInput';
 
 interface MemberInputRowProps {
   id: number;
@@ -22,13 +22,11 @@ export interface MemberData {
 const MemberInputRow = forwardRef(({ id, onRemove }: MemberInputRowProps, ref) => {
   const nameInput = useCustomInput({
     required: true,
-    requiredMessage: '필수 항목입니다.',
     validator: NameValidator,
   });
 
   const phoneNoInput = useCustomInput({
     required: true,
-    requiredMessage: '필수 항목입니다.',
     validator: PhoneNumberValidator,
     formator: FormatPhoneNumber,
   });
@@ -41,6 +39,12 @@ const MemberInputRow = forwardRef(({ id, onRemove }: MemberInputRowProps, ref) =
       phoneNo: phoneNoInput.value,
       isPhoneValid: phoneNoInput.isValid,
     }),
+    setNameError: (msg: string) => nameInput.setError(msg),
+    setPhoneError: (msg: string) => phoneNoInput.setError(msg),
+    validate: () => {
+      nameInput.validate();
+      phoneNoInput.validate();
+    },
   }));
 
   return (

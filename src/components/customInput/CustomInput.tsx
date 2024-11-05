@@ -1,5 +1,3 @@
-// components/customInput/CustomInput.tsx
-
 import React from 'react';
 import {
   TextInput,
