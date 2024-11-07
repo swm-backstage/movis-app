@@ -5,7 +5,6 @@ import { mainNavigations } from '../constants/navigations';
 import NotificiationTest from '../screens/NotificiationTest';
 import ClubDetailScreen from '../screens/club/ClubDetailScreen';
 import ClubListScreen from '../screens/club/ClubListScreen';
-import ClubCreateScreen from '../screens/club/create/ClubCreateScreen';
 import ClubUserUpdateScreen from '../screens/clubUser/ClubUserUpdateScreen';
 import EventCreateScreen from '../screens/event/EventCreateScreen';
 import TransactionHistoryCreateScreen from '../screens/transactionHistory/TransactionHistoryCreateScreen';
@@ -61,7 +60,6 @@ function MainStackNavigator() {
       }}>
       <Stack.Screen name={mainNavigations.CLUB_LIST} component={ClubListScreen} options={{headerShown: false}}/>
       <Stack.Screen name={mainNavigations.CLUB_DETAIL} component={ClubDetailScreen} options={{headerShown: false}}/>
-      <Stack.Screen name={mainNavigations.CLUB_CREATE} component={ClubCreateScreen} options={{ headerTitle: ''}} />
       <Stack.Screen name={mainNavigations.CLUB_MAIN_INFO_CREATE} component={ClubMainInfoCreateScreen} options={{ headerTitle: ''}} />
       <Stack.Screen name={mainNavigations.CLUB_BANK_INFO_CREATE} component={ClubBankInfoCreateScreen} options={{ headerTitle: ''}} />
       <Stack.Screen name={mainNavigations.CLUB_CREATE_COMPLETE} component={ClubCreateCompleteScreen} options={{ headerShown: false}} />

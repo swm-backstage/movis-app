@@ -19,7 +19,7 @@ export const ClubAccountFormat = (text: string) => {
   return cleaned.slice(0, 4);
 }
 
-export const ClubBalanceFormat = (text: string) => {
+export const BalanceFormat = (text: string) => {
   const cleaned = text.replace(/\D+/g, '');
   const formatted = cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 

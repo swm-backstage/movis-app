@@ -14,6 +14,7 @@ interface CustomInputProps extends TextInputProps {
   value: string;
   isValid: boolean;
   errorMessage: string;
+  label?: string;
   onChangeText: (text: string) => void;
   onBlur: () => void;
   clearInput: () => void;
@@ -23,6 +24,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   value,
   isValid,
   errorMessage,
+  label,
   onChangeText,
   onBlur,
   clearInput,
@@ -30,6 +32,13 @@ const CustomInput: React.FC<CustomInputProps> = ({
 }) => {
   return (
     <View style={styles.container}>
+      <View style={styles.labelContainer}>
+        {label && 
+        <Text style={styles.labelText}>
+          {label}
+        </Text>
+        }
+      </View>
       <View style={[styles.inputWrapper, !isValid && styles.invalidInputWrapper]}>
         <TextInput
           style={styles.input}
@@ -58,7 +67,14 @@ export default CustomInput;
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 16,
+  },
+  labelContainer: {
     marginBottom: 12,
+  },
+  labelText: {
+    fontSize: 14,
+    fontWeight: '700'
   },
   inputWrapper: {
     flexDirection: 'row',
