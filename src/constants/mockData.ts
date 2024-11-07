@@ -1,8 +1,10 @@
+import { ImageSourcePropType } from "react-native";
+
 type BankNameCodeRecord = {
   key: string;
   data: {
     name: string;
-    imageURL: string;
+    imageURL: ImageSourcePropType;
   }
 };
 
