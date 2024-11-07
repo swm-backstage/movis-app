@@ -13,7 +13,7 @@ type ClubCreateCompleteScreenProps = StackScreenProps<
 >;
 
 function ClubCreateCompleteScreen({ route, navigation }: ClubCreateCompleteScreenProps) {
-    const data = route.params
+    const club = route.params.club;
 
     return (
         <View style={styles.container}>
@@ -22,12 +22,15 @@ function ClubCreateCompleteScreen({ route, navigation }: ClubCreateCompleteScree
                     <Image source={require('../../../assets/welcom.png')} style={styles.icon} />
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.bigText}>{data.clubName}</Text>
+                    <Text style={styles.bigText}>{club.name}</Text>
                     <Text style={styles.smallText}>모임을 만들었어요!{'\n'}회원을 추가 해볼까요?</Text>
                 </View>
             </View>
             <View style={styles.footerContainer}>
-                <ExpandedButton onPress={() => console.log('hi')} buttonText='회원 추가하기'/>
+                <ExpandedButton 
+                    onPress={() => navigation.replace(mainNavigations.CLUB_DETAIL, { club: club })} 
+                    buttonText='회원 추가하기'
+                />
             </View>
         </View>
     )
@@ -62,8 +65,10 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
     smallText: {
+        marginTop: 10,
         textAlign: 'center',
         color: colors.Gray400,
+        fontWeight: '700',
         fontSize: 14,
     },
     footerContainer: {

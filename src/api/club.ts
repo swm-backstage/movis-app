@@ -4,7 +4,7 @@ import { ClubGetRes } from "../types/club/response/ClubGetRes";
 import axiosHost from "./axios";
 
 
-const createClub = async (body: ClubCreateReq): Promise<void> => {
+const createClub = async (body: ClubCreateReq): Promise<ClubGetRes> => {
   const { data } = await axiosHost.post('/api/v1/clubs', body);
 
   return data;

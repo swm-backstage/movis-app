@@ -1,21 +1,22 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 
-import { mainNavigations } from '../../../constants/navigations';
-import { MainStackParamList } from '../../../navigations/MainStackNavigator';
 import { Text } from 'react-native-paper';
-import CustomInput from '../../../components/customInput/CustomInput';
 import ExpandedButton from '../../../components/Button/ExpandedButton';
-import useCustomInput from '../../../hooks/useCustomInput';
-import { ClubAccountValidator } from '../../../utils/validator';
-import { ClubAccountFormat, ClubBalanceFormat } from '../../../utils/formator';
-import useCustomBottomSheet from '../../../hooks/useCustomButtomSheet';
+import CustomInput from '../../../components/customInput/CustomInput';
 import SelectItemInput from '../../../components/select/SelectItemInput';
 import SelectItemList from '../../../components/select/SelectItemList';
-import useSelectItemList from '../../../hooks/useSelectItem';
-import { ClubCreateReq } from '../../../types/club/request/ClubCreateReq';
+import { mainNavigations } from '../../../constants/navigations';
 import { useMutateCreateClub } from '../../../hooks/useClub';
+import useCustomBottomSheet from '../../../hooks/useCustomButtomSheet';
+import useCustomInput from '../../../hooks/useCustomInput';
+import useSelectItemList from '../../../hooks/useSelectItem';
+import { MainStackParamList } from '../../../navigations/MainStackNavigator';
+import { ClubCreateReq } from '../../../types/club/request/ClubCreateReq';
+import { ClubAccountFormat } from '../../../utils/formator';
+import { ClubAccountValidator } from '../../../utils/validator';
+import CustomLoader from '../../../components/Loader';
 
 type ClubBankInfoCreateScreenProps = StackScreenProps<
     MainStackParamList,
@@ -35,27 +36,40 @@ function ClubBankInfoCreateScreen({ route, navigation }: ClubBankInfoCreateScree
         formator: ClubAccountFormat,
     });
     const bankSelectInput = useSelectItemList();
-    const onPress = () => {
+    const onPress = async () => {
+        accountNumberInput.validate();
+        bankSelectInput.validate();
+
+        if (!accountNumberInput.isValid || !bankSelectInput.isValid) {
+            Alert.alert('오류', '모든 필드를 올바르게 입력해주세요.');
+            return;
+        }
+
         const values: ClubCreateReq = {
             name: preValues.name,
             description: preValues.description,
             accountNumber: accountNumberInput.value,
             bankCode: bankSelectInput.selectedItem?.code || "",
         };
-
-        navigation.navigate(mainNavigations.CLUB_CREATE_COMPLETE, { clubName: values.name });
-
-        // createClub.mutate(
-        //     values,
-        //     {
-        //         onSuccess: () => navigation.goBack(),
-        //         onError: (error) => {
-        //             console.error('Error creating club:', error, error.message, error.name);
-        //         }
-        //     }
-        // );
+        const club = await createClub.mutateAsync(
+            values,
+            {
+                onSuccess: () => navigation.goBack(),
+                onError: (error) => {
+                    console.error('Error creating club:', error, error.message, error.name);
+                }
+            }
+        );
+        for (let i = 0; i < 2; i++) {
+            if (navigation.canGoBack()) {
+                navigation.popToTop();
+            }
+        }
+        navigation.navigate(mainNavigations.CLUB_CREATE_COMPLETE, { club: club });
     }
-
+    if(createClub.isPending) {
+        return <CustomLoader />
+    }
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>

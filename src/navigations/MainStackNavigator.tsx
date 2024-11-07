@@ -25,7 +25,7 @@ export type MainStackParamList = {
   [mainNavigations.CLUB_CREATE]: undefined;
   [mainNavigations.CLUB_MAIN_INFO_CREATE]: undefined;
   [mainNavigations.CLUB_BANK_INFO_CREATE]: { values: ClubCreateReq };
-  [mainNavigations.CLUB_CREATE_COMPLETE]: { clubName: string };
+  [mainNavigations.CLUB_CREATE_COMPLETE]: { club: ClubGetRes };
 
   [mainNavigations.CLUB_USER_UPDATE]: { clubId: string };
 
