@@ -25,7 +25,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
     snapPoints: useMemo(() => ['80%'], []),
   });
   const handlePressClubCreateScreen = () => {
-    navigation.navigate(mainNavigations.CLUB_CREATE);
+    navigation.navigate(mainNavigations.CLUB_MAIN_INFO_CREATE);
   };
   const handlePressClubDetailScreen = (club: ClubGetRes) => {
     navigation.navigate(mainNavigations.CLUB_DETAIL, { club });

@@ -1,9 +1,9 @@
 type ClubCreateReq = {
-  name: String,
-  description: String,
-  accountNumber: String,
-  balance: number,
-  bankCode: String,
+  name: string,
+  description: string,
+  accountNumber: string,
+  // balance: number,
+  bankCode: string,
 }
 
 export type { ClubCreateReq };

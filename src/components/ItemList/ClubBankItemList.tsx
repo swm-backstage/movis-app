@@ -26,7 +26,7 @@ const ClubBankItemList: React.FC<ClubBankItemListProps> = ({ club }) => {
                 <ItemList>
                     <Item
                         imageNode={<Image
-                            source={data?.imageURL ?? require("../../assets/bank/카카오뱅크.png")}
+                            source={data?.imageURL}
                             style={styles.bankImage}/>}                        
                         mainText={data?.name ?? "은행"}
                         subText={club.accountNumber}

@@ -63,16 +63,18 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
+    borderWidth: 0.8,
     borderColor: colors.Gray200,
     borderRadius: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   invalidInputWrapper: {
     borderColor: colors.Red,
   },
   input: {
     flex: 1,
+    fontWeight: '500',
     paddingVertical: 8,
   },
   clearButton: {

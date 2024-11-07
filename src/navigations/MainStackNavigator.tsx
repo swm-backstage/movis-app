@@ -1,31 +1,31 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-
-
 import { mainNavigations } from '../constants/navigations';
+import NotificiationTest from '../screens/NotificiationTest';
 import ClubDetailScreen from '../screens/club/ClubDetailScreen';
 import ClubListScreen from '../screens/club/ClubListScreen';
-import { ClubGetRes } from '../types/club/response/ClubGetRes';
-import ClubCreateScreen from '../screens/club/ClubCreateScreen';
+import ClubCreateScreen from '../screens/club/create/ClubCreateScreen';
+import ClubUserUpdateScreen from '../screens/clubUser/ClubUserUpdateScreen';
 import EventCreateScreen from '../screens/event/EventCreateScreen';
-import WebViewScreen from '../screens/webview/WebViewScreen';
-import NotificiationTest from '../screens/NotificiationTest';
-
+import TransactionHistoryCreateScreen from '../screens/transactionHistory/TransactionHistoryCreateScreen';
+import DepositClassifiedScreen from '../screens/unclassified/DepositClassifiedScreen';
 import UnclassifiedListScreen from '../screens/unclassified/UnclassifiedListScreen';
 import WithdrawalClassifiedScreen from '../screens/unclassified/WithdrawalClassifiedScreen';
-import DepositClassifiedScreen from '../screens/unclassified/DepositClassifiedScreen';
-import TransactionHistoryCreateScreen from '../screens/transactionHistory/TransactionHistoryCreateScreen';
-import { clubUserGetResDtoList } from '../types/clubUser/response/ClubUserGetListRes';
-import ClubUserUpdateScreen from '../screens/clubUser/ClubUserUpdateScreen';
-
-
-
+import WebViewScreen from '../screens/webview/WebViewScreen';
+import { ClubGetRes } from '../types/club/response/ClubGetRes';
+import ClubMainInfoCreateScreen from '../screens/club/create/ClubMainInfoCreateScreen';
+import ClubBankInfoCreateScreen from '../screens/club/create/ClubBankInfoCreateScreen';
+import { ClubCreateReq } from '../types/club/request/ClubCreateReq';
+import ClubCreateCompleteScreen from '../screens/club/create/ClubCreateCompleteScreen';
 
 export type MainStackParamList = {
   [mainNavigations.CLUB_LIST]: undefined;
   [mainNavigations.CLUB_DETAIL]: { club: ClubGetRes };
   [mainNavigations.CLUB_CREATE]: undefined;
+  [mainNavigations.CLUB_MAIN_INFO_CREATE]: undefined;
+  [mainNavigations.CLUB_BANK_INFO_CREATE]: { values: ClubCreateReq };
+  [mainNavigations.CLUB_CREATE_COMPLETE]: { club: ClubGetRes };
 
   [mainNavigations.CLUB_USER_UPDATE]: { clubId: string };
 
@@ -59,81 +59,22 @@ function MainStackNavigator() {
         },
         headerTintColor: 'black',
       }}>
-      <Stack.Screen
-        name={mainNavigations.CLUB_LIST}
-        component={ClubListScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name={mainNavigations.CLUB_DETAIL}
-        component={ClubDetailScreen}
-        options={{
-          // headerTitle: '',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name={mainNavigations.CLUB_CREATE}
-        component={ClubCreateScreen}
-        options={{
-          headerTitle: '',
-        }}
-      />
-      <Stack.Screen
-        name={mainNavigations.CLUB_USER_UPDATE}
-        component={ClubUserUpdateScreen}
-        options={{
-          headerTitle: '',
-        }}
-      />
-      <Stack.Screen
-        name={mainNavigations.EVENT_CREATE}
-        component={EventCreateScreen}
-        options={{
-          headerTitle: '',
-        }}
-      />
-      <Stack.Screen
-        name={mainNavigations.TRANSACTIONHISTORY_CREATE}
-        component={TransactionHistoryCreateScreen}
-        options={{
-          headerTitle: '',
-        }}
-      />
-      <Stack.Screen
-        name={mainNavigations.WEBVIEW}
-        component={WebViewScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen name={mainNavigations.NOTIFICATION}
-        component={NotificiationTest}
-        options={{
-          headerTitle: '',
-        }}
-      />
-      <Stack.Screen name={mainNavigations.UNCLASSIFIED}
-        component={UnclassifiedListScreen}
-        options={{
-          headerTitle: '',
-        }}
-      />
-      <Stack.Screen name={mainNavigations.WITHDRAWAL}
-        component={WithdrawalClassifiedScreen}
-        options={{
-          headerTitle: '',
-        }}
-      />
-      <Stack.Screen name={mainNavigations.DEPOSIT}
-        component={DepositClassifiedScreen}
-        options={{
-          headerTitle: '',
-        }}
-      />
+      <Stack.Screen name={mainNavigations.CLUB_LIST} component={ClubListScreen} options={{headerShown: false}}/>
+      <Stack.Screen name={mainNavigations.CLUB_DETAIL} component={ClubDetailScreen} options={{headerShown: false}}/>
+      <Stack.Screen name={mainNavigations.CLUB_CREATE} component={ClubCreateScreen} options={{ headerTitle: ''}} />
+      <Stack.Screen name={mainNavigations.CLUB_MAIN_INFO_CREATE} component={ClubMainInfoCreateScreen} options={{ headerTitle: ''}} />
+      <Stack.Screen name={mainNavigations.CLUB_BANK_INFO_CREATE} component={ClubBankInfoCreateScreen} options={{ headerTitle: ''}} />
+      <Stack.Screen name={mainNavigations.CLUB_CREATE_COMPLETE} component={ClubCreateCompleteScreen} options={{ headerShown: false}} />
+      <Stack.Screen name={mainNavigations.CLUB_USER_UPDATE} component={ClubUserUpdateScreen} options={{ headerTitle: ''}} />
 
+      <Stack.Screen name={mainNavigations.EVENT_CREATE} component={EventCreateScreen} options={{ headerTitle: ''}}/>
+      
+      <Stack.Screen name={mainNavigations.TRANSACTIONHISTORY_CREATE} component={TransactionHistoryCreateScreen} options={{ headerTitle: ''}}/>
+      <Stack.Screen name={mainNavigations.WEBVIEW} component={WebViewScreen} options={{ headerShown: false, }} />
+      <Stack.Screen name={mainNavigations.NOTIFICATION} component={NotificiationTest} options={{ headerTitle: '' }} />
+      <Stack.Screen name={mainNavigations.UNCLASSIFIED} component={UnclassifiedListScreen} options={{ headerTitle: '', }} />
+      <Stack.Screen name={mainNavigations.WITHDRAWAL} component={WithdrawalClassifiedScreen} options={{ headerTitle: '', }} />
+      <Stack.Screen name={mainNavigations.DEPOSIT} component={DepositClassifiedScreen} options={{ headerTitle: '', }} />
     </Stack.Navigator>
   )
 }
