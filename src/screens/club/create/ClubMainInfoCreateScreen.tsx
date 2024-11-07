@@ -35,15 +35,14 @@ function ClubMainInfoCreateScreen({ navigation }: ClubMainInfoCreateScreenProps)
             return;
         }
 
-        const clubCreateReq: ClubCreateReq = {
+        const values: ClubCreateReq = {
             name: clubNameInput.value,
             description: clubDescriptionInput.value,
             accountNumber: '',
-            balance: 0,
             bankCode: '',
         }
 
-        navigation.navigate(mainNavigations.CLUB_BANK_INFO_CREATE, { clubCreateReq: clubCreateReq });
+        navigation.navigate(mainNavigations.CLUB_BANK_INFO_CREATE, { values: values });
     }
 
     return (

@@ -2,21 +2,31 @@ import { useState } from 'react';
 import { bankMap } from '../constants/mockData';
 
 interface UseSelectItemListReturn {
-  selectedBank: { name: string; imageURL: any } | undefined;
-  selectBank: (key: string) => void;
+  selectedItem: { code: string; name: string; imageURL: any } | undefined;
+  isValid: boolean;
+  validate: () => void;
+  selectItem: (key: string) => void;
 }
 
 const useSelectItemList = (): UseSelectItemListReturn => {
-  const [selectedBank, setSelectedBank] = useState<{ name: string; imageURL: any } | undefined>(undefined);
+  const [selectedItem, setSelectedItem] = useState<{ code: String; name: string; imageURL: any } | undefined>(undefined);
+  const [isValid, setIsValid] = useState<boolean>(false);
 
-  const selectBank = (key: string) => {
-    const bank = bankMap.get(key);
-    if (bank) {
-      setSelectedBank(bank);
+  const validate = () => {
+    if (selectedItem) {
+      setIsValid(true);
+    }
+  }
+
+  const selectItem = (key: string) => {
+    const item = bankMap.get(key);
+    if (item) {
+      setSelectedItem(item);
+      setIsValid(true);
     }
   };
 
-  return { selectedBank, selectBank };
+  return { selectedItem, isValid, validate , selectItem };
 };
 
 export default useSelectItemList;

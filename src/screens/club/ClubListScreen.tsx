@@ -24,9 +24,6 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
   const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
     snapPoints: useMemo(() => ['80%'], []),
   });
-  const handlePressClubCreateScreenLegacy = () => {
-    navigation.navigate(mainNavigations.CLUB_CREATE);
-  };
   const handlePressClubCreateScreen = () => {
     navigation.navigate(mainNavigations.CLUB_MAIN_INFO_CREATE);
   };
@@ -55,15 +52,6 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
             <AntDesign
               name="setting"
               style={styles.settingIcon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={handlePressClubCreateScreenLegacy}
-          >
-            <AntDesign
-              name="plus"
-              style={styles.addIcon}
             />
           </TouchableOpacity>
           <TouchableOpacity

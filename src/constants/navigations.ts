@@ -4,6 +4,7 @@ const mainNavigations = {
   CLUB_CREATE: 'clubCreate',
   CLUB_MAIN_INFO_CREATE: 'clubMainInfoCreate',
   CLUB_BANK_INFO_CREATE: 'clubBankInfoCreate',
+  CLUB_CREATE_COMPLETE: 'clubCreateComplete',
 
   CLUB_USER_UPDATE: 'clubUserUpdate',
 

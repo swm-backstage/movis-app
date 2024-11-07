@@ -17,13 +17,15 @@ import { ClubGetRes } from '../types/club/response/ClubGetRes';
 import ClubMainInfoCreateScreen from '../screens/club/create/ClubMainInfoCreateScreen';
 import ClubBankInfoCreateScreen from '../screens/club/create/ClubBankInfoCreateScreen';
 import { ClubCreateReq } from '../types/club/request/ClubCreateReq';
+import ClubCreateCompleteScreen from '../screens/club/create/ClubCreateCompleteScreen';
 
 export type MainStackParamList = {
   [mainNavigations.CLUB_LIST]: undefined;
   [mainNavigations.CLUB_DETAIL]: { club: ClubGetRes };
   [mainNavigations.CLUB_CREATE]: undefined;
-  [mainNavigations.CLUB_MAIN_INFO_CREATE] : undefined;
-  [mainNavigations.CLUB_BANK_INFO_CREATE] : { clubCreateReq: ClubCreateReq };
+  [mainNavigations.CLUB_MAIN_INFO_CREATE]: undefined;
+  [mainNavigations.CLUB_BANK_INFO_CREATE]: { values: ClubCreateReq };
+  [mainNavigations.CLUB_CREATE_COMPLETE]: { clubName: string };
 
   [mainNavigations.CLUB_USER_UPDATE]: { clubId: string };
 
@@ -62,6 +64,7 @@ function MainStackNavigator() {
       <Stack.Screen name={mainNavigations.CLUB_CREATE} component={ClubCreateScreen} options={{ headerTitle: ''}} />
       <Stack.Screen name={mainNavigations.CLUB_MAIN_INFO_CREATE} component={ClubMainInfoCreateScreen} options={{ headerTitle: ''}} />
       <Stack.Screen name={mainNavigations.CLUB_BANK_INFO_CREATE} component={ClubBankInfoCreateScreen} options={{ headerTitle: ''}} />
+      <Stack.Screen name={mainNavigations.CLUB_CREATE_COMPLETE} component={ClubCreateCompleteScreen} options={{ headerShown: false}} />
       <Stack.Screen name={mainNavigations.CLUB_USER_UPDATE} component={ClubUserUpdateScreen} options={{ headerTitle: ''}} />
 
       <Stack.Screen name={mainNavigations.EVENT_CREATE} component={EventCreateScreen} options={{ headerTitle: ''}}/>

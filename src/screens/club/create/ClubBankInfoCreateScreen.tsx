@@ -14,6 +14,8 @@ import useCustomBottomSheet from '../../../hooks/useCustomButtomSheet';
 import SelectItemInput from '../../../components/select/SelectItemInput';
 import SelectItemList from '../../../components/select/SelectItemList';
 import useSelectItemList from '../../../hooks/useSelectItem';
+import { ClubCreateReq } from '../../../types/club/request/ClubCreateReq';
+import { useMutateCreateClub } from '../../../hooks/useClub';
 
 type ClubBankInfoCreateScreenProps = StackScreenProps<
     MainStackParamList,
@@ -21,27 +23,39 @@ type ClubBankInfoCreateScreenProps = StackScreenProps<
 >;
 
 function ClubBankInfoCreateScreen({ route, navigation }: ClubBankInfoCreateScreenProps) {
-    const clubCreateReq = route.params;
-    const { selectedBank, selectBank } = useSelectItemList();
-
+    const preValues = route.params.values;
+    const createClub = useMutateCreateClub();
     const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
         snapPoints: useMemo(() => ['80%'], []),
-      });
+    });
     const accountNumberInput = useCustomInput({
         required: true,
         requiredMessage: '필수 항목',
         validator: ClubAccountValidator,
         formator: ClubAccountFormat,
     });
-    const balanceInput = useCustomInput({
-        required: true,
-        requiredMessage: '필수 항목',
-        formator: ClubBalanceFormat,
-    });
+    const bankSelectInput = useSelectItemList();
     const onPress = () => {
-        console.log(accountNumberInput.value, balanceInput.value);
+        const values: ClubCreateReq = {
+            name: preValues.name,
+            description: preValues.description,
+            accountNumber: accountNumberInput.value,
+            bankCode: bankSelectInput.selectedItem?.code || "",
+        };
+
+        navigation.navigate(mainNavigations.CLUB_CREATE_COMPLETE, { clubName: values.name });
+
+        // createClub.mutate(
+        //     values,
+        //     {
+        //         onSuccess: () => navigation.goBack(),
+        //         onError: (error) => {
+        //             console.error('Error creating club:', error, error.message, error.name);
+        //         }
+        //     }
+        // );
     }
-    
+
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -61,22 +75,12 @@ function ClubBankInfoCreateScreen({ route, navigation }: ClubBankInfoCreateScree
                     keyboardType='numeric'
                     autoCapitalize="none"
                 />
-                <CustomInput
-                    value={balanceInput.value}
-                    isValid={balanceInput.isValid}
-                    errorMessage={balanceInput.errorMessage}
-                    onChangeText={balanceInput.onChangeText}
-                    onBlur={balanceInput.onBlur}
-                    clearInput={balanceInput.clearInput}
-                    placeholder="현재 계좌 잔고"
-                    autoCapitalize="none"
-                />
-                <SelectItemInput name={selectedBank?.name} imageURL={selectedBank?.imageURL} openSelectItemList={() => openCustomBottomSheet()} />
+                <SelectItemInput name={bankSelectInput.selectedItem?.name} imageURL={bankSelectInput.selectedItem?.imageURL} openSelectItemList={() => openCustomBottomSheet()} />
             </View>
             <View style={styles.footerContainer}>
                 <ExpandedButton onPress={onPress} buttonText='완료' />
                 <CustomBottomSheet>
-                    <SelectItemList selectItem={selectBank}/>
+                    <SelectItemList selectItem={bankSelectInput.selectItem} />
                 </CustomBottomSheet>
             </View>
         </View>
