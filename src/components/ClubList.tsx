@@ -28,7 +28,6 @@ const ClubList: React.FC<SettingEntryProps> = ({
     isSuccess,
     isError,
   } = useGetClubList();
-  console.log(isSuccess, isError, clubListIsLoading);
 
   const handleRefresh = async () => {
     try {

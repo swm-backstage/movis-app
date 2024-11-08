@@ -44,7 +44,7 @@ const ClubListSettingEntry: React.FC<ClubListSettingEntryProps> = ({ user, logou
     useEffect(() => {
 
         handleAppStateChange('', true)
-        handleClose
+
 
         return () => {
             console.log('권한 추적 끝')

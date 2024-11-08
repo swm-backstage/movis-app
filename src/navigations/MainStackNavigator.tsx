@@ -5,10 +5,7 @@ import { mainNavigations } from '../constants/navigations';
 import NotificiationTest from '../screens/NotificiationTest';
 import ClubDetailScreen from '../screens/club/ClubDetailScreen';
 import ClubListScreen from '../screens/club/ClubListScreen';
-import ClubUserUpdateScreen from '../screens/clubUser/ClubUserUpdateScreen';
 import EventCreateScreen from '../screens/event/EventCreateScreen';
-import TransactionHistoryCreateScreen from '../screens/transactionHistory/TransactionHistoryCreateScreen';
-import DepositClassifiedScreen from '../screens/unclassified/DepositClassifiedScreen';
 import UnclassifiedListScreen from '../screens/unclassified/UnclassifiedListScreen';
 import WithdrawalClassifiedScreen from '../screens/unclassified/WithdrawalClassifiedScreen';
 import WebViewScreen from '../screens/webview/WebViewScreen';
@@ -19,7 +16,6 @@ import { ClubCreateReq } from '../types/club/request/ClubCreateReq';
 import ClubCreateCompleteScreen from '../screens/club/create/ClubCreateCompleteScreen';
 import DepositClassifiedScreen from '../screens/unclassified/DepositClassifiedScreen';
 import TransactionHistoryCreateScreen from '../screens/transactionHistory/TransactionHistoryCreateScreen';
-import { clubUserGetResDtoList } from '../types/clubUser/response/ClubUserGetListRes';
 import ClubUserUpdateScreen from '../screens/clubUser/ClubUserUpdateScreen';
 import ChangePasswordScreen from '../screens/auth/find/ChangePasswordScreen';
 
@@ -65,23 +61,23 @@ function MainStackNavigator() {
         },
         headerTintColor: 'black',
       }}>
-      
-      <Stack.Screen name={mainNavigations.CLUB_LIST} component={ClubListScreen} options={{headerShown: false}}/>
-      <Stack.Screen name={mainNavigations.CLUB_DETAIL} component={ClubDetailScreen} options={{headerShown: false}}/>
-      <Stack.Screen name={mainNavigations.CLUB_MAIN_INFO_CREATE} component={ClubMainInfoCreateScreen} options={{ headerTitle: ''}} />
-      <Stack.Screen name={mainNavigations.CLUB_BANK_INFO_CREATE} component={ClubBankInfoCreateScreen} options={{ headerTitle: ''}} />
-      <Stack.Screen name={mainNavigations.CLUB_CREATE_COMPLETE} component={ClubCreateCompleteScreen} options={{ headerShown: false}} />
-      <Stack.Screen name={mainNavigations.CLUB_USER_UPDATE} component={ClubUserUpdateScreen} options={{ headerTitle: ''}} />
 
-      <Stack.Screen name={mainNavigations.EVENT_CREATE} component={EventCreateScreen} options={{ headerTitle: ''}}/>
-      
-      <Stack.Screen name={mainNavigations.TRANSACTIONHISTORY_CREATE} component={TransactionHistoryCreateScreen} options={{ headerTitle: ''}}/>
+      <Stack.Screen name={mainNavigations.CLUB_LIST} component={ClubListScreen} options={{ headerShown: false }} />
+      <Stack.Screen name={mainNavigations.CLUB_DETAIL} component={ClubDetailScreen} options={{ headerShown: false }} />
+      <Stack.Screen name={mainNavigations.CLUB_MAIN_INFO_CREATE} component={ClubMainInfoCreateScreen} options={{ headerTitle: '' }} />
+      <Stack.Screen name={mainNavigations.CLUB_BANK_INFO_CREATE} component={ClubBankInfoCreateScreen} options={{ headerTitle: '' }} />
+      <Stack.Screen name={mainNavigations.CLUB_CREATE_COMPLETE} component={ClubCreateCompleteScreen} options={{ headerShown: false }} />
+      <Stack.Screen name={mainNavigations.CLUB_USER_UPDATE} component={ClubUserUpdateScreen} options={{ headerTitle: '' }} />
+
+      <Stack.Screen name={mainNavigations.EVENT_CREATE} component={EventCreateScreen} options={{ headerTitle: '' }} />
+
+      <Stack.Screen name={mainNavigations.TRANSACTIONHISTORY_CREATE} component={TransactionHistoryCreateScreen} options={{ headerTitle: '' }} />
       <Stack.Screen name={mainNavigations.WEBVIEW} component={WebViewScreen} options={{ headerShown: false, }} />
       <Stack.Screen name={mainNavigations.NOTIFICATION} component={NotificiationTest} options={{ headerTitle: '' }} />
       <Stack.Screen name={mainNavigations.UNCLASSIFIED} component={UnclassifiedListScreen} options={{ headerTitle: '', }} />
       <Stack.Screen name={mainNavigations.WITHDRAWAL} component={WithdrawalClassifiedScreen} options={{ headerTitle: '', }} />
       <Stack.Screen name={mainNavigations.DEPOSIT} component={DepositClassifiedScreen} options={{ headerTitle: '미분류 설정(입금)', headerTitleStyle: { fontSize: 20, marginLeft: -12 }, }} />
-      <Stack.Screen name={mainNavigations.CHANGE_PASSWORD} component={ChangePasswordScreen} options={{ headerShown: false }}/>
+      <Stack.Screen name={mainNavigations.CHANGE_PASSWORD} component={ChangePasswordScreen} options={{ headerShown: false }} />
 
     </Stack.Navigator>
   )
