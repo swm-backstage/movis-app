@@ -15,7 +15,8 @@ import ClubBankInfoCreateScreen from '../screens/club/create/ClubBankInfoCreateS
 import { ClubCreateReq } from '../types/club/request/ClubCreateReq';
 import ClubCreateCompleteScreen from '../screens/club/create/ClubCreateCompleteScreen';
 import DepositClassifiedScreen from '../screens/unclassified/DepositClassifiedScreen';
-import TransactionHistoryCreateScreen from '../screens/transactionHistory/TransactionHistoryCreateScreen';
+import TransactionHistoryDepositCreateScreen from '../screens/transactionHistory/TransactionHistoryDepostiCreateScreen';
+import TransactionHistoryWithdrawCreateScreen from '../screens/transactionHistory/TransactionHistoryWithdrawCreateScreen';
 import ClubUserUpdateScreen from '../screens/clubUser/ClubUserUpdateScreen';
 import ChangePasswordScreen from '../screens/auth/find/ChangePasswordScreen';
 
@@ -33,6 +34,8 @@ export type MainStackParamList = {
   [mainNavigations.EVENT_CREATE]: { clubId: string };
 
   [mainNavigations.TRANSACTIONHISTORY_CREATE]: { clubId: string, eventId: string };
+  [mainNavigations.TRANSACTIONHISTORY_DEPOSIT_CREATE]: { clubId: string, eventId: string };
+  [mainNavigations.TRANSACTIONHISTORY_WITHDRAW_CREATE]: { clubId: string, eventId: string };
 
   [mainNavigations.WEBVIEW]: { clubId: string };
   [mainNavigations.NOTIFICATION]: undefined,
@@ -71,7 +74,9 @@ function MainStackNavigator() {
 
       <Stack.Screen name={mainNavigations.EVENT_CREATE} component={EventCreateScreen} options={{ headerTitle: '' }} />
 
-      <Stack.Screen name={mainNavigations.TRANSACTIONHISTORY_CREATE} component={TransactionHistoryCreateScreen} options={{ headerTitle: '' }} />
+      <Stack.Screen name={mainNavigations.TRANSACTIONHISTORY_DEPOSIT_CREATE} component={TransactionHistoryDepositCreateScreen} options={{ headerTitle: ''}}/>
+      <Stack.Screen name={mainNavigations.TRANSACTIONHISTORY_WITHDRAW_CREATE} component={TransactionHistoryWithdrawCreateScreen} options={{ headerTitle: ''}}/>
+
       <Stack.Screen name={mainNavigations.WEBVIEW} component={WebViewScreen} options={{ headerShown: false, }} />
       <Stack.Screen name={mainNavigations.NOTIFICATION} component={NotificiationTest} options={{ headerTitle: '' }} />
       <Stack.Screen name={mainNavigations.UNCLASSIFIED} component={UnclassifiedListScreen} options={{ headerTitle: '', }} />

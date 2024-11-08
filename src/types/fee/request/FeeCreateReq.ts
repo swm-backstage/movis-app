@@ -1,9 +1,9 @@
 type FeeCreateReq = {
-    eventMemberId: String,
+    eventMemberId: string,
     paidAmount: Number,
-    paidAt: String,
-    name: String,
-    explanation: String,
+    paidAt: string,
+    name: string,
+    explanation: string,
 }
 
 export type { FeeCreateReq };

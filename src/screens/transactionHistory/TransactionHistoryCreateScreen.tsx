@@ -23,7 +23,7 @@ const TransactionHistoryCreateScreen = ({ route, navigation }: TransactionHistor
   const [isDepositView, setIsDepositView] = useState(true);
   const { clubId, eventId } = route.params;
   const { data: eventMemberGetListRes, isLoading, isError } = useQueryGetEventMemberList(eventId);
-
+  console.log(clubId, eventId)
   const handleDepositViewToggle = () => {
     setIsDepositView(!isDepositView);
   };
