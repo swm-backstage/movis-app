@@ -29,6 +29,13 @@ export const ClubAccountValidator = (text: string) => {
     return { valid: true };
 };
 
+export const EventNameValidator = (text: string) => {
+    if (text.trim().length > 30 || text.trim().length < 2) {
+        return { valid: false, errorMessage: '2자리 이상 30자리 이하' };
+    }
+    return { valid: true };
+};
+
 export const PhoneNumberValidator = (text: string) => {
     const cleaned = text.replace(/\D+/g, '');
 

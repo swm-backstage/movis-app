@@ -47,7 +47,7 @@ const ClubMemberItemList: React.FC<ClubMemberItemListProps> = ({ clubId }) => {
                     {data && data.members.map((member) => (
                         <Item
                             key={member.memberId}
-                            imageNode={<ProfileIcon backgroundColor={getProfileColor(member.name)} />}
+                            imageNode={<ProfileIcon iconName={member.name} iconSize={48}/>}
                             mainText={member.name}
                             subText={member.phoneNo}
                         />

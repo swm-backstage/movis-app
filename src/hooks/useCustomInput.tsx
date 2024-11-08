@@ -15,7 +15,7 @@ interface UseCustomInputReturn {
   onChangeText: (text: string) => void;
   onBlur: () => void;
   setError: (msg: string) => void;
-  validate: () => void;
+  validate: () => boolean;
 }
 
 const useCustomInput = ({
@@ -34,23 +34,25 @@ const useCustomInput = ({
     setIsValid(false);
   }, []);
 
-  const validateInput = useCallback(() => {
+  const validateInput = useCallback((): boolean => {
     if (required && value.trim() === '') {
       setErrorMessage(requiredMessage);
       setIsValid(false);
-    } else if (validator) {
+      return false;
+    }
+
+    if (validator) {
       const validation = validator(value);
       if (!validation.valid) {
         setErrorMessage(validation.errorMessage || '옳바르지 않은 형식');
         setIsValid(false);
-      } else {
-        setErrorMessage('');
-        setIsValid(true);
+        return false;
       }
-    } else {
-      setErrorMessage('');
-      setIsValid(true);
     }
+
+    setErrorMessage('');
+    setIsValid(true);
+    return true;
   }, [value, required, validator, requiredMessage]);
 
   const onChangeText = useCallback(
@@ -65,6 +67,7 @@ const useCustomInput = ({
         setTouched(true);
       }
 
+      // 실시간 유효성 검사
       if (formattedText.trim() !== '' && validator) {
         const validation = validator(formattedText);
         if (!validation.valid) {
@@ -96,9 +99,9 @@ const useCustomInput = ({
     validateInput();
   }, [validateInput]);
 
-  const validate = useCallback(() => {
+  const validate = useCallback((): boolean => {
     setTouched(true);
-    validateInput();
+    return validateInput();
   }, [validateInput]);
 
   return { value, isValid, errorMessage, clearInput, onChangeText, onBlur, setError, validate };

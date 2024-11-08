@@ -84,7 +84,7 @@ const ClubUserItemList: React.FC<ClubUserItemListProps> = ({ clubId }) => {
                     {data && data.clubUserGetResDtoList.map((clubUser: ClubUserGetRes) => (
                         <Item
                             key={clubUser.identifier}
-                            imageNode={<ProfileIcon backgroundColor={getProfileColor(clubUser.identifier)} />}
+                            imageNode={<ProfileIcon iconName={clubUser.identifier} iconSize={48}/>}
                             mainText={clubUser.identifier}
                             subText={clubUser.identifier}
                             labelText={roleMap[clubUser.role]}

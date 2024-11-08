@@ -11,6 +11,7 @@ import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { useGetUser } from '../../hooks/useUser';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
+import ExpandedButton from '../../components/Button/ExpandedButton';
 
 type ClubHomeScreenProps = StackScreenProps<
   MainStackParamList,
