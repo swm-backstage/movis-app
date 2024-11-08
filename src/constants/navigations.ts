@@ -11,6 +11,9 @@ const mainNavigations = {
   EVENT_CREATE: 'eventCreate',
 
   TRANSACTIONHISTORY_CREATE: 'transacntionHistoryCreate',
+  TRANSACTIONHISTORY_DEPOSIT_CREATE: 'transacntionHistoryDepositCreate',
+  TRANSACTIONHISTORY_WITHDRAW_CREATE: 'transacntionHistoryWithdrawCreate',
+
 
   WEBVIEW: 'webview',
   NOTIFICATION: 'notification',

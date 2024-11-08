@@ -56,13 +56,15 @@ function WebViewScreen({ route, navigation }: WebViewScreenProps) {
     const data = JSON.parse(e.data);
     if (data.type === 'navigationStateChange') {
       setIsCanGoBack(e.canGoBack);
-    } else if (data.type === 'eventCreate') {
+    } else if (data.type === mainNavigations.EVENT_CREATE) {
       navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: data.clubId });
-    } else if (data.type === 'eventConfig') {
-
-    } else if (data.type === 'transactionHistoryCreate') {
+    } else if (data.type === mainNavigations.TRANSACTIONHISTORY_CREATE) {
       navigation.navigate(mainNavigations.TRANSACTIONHISTORY_CREATE, { clubId: data.clubId, eventId: data.eventId });
-    } else if (data.type === 'unClassifiedTransaction') {
+    } else if (data.type === mainNavigations.TRANSACTIONHISTORY_CREATE) {
+      navigation.navigate(mainNavigations.TRANSACTIONHISTORY_DEPOSIT_CREATE, { clubId: data.clubId, eventId: data.eventId });
+    } else if (data.type === mainNavigations.TRANSACTIONHISTORY_WITHDRAW_CREATE) {
+      navigation.navigate(mainNavigations.TRANSACTIONHISTORY_WITHDRAW_CREATE, { clubId: data.clubId, eventId: data.eventId });
+    } else if (data.type === mainNavigations.UNCLASSIFIED) {
       navigation.navigate(mainNavigations.UNCLASSIFIED, { clubId: data.clubId });
     }
   };
