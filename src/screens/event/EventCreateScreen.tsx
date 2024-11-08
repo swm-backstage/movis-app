@@ -6,12 +6,12 @@ import ExpandedButton from '../../components/Button/ExpandedButton';
 import CustomLoader from '../../components/Loader';
 import CustomInput from '../../components/customInput/CustomInput';
 import DateTimePickerInput from '../../components/select/DateTimePickerInput';
-import ItemListSelector from '../../components/select/ItemListSelector';
+import ItemListCheckBox from '../../components/select/ItemListCheckBox';
 import { mainNavigations } from '../../constants/navigations';
 import useCustomInput from '../../hooks/useCustomInput';
 import useDateTimePickerInput from '../../hooks/useDateTimePickerInput';
 import { useMutateCreateEvent } from '../../hooks/useEvent';
-import useItemListSelector, { Item } from '../../hooks/useItemListSelector';
+import useItemListCheckBox, { Item } from '../../hooks/useItemListCheckBox';
 import { useGetMemberList } from '../../hooks/useMember';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { EventCreateReq, GatherFeeInfo } from '../../types/event/request/EventCreateReq';
@@ -39,7 +39,7 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
     formator: BalanceFormat,
   });
   const paymentDeadlineInput = useDateTimePickerInput();
-  const memberListSelector = useItemListSelector({
+  const memberListSelector = useItemListCheckBox({
     required: true,
     requiredMessage: '필수 항목',
   });
@@ -121,7 +121,7 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
           selectedDate={paymentDeadlineInput.selectedDateTime}
           setSelectedDateTime={paymentDeadlineInput.setSelectedDateTime}
         />
-        <ItemListSelector
+        <ItemListCheckBox
           items={itemList}
           isValid={memberListSelector.isValid}
           errorMessage={memberListSelector.errorMessage}

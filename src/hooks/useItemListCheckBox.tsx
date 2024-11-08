@@ -5,13 +5,13 @@ export type Item = {
   name: string;
 };
 
-interface UseItemListSelectorProps {
+interface useItemListCheckBoxProps {
   validator?: (selectedIds: string[]) => { valid: boolean; errorMessage?: string };
   required?: boolean;
   requiredMessage?: string;
 }
 
-interface UseItemListSelectorReturn {
+interface useItemListCheckBoxReturn {
   selectedIds: string[];
   isSelected: (itemId: string) => boolean;
   toggleSelectItem: (itemId: string) => void;
@@ -23,11 +23,11 @@ interface UseItemListSelectorReturn {
   validate: () => boolean;
 }
 
-const useItemListSelector = ({
+const useItemListCheckBox = ({
   validator,
   required = false,
   requiredMessage = '필수 항목입니다.',
-}: UseItemListSelectorProps = {}): UseItemListSelectorReturn => {
+}: useItemListCheckBoxProps = {}): useItemListCheckBoxReturn => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isValid, setIsValid] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -94,4 +94,4 @@ const useItemListSelector = ({
   };
 };
 
-export default useItemListSelector;
+export default useItemListCheckBox;

@@ -1,12 +1,11 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import colors from '../../assets/colors/defaultColors';
-import { Item } from '../../hooks/useItemListSelector';
 import { Icon } from '@ant-design/react-native';
-import profileColors from '../../assets/colors/profileColors';
+import React from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import colors from '../../assets/colors/defaultColors';
+import { Item } from '../../hooks/useItemListCheckBox';
 import ProfileIcon from '../ProfileIcon';
 
-interface ItemListSelectorProps {
+interface ItemListCheckBoxProps {
   items: Item[];
   selectedIds: string[];
   label?: string;
@@ -19,7 +18,7 @@ interface ItemListSelectorProps {
   errorMessage: string;
 }
 
-const ItemListSelector: React.FC<ItemListSelectorProps> = ({
+const ItemListCheckBox: React.FC<ItemListCheckBoxProps> = ({
   items,
   selectedIds,
   label,
@@ -78,11 +77,11 @@ const ItemListSelector: React.FC<ItemListSelectorProps> = ({
   );
 };
 
-export default ItemListSelector;
+export default ItemListCheckBox;
 
 const styles = StyleSheet.create({
   container: {
-    height: 260,
+    height: 284,
     marginTop: 16,
   },
   headerContainer: {
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 16,
+    paddingVertical: 14,
     paddingHorizontal: 20,
   },
   checkbox: {
