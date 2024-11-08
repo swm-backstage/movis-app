@@ -101,107 +101,135 @@ function DepositClassifiedScreen({ route, navigation }: DepositClassifiedScreenP
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>미분류 설정</Text>
-            <Text style={styles.subtitle}>선택된 입금 내역</Text>
-            <View style={styles.selectedTransactionBox}>
-                {selectedDeposits.map((item) => (
-                    <View key={item.elementIid} style={styles.transactionItem}>
-                        <Text style={styles.transactionName}>{item.name}</Text>
-                        <Text style={styles.transactionAmount}>{item.amount.toLocaleString()}원</Text>
+            <View style={styles.contentContainer}>
+                <View style={styles.firstContainer}>
+                    <Text style={styles.text}>선택된 입금 내역</Text>
+                    <View style={styles.selectedDepositBox}>
+                        {selectedDeposits.map((item) => (
+                            <View key={item.elementIid} style={styles.transactionItem}>
+                                <Text style={styles.transactionName}>{item.name}{"\n"}{item.paidAt}</Text>
+                                <Text style={styles.transactionAmount}>{item.amount.toLocaleString()}원</Text>
+                            </View>
+                        ))}
                     </View>
-                ))}
+                </View>
+                <Text style={styles.eventTitle}>이벤트 설정</Text>
+                <FlatList
+                    data={events}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity
+                            style={[
+                                styles.eventItem,
+                                selectedEvent?.eventId === item.eventId && styles.selectedEventItem,
+                            ]}
+                            onPress={() => handleEventSelect(item)}
+                        >
+                            <View style={styles.radioButtonOuter}>
+                                <View
+                                    style={[
+                                        styles.radioButtonInner,
+                                        selectedEvent?.eventId === item.eventId && styles.radioButtonSelected,
+                                    ]}
+                                />
+                            </View>
+                            <Text style={styles.eventText}>{item.name}</Text>
+                        </TouchableOpacity>
+                    )}
+                    keyExtractor={(item) => item.eventId}
+                    style={styles.eventList}
+                />
+
+                <Text style={styles.eventTitle}>할당할 인원</Text>
+                <FlatList
+                    data={participants}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity
+                            style={[
+                                styles.eventItem,
+                                selectedParticipant?.eventMemberId === item.eventMemberId && styles.selectedEventItem,
+                            ]}
+                            onPress={() => handleParticipantSelect(item)}
+                        >
+                            <View style={styles.radioButtonOuter}>
+                                <View
+                                    style={[
+                                        styles.radioButtonInner,
+                                        selectedParticipant?.eventMemberId === item.eventMemberId && styles.radioButtonSelected,
+                                    ]}
+                                />
+                            </View>
+                            <Text style={styles.eventText}>{item.name}</Text>
+                        </TouchableOpacity>
+                    )}
+                    keyExtractor={(item) => item.eventMemberId}
+                    style={styles.eventList}
+                />
+
+                <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
+                    <Text style={styles.confirmButtonText}>설정 완료</Text>
+                </TouchableOpacity>
+
             </View>
-
-            <Text style={styles.eventTitle}>이벤트 설정</Text>
-            <FlatList
-                data={events}
-                renderItem={({ item }) => (
-                    <TouchableOpacity
-                        style={[
-                            styles.eventItem,
-                            selectedEvent?.eventId === item.eventId && styles.selectedEventItem,
-                        ]}
-                        onPress={() => handleEventSelect(item)}
-                    >
-                        <View style={styles.radioButtonOuter}>
-                            <View
-                                style={[
-                                    styles.radioButtonInner,
-                                    selectedEvent?.eventId === item.eventId && styles.radioButtonSelected,
-                                ]}
-                            />
-                        </View>
-                        <Text style={styles.eventText}>{item.name}</Text>
-                    </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.eventId}
-                style={styles.eventList}
-            />
-
-            <Text style={styles.eventTitle}>할당할 인원</Text>
-            <FlatList
-                data={participants}
-                renderItem={({ item }) => (
-                    <TouchableOpacity
-                        style={[
-                            styles.eventItem,
-                            selectedParticipant?.eventMemberId === item.eventMemberId && styles.selectedEventItem,
-                        ]}
-                        onPress={() => handleParticipantSelect(item)}
-                    >
-                        <View style={styles.radioButtonOuter}>
-                            <View
-                                style={[
-                                    styles.radioButtonInner,
-                                    selectedParticipant?.eventMemberId === item.eventMemberId && styles.radioButtonSelected,
-                                ]}
-                            />
-                        </View>
-                        <Text style={styles.eventText}>{item.name}</Text>
-                    </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.eventMemberId}
-                style={styles.eventList}
-            />
-
-            <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
-                <Text style={styles.confirmButtonText}>설정 완료</Text>
-            </TouchableOpacity>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    sectionBox: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 16,
-        borderRadius: 8,
-        marginBottom: 16,
-    },
     container: {
         flex: 1,
-        padding: 16,
+
         backgroundColor: '#fff',
     },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 16,
-        color: 'black',
+    contentContainer: {
+        display: 'flex',
+        alignItems: 'flex-start',
+        flexDirection: 'column',
+        marginTop: 32,
+        gap: 16,
+        marginHorizontal: 24,
+        width: '90%'
+    },
+    firstContainer: {
+        display: 'flex',
+        padding: 16,
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: 8,
+        alignSelf: 'stretch'
+    },
+    text: {
+        fontFamily: 'Pretendard',
+        fontSize: 16,
+        fontStyle: 'normal',
+        fontWeight: '500',
+        lineHeight: 18.2,
+        letterSpacing: -0.28,
+        color: '#595E62',
+    },
+    dateText: {
+        fontFamily: 'Pretendard',
+        fontSize: 12,
+        fontStyle: 'normal',
+        fontWeight: '300',
+        lineHeight: 14.16,
+        letterSpacing: -0.24,
+        color: '#ACB2B5',
     },
     subtitle: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 8,
     },
-    selectedTransactionBox: {
+    selectedDepositBox: {
         borderWidth: 1,
-        borderColor: '#ccc',
+        borderRadius: 4,
+        borderColor: '#F0F0F3',
         padding: 16,
         marginBottom: 16,
     },
     transactionItem: {
+        display: 'flex',
+        paddingVertical: 16,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
@@ -275,6 +303,13 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    sectionBox: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 16,
+        borderRadius: 8,
+        marginBottom: 16,
     },
 });
 

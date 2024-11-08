@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { checkIdentifier, getUser } from "../api/user";
+import { changePassword, checkIdentifier, getIdentifierWithPhone, getUser } from "../api/user";
 import { queryKeys } from "../constants/key";
+import { UseMutationCustomOptions } from "../types/common";
 
 
 function useGetUser() {
@@ -19,4 +20,21 @@ function useCheckIdentifier(identifier: string) {
   })
 }
 
-export { useGetUser, useCheckIdentifier };
+function useGetIdentifier(mutationOptions?: UseMutationCustomOptions) {
+  return useMutation({
+    mutationFn: (phoneNo: string) => getIdentifierWithPhone(phoneNo),
+    ...mutationOptions
+  }
+  )
+}
+
+function useChangePassword(mutationOptions?: UseMutationCustomOptions) {
+  return useMutation({
+    mutationFn: ({ oldPassword, newPassword }: { oldPassword: string; newPassword: string }) => changePassword(oldPassword, newPassword),
+    ...mutationOptions
+  })
+}
+
+
+
+export { useGetUser, useCheckIdentifier, useGetIdentifier, useChangePassword };

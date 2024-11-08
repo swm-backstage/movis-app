@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignupScreen from '../screens/auth/SignupScreen';
@@ -7,6 +7,7 @@ import CreateIdScreen from '../screens/auth/signup/CreateIdScreen';
 import SetPasswordScreen from '../screens/auth/signup/SetPasswordScreen';
 import VerifyPhoneNumberScreen from '../screens/auth/signup/VerifyPhoneNumberScreen';
 import WelcomeScreen from '../screens/auth/signup/WelcomeScreen';
+import FindScreen from '../screens/auth/find/FindScreen';
 
 
 export type AuthStackParamList = {
@@ -16,6 +17,7 @@ export type AuthStackParamList = {
     SetPassword: { identifier: string };
     VerifyPhoneNumber: { identifier: string, password: string };
     Welcome: { identifier: string, password: string, name: string };
+    FindInfo: undefined;
 }
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -31,6 +33,7 @@ function AuthStackNavigator() {
             <Stack.Screen name="VerifyPhoneNumber" component={VerifyPhoneNumberScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Signup" component={SignupScreen} options={{ headerTitle: '', headerTransparent: true, headerTintColor: '#fff', }} />
+            <Stack.Screen name="FindInfo" component={FindScreen} options={{ headerTitle: '', }} />
         </Stack.Navigator>
     )
 }
