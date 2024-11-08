@@ -18,9 +18,10 @@ const mainNavigations = {
   WEBVIEW: 'webview',
   NOTIFICATION: 'notification',
 
-  UNCLASSIFIED : 'unclassified',
-  WITHDRAWAL : 'withdrawal',
-  DEPOSIT : 'deposit'
+  UNCLASSIFIED: 'unclassified',
+  WITHDRAWAL: 'withdrawal',
+  DEPOSIT: 'deposit',
+  CHANGE_PASSWORD: 'changePassword'
 } as const;
 
 export { mainNavigations };

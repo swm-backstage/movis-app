@@ -11,7 +11,7 @@ import {
 import colors from '../../assets/colors/defaultColors';
 
 interface NameInputProps extends TextInputProps {
-    onClear?: () => void;
+    onClear: any;
     isFocused: boolean;
     isClosed?: boolean;
 }
@@ -30,7 +30,7 @@ const CancelButtonWithInput: React.FC<NameInputProps> = ({
                 {...props}
             />
             {isFocused && (
-                <TouchableOpacity onPress={() => onClear}>
+                <TouchableOpacity onPress={onClear}>
                     <Image
                         source={require('../../assets/delete.png')}
                         style={styles.clearIcon}

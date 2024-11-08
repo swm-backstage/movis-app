@@ -88,9 +88,9 @@ function LoginScreen({ navigation }: AuthHomeScreenProps) {
         <TouchableOpacity onPress={() => navigation.navigate('CreateId')}>
           <Text style={styles.linkText}>회원가입</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity>
-          <Text style={styles.linkText}>비밀번호 찾기</Text>
-        </TouchableOpacity> */}
+        <TouchableOpacity onPress={() => navigation.navigate('FindInfo')}>
+          <Text style={styles.linkText}>아이디/비밀번호 찾기</Text>
+        </TouchableOpacity>
       </View>
 
       {/* <View style={styles.buttonContainer}>
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   linksContainer: {
     marginTop: 20,
     flexDirection: 'row',
-    //justifyContent: 'space-between',
+    gap: 60,
     justifyContent: 'center',
     width: '80%',
   },

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Image, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AuthStackParamList } from '../../../navigations/AuthStackNavigator';
 import { useCheckIdentifier } from '../../../hooks/useUser';
-import colors from '../../../assets/colors/colors'
 
 type CreadtedIdScreenProps = StackScreenProps<AuthStackParamList>;
 

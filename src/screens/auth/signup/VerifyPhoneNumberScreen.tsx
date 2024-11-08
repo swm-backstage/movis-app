@@ -109,7 +109,7 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
     useEffect(() => {
         if (code.length === 4) {
             const timeout = setTimeout(() => {
-                verifyCode.mutate({ phoneNumber: phoneNo.replace(/-/g, ''), verifyCode: code });
+                verifyCode.mutate({ phoneNumber: phoneNo, verifyCode: code });
             }, 1000);
 
             return () => clearTimeout(timeout);
@@ -166,7 +166,7 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
             );
         }
         else {
-            send.mutate(phoneNo.replace(/-/g, ''));
+            send.mutate(phoneNo);
             setIsButtonDisabled(true);
         }
     };
