@@ -41,6 +41,7 @@ const postLogin = async ({ identifier, password }: RequestLogin): Promise<Respon
 
 const getAccessToken = async (): Promise<ResponseToken> => {
     const refreshToken = await getEncryptStorage('refreshToken');
+
     const { data } = await axiosHost.patch('/api/v1/auth/reissue', {
         refreshToken
     })
