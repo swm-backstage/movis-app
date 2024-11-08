@@ -1,7 +1,7 @@
 import { ClubCreateReq } from "../types/club/request/ClubCreateReq";
 import { ClubGetListRes } from "../types/club/response/ClubGetListRes";
 import { ClubGetRes } from "../types/club/response/ClubGetRes";
-import { ClubUserCreateReq, ClubUserDelegateReq } from "../types/clubUser/request/ClubUserReq";
+import { ClubUserCreateReq, ClubUserDelegateReq, ClubUserDeleteReq } from "../types/clubUser/request/ClubUserReq";
 import axiosHost from "./axios";
 
 const createClubUser = async (body: ClubUserCreateReq): Promise<void> => {
@@ -27,5 +27,14 @@ const getClubUserList = async (queryParams: Record<string, any>): Promise<ClubGe
   return data;
 };
 
+const deleteClubUser = async (values: ClubUserDeleteReq): Promise<void> => {
+  const config = {
+		params: values.queryParams,
+	};
+  const { data } = await axiosHost.delete(`/api/v1/clubUsers/${values.identifier}`, config);
 
-export { createClubUser, getClubUserList, delegateClubUser };
+  return data;
+}
+
+
+export { createClubUser, getClubUserList, delegateClubUser, deleteClubUser };

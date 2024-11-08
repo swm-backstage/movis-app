@@ -11,6 +11,7 @@ import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
 import { useGetUser } from '../../hooks/useUser';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
+import ExpandedButton from '../../components/Button/ExpandedButton';
 
 type ClubHomeScreenProps = StackScreenProps<
   MainStackParamList,
@@ -25,7 +26,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
     snapPoints: useMemo(() => ['80%'], []),
   });
   const handlePressClubCreateScreen = () => {
-    navigation.navigate(mainNavigations.CLUB_CREATE);
+    navigation.navigate(mainNavigations.CLUB_MAIN_INFO_CREATE);
   };
   const handlePressClubDetailScreen = (club: ClubGetRes) => {
     navigation.navigate(mainNavigations.CLUB_DETAIL, { club });

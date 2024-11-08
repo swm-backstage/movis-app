@@ -9,12 +9,12 @@ import { StackScreenProps } from '@react-navigation/stack';
 import React, { ReactNode, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { mainNavigations } from '../../constants/navigations';
-import { useMutateCreateClub } from '../../hooks/useClub';
-import { MainStackParamList } from '../../navigations/MainStackNavigator';
-import { ClubCreateReq } from '../../types/club/request/ClubCreateReq';
-import AntdWithStyleButton from '../../components/AntdWithStyleButton';
-import { bankList } from '../../constants/mockData';
+import { mainNavigations } from '../../../constants/navigations';
+import { useMutateCreateClub } from '../../../hooks/useClub';
+import { MainStackParamList } from '../../../navigations/MainStackNavigator';
+import { ClubCreateReq } from '../../../types/club/request/ClubCreateReq';
+import AntdWithStyleButton from '../../../components/AntdWithStyleButton';
+import { bankList } from '../../../constants/mockData';
 
 
 type ClubCreateScreenProps = StackScreenProps<

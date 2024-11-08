@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { createClubUser, delegateClubUser, getClubUserList } from "../api/clubUser";
+import { createClubUser, delegateClubUser, deleteClubUser, getClubUserList } from "../api/clubUser";
 import queryClient from "../api/queryClient";
 import { queryKeys } from "../constants/key";
 import { UseMutationCustomOptions } from "../types/common";
@@ -36,4 +36,16 @@ function useMutateDelegateClubUser(mutationOptions?: UseMutationCustomOptions) {
   })
 }
 
-export { useGetClubUserList, useMutateCreateClubUser, useMutateDelegateClubUser };
+function useMutateDeleteClub(mutationOptions?: UseMutationCustomOptions) {
+  return useMutation({
+    mutationFn: deleteClubUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.CLUB_USER, queryKeys.GET_CLUB_USERLIST],
+      });
+    },
+    ...mutationOptions
+  })
+}
+
+export { useGetClubUserList, useMutateCreateClubUser, useMutateDelegateClubUser, useMutateDeleteClub };
