@@ -9,6 +9,7 @@ type DateTimePickerInputProps = {
     label?: string;
     selectedDate?: string;
     isValid: boolean;
+    mode?: 'date' | 'time' | 'datetime' | undefined;
     onBlur: () => void;
     handleTouched: () => void;
     setSelectedDateTime: (dateTime: string) => void;
@@ -18,6 +19,7 @@ const DateTimePickerInput: React.FC<DateTimePickerInputProps> = ({
     label,
     selectedDate,
     isValid,
+    mode = 'date',
     onBlur,
     handleTouched,
     setSelectedDateTime,
@@ -35,9 +37,30 @@ const DateTimePickerInput: React.FC<DateTimePickerInputProps> = ({
     };
 
     const handleConfirm = (date: Date) => {
-        const isoDateString = date.toISOString().split('T')[0];
+        const isoDateString = date.toISOString();
         setSelectedDateTime(isoDateString);
         hideDatePicker();
+    };
+
+    const getDisplayDate = () => {
+        if (selectedDate) {
+            const dateObj = new Date(selectedDate);
+            if (mode === 'date') {
+                return dateObj.toISOString().split('T')[0];
+            } else if (mode === 'time') {
+                const hours = dateObj.getHours().toString().padStart(2, '0');
+                const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+                return `${hours}:${minutes}`;
+            } else if (mode === 'datetime') {
+                const datePart = dateObj.toISOString().split('T')[0];
+                const hours = dateObj.getHours().toString().padStart(2, '0');
+                const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+                return `${datePart} ${hours}:${minutes}`;
+            } else {
+                return selectedDate;
+            }
+        }
+        return '';
     };
 
     return (
@@ -45,25 +68,20 @@ const DateTimePickerInput: React.FC<DateTimePickerInputProps> = ({
             <View style={styles.labelContainer}>
                 {label && <Text style={styles.labelText}>{label}</Text>}
             </View>
-            <Input
-                value={selectedDate || undefined}
-                placeholder="날짜를 선택하세요"
-                placeholderTextColor={colors.Gray500}
-                style={[styles.input, !isValid && styles.invalidInputWrapper]}
-                inputStyle={{ fontSize: 14, fontWeight: '500'}}
-                editable={false}
-                suffix={
-                    <TouchableOpacity onPress={showDatePicker} style={styles.iconButton}>
-                        <Icon name="calendar" style={styles.calendarIcon} />
-                    </TouchableOpacity>
-                }
-            />
+            <TouchableOpacity onPress={showDatePicker}>
+                <View style={[styles.input, !isValid && styles.invalidInputWrapper]}>
+                    <Text style={styles.inputText}>
+                        {getDisplayDate() || '날짜를 선택하세요'}
+                    </Text>
+                    <Icon name="calendar" style={styles.calendarIcon} />
+                </View>
+            </TouchableOpacity>
             {!isValid && (
                 <Text style={styles.errorText}>필수 항목</Text>
             )}
             <DateTimePicker
                 isVisible={isDatePickerVisible}
-                mode="date"
+                mode={mode}
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
                 date={selectedDate ? new Date(selectedDate) : new Date()}
@@ -91,13 +109,15 @@ const styles = StyleSheet.create({
         borderColor: colors.Gray200,
         borderRadius: 5,
         paddingHorizontal: 16,
-        paddingVertical: 6,
+        paddingVertical: 12,
+        justifyContent: 'space-between',
+    },
+    inputText: {
+        fontSize: 14,
+        color: colors.Black,
     },
     invalidInputWrapper: {
         borderColor: colors.Red,
-    },
-    iconButton: {
-        padding: 5,
     },
     calendarIcon: {
         fontSize: 24,
