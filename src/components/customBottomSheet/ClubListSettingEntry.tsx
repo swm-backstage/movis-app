@@ -8,10 +8,12 @@ import { UserGetRes } from '../../types/user/UserGetRes';
 type ClubListSettingEntryProps = {
     user: UserGetRes | undefined,
     logout: () => void;
+    handleChangePassword: () => void;
 };
 
-const ClubListSettingEntry: React.FC<ClubListSettingEntryProps> = ({ user, logout }) => {
+const ClubListSettingEntry: React.FC<ClubListSettingEntryProps> = ({ user, logout, handleChangePassword }) => {
     const [hasPermission, setHasPermission] = useState(false)
+    const [text, setText] = useState<string>('알림: 허용되지 않음');
 
     const handleOnPressPermissionButton = async () => {
         /**
@@ -19,19 +21,30 @@ const ClubListSettingEntry: React.FC<ClubListSettingEntryProps> = ({ user, logou
          * so the user can enable it
          */
         RNAndroidNotificationListener.requestPermission()
+
     }
 
     const handleAppStateChange = async (nextAppState: string, force = false) => {
         if (nextAppState === 'active' || force) {
             const status = await RNAndroidNotificationListener.getPermissionStatus()
             setHasPermission(status !== 'denied')
+            if (status === 'authorized') {
+                setText("알림: 허용됨")
+            }
+            else {
+                setText('알림: 허용되지 않음')
+            }
         }
     }
 
     useEffect(() => {
-        console.log('권한 추적')
+        console.log('현재 text 상태:', text)
+    }, [text])
+
+    useEffect(() => {
 
         handleAppStateChange('', true)
+        handleClose
 
         return () => {
             console.log('권한 추적 끝')
@@ -79,16 +92,15 @@ const ClubListSettingEntry: React.FC<ClubListSettingEntryProps> = ({ user, logou
 
             <SettingList title="권한 설정">
                 <SettingListItem
-                    text={hasPermission ? "알림: 허용됨" : "알림: 허용되지 않음"}
+                    text={text}
                     onPress={handleOnPressPermissionButton}
                 />
             </SettingList>
 
             <SettingList title="로그인 정보">
                 <SettingListItem
-                    text="비밀번호 변경(추가 예정)"
-                    onPress={() => Alert.alert("추가 예정입니다.")}
-                    disabled={true}
+                    text="비밀번호 변경"
+                    onPress={handleChangePassword}
                 />
                 <SettingListItem
                     text="로그아웃"

@@ -18,6 +18,7 @@ import DepositClassifiedScreen from '../screens/unclassified/DepositClassifiedSc
 import TransactionHistoryCreateScreen from '../screens/transactionHistory/TransactionHistoryCreateScreen';
 import { clubUserGetResDtoList } from '../types/clubUser/response/ClubUserGetListRes';
 import ClubUserUpdateScreen from '../screens/clubUser/ClubUserUpdateScreen';
+import ChangePasswordScreen from '../screens/auth/find/ChangePasswordScreen';
 
 
 
@@ -37,7 +38,8 @@ export type MainStackParamList = {
   [mainNavigations.NOTIFICATION]: undefined,
   [mainNavigations.UNCLASSIFIED]: { clubId: string },
   [mainNavigations.WITHDRAWAL]: { selectedWithdrawals: any[], clubId: string },
-  [mainNavigations.DEPOSIT]: { selectedDeposits: any[], clubId: string }
+  [mainNavigations.DEPOSIT]: { selectedDeposits: any[], clubId: string },
+  [mainNavigations.CHANGE_PASSWORD]: undefined
 }
 
 const Stack = createStackNavigator<MainStackParamList>();
@@ -130,7 +132,18 @@ function MainStackNavigator() {
       <Stack.Screen name={mainNavigations.DEPOSIT}
         component={DepositClassifiedScreen}
         options={{
-          headerTitle: '',
+          headerTitle: '미분류 설정(입금)',
+          headerTitleStyle: {
+            fontSize: 20,
+            marginLeft: -12
+          },
+        }}
+
+      />
+      <Stack.Screen name={mainNavigations.CHANGE_PASSWORD}
+        component={ChangePasswordScreen}
+        options={{
+          headerShown: false
         }}
       />
 

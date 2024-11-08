@@ -47,15 +47,15 @@ function useGetRefreshToken() {
 
     useEffect(() => {
         if (isSuccess) {
-            setHeader('Authorization', `Bearer ${data.accessToken}`),
-                setEncryptStorage('refresthToken', data.refreshToken)
+            setHeader('Authorization', `Bearer ${data.accessToken}`);
+            setEncryptStorage('refreshToken', data.refreshToken)
         }
     }, [isSuccess]);
     useEffect(() => {
         if (isError) {
 
-            removeHeader('Authorization'),
-                removeEncryptStorage('refreshToken')
+            removeHeader('Authorization');
+            removeEncryptStorage('refreshToken')
         }
     }, [isError]);
     return { isSuccess, isError };

@@ -7,7 +7,7 @@ import CancelButtonWithInput from './CancelButtonWithInput';
 interface InputProps extends Omit<TextInputProps, 'value'> {
     value: string;
     isValidText?: (text: string) => boolean;
-    onClear?: () => void;
+    onClear: any;
     isFocused: boolean;
     successText?: string;
     errorText?: string;

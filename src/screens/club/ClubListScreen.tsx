@@ -21,7 +21,7 @@ type ClubHomeScreenProps = StackScreenProps<
 function ClubListScreen({ navigation }: ClubHomeScreenProps) {
   const { data: user, isLoading: userIsLoading } = useGetUser();
   const { logoutMutation } = useAuth();
-  const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
+  const { openCustomBottomSheet, CustomBottomSheet, closeCustomBottomSheet } = useCustomBottomSheet({
     snapPoints: useMemo(() => ['80%'], []),
   });
   const handlePressClubCreateScreen = () => {
@@ -34,6 +34,11 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
   const handlePressWebView = (clubId: string) => {
     navigation.navigate(mainNavigations.WEBVIEW, { clubId });
   };
+
+  const handleChangePassword = () => {
+    closeCustomBottomSheet()
+    navigation.navigate(mainNavigations.CHANGE_PASSWORD)
+  }
 
   return (
     <View style={styles.container}>
@@ -76,6 +81,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
         <ClubListSettingEntry
           user={user}
           logout={() => logoutMutation.mutate(undefined)}
+          handleChangePassword={handleChangePassword}
         />
       </CustomBottomSheet>
     </View>
