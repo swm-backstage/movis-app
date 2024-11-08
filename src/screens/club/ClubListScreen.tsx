@@ -78,10 +78,6 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
           handlePressWebView={handlePressWebView}>
         </ClubList>
         <ExpandedButton
-          onPress={() => navigation.navigate(mainNavigations.TRANSACTIONHISTORY_CREATE, { clubId: '01JC2STQWSKTV58E92XZTA3ZQC', eventId: '01JC56Q5F69VAF78WQMZ1K82KM' })}
-          buttonText='내역 생성(레거시)'
-        />
-        <ExpandedButton
           onPress={() => navigation.navigate(mainNavigations.TRANSACTIONHISTORY_DEPOSIT_CREATE, { clubId: '01JC2STQWSKTV58E92XZTA3ZQC', eventId: '01JC56Q5F69VAF78WQMZ1K82KM' })}
           buttonText='입금 내역 생성(테스트)'
         />
