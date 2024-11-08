@@ -33,16 +33,6 @@ const ItemListSelector: React.FC<ItemListSelectorProps> = ({
 }) => {
   const isAllSelected = selectedCount === items.length && items.length > 0;
 
-  const getProfileColor = (identifier: string): string => {
-    const profileColorValues = Object.values(profileColors) as string[];
-    let hash = 0;
-    for (let i = 0; i < identifier.length; i++) {
-      hash = identifier.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const index = Math.abs(hash) % profileColorValues.length;
-    return profileColorValues[index];
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -62,7 +52,7 @@ const ItemListSelector: React.FC<ItemListSelectorProps> = ({
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View style={styles.itemContainer}>
-                <ProfileIcon backgroundColor={getProfileColor(item.name)} />
+                <ProfileIcon iconName={item.name} iconSize={40}/>
                 <Text style={styles.itemText}>{item.name}</Text>
                 <TouchableOpacity
                   onPress={() => toggleSelectItem(item.id)}
@@ -150,6 +140,8 @@ const styles = StyleSheet.create({
   itemText: {
     flex: 1,
     fontSize: 16,
+    marginLeft: 12,
+    marginBottom: 4,
     color: colors.Black,
   },
   countContainer: {

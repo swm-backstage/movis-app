@@ -67,7 +67,6 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
         </View>
       </View>
       <View style={styles.bodyContainer}>
-        <ExpandedButton onPress={() => navigation.navigate(mainNavigations.EVENT_CREATE, {clubId: '01JC2STQWSKTV58E92XZTA3ZQC'})} buttonText='이벤트 생성(테스트)' />
         <ClubList
           handlePressClubCreateScreen={handlePressClubCreateScreen}
           handlePressClubDetailScreen={handlePressClubDetailScreen}

@@ -2,30 +2,42 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import colors from '../assets/colors/defaultColors';
+import profileColors from '../assets/colors/profileColors';
 
 interface ProfileIconProps {
-  backgroundColor?: string;
-  iconName?: string;
+  iconName: string;
   iconSize?: number;
   iconColor?: string;
 }
 
 const ProfileIcon: React.FC<ProfileIconProps> = ({
-  backgroundColor = colors.Gray400,
   iconName = 'user',
-  iconSize = 22,
+  iconSize = 48,
   iconColor = colors.White,
 }) => {
+
+  const getProfileColor = (identifier: string): string => {
+    const profileColorValues = Object.values(profileColors) as string[];
+    let hash = 0;
+    for (let i = 0; i < identifier.length; i++) {
+      hash = identifier.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const index = Math.abs(hash) % profileColorValues.length;
+    return profileColorValues[index];
+  };
+  
   return (
     <View
-      style={[
-        styles.profile,
-        { backgroundColor },
-      ]}
+      style={[styles.profile, { 
+        width: iconSize,
+        height: iconSize,
+        borderRadius: iconSize / 2,
+        backgroundColor: getProfileColor(iconName) 
+      }]}
     >
       <Icon
-        name={iconName}
-        style={{ fontSize: iconSize, color: iconColor }}
+        name='user'
+        style={{ fontSize: iconSize / 2, color: iconColor }}
       />
     </View>
   );
