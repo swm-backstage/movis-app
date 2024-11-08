@@ -1,19 +1,22 @@
 import { View } from '@ant-design/react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { useCallback } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import ExpandedButton from '../../components/Button/ExpandedButton';
 import CustomLoader from '../../components/Loader';
 import CustomInput from '../../components/customInput/CustomInput';
 import DateTimePickerInput from '../../components/select/DateTimePickerInput';
+import ItemListSelector from '../../components/select/ItemListSelector';
 import { mainNavigations } from '../../constants/navigations';
 import useCustomInput from '../../hooks/useCustomInput';
+import useDateTimePickerInput from '../../hooks/useDateTimePickerInput';
 import { useMutateCreateEvent } from '../../hooks/useEvent';
+import useItemListSelector, { Item } from '../../hooks/useItemListSelector';
 import { useGetMemberList } from '../../hooks/useMember';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
+import { EventCreateReq, GatherFeeInfo } from '../../types/event/request/EventCreateReq';
 import { BalanceFormat } from '../../utils/formator';
 import { EventNameValidator } from '../../utils/validator';
-import useDateTimePickerInput from '../../hooks/useDateTimePickerInput';
-import ExpandedButton from '../../components/Button/ExpandedButton';
 
 type EventCreateScreenProps = StackScreenProps<
   MainStackParamList,
@@ -30,32 +33,47 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
     requiredMessage: '필수 항목',
     validator: EventNameValidator,
   });
-
   const totalPaymentAmountInput = useCustomInput({
     required: true,
     requiredMessage: '필수 항목',
     formator: BalanceFormat,
   });
+  const paymentDeadlineInput = useDateTimePickerInput();
+  const memberListSelector = useItemListSelector({
+    required: true,
+    requiredMessage: '필수 항목',
+  });
 
-  const dateTimePickerInput = useDateTimePickerInput();
-
-  const onFinish = useCallback(() => {
+  const itemList: Item[] = data?.members.map(member => ({
+    id: member.memberId,
+    name: member.name,
+  })) || [];
+  const onFinish = () => {
     const isEventNameValid = eventNameInput.validate();
     const isTotalPaymentValid = totalPaymentAmountInput.validate();
-    const isDateValid = dateTimePickerInput.validate();
+    const isDateValid = paymentDeadlineInput.validate();
+    const isMemberListvalid = memberListSelector.validate();
 
-    if (!isEventNameValid || !isTotalPaymentValid || !isDateValid) {
-      Alert.alert('오류', '모든 필드를 올바르게 입력해주세요.');
+    if (!isEventNameValid || !isTotalPaymentValid || !isDateValid || !isMemberListvalid) {
       return;
     }
 
+    const values: EventCreateReq = {
+      clubId: clubId,
+      eventName: eventNameInput.value,
+      gatherFeeInfo: null,
+      eventMemberIdList: memberListSelector.selectedIds || [],
+    };
+    if (totalPaymentAmountInput.value && paymentDeadlineInput.value) {
+      const gatherFeeInfo: GatherFeeInfo = {
+        totalPaymentAmount: Number(totalPaymentAmountInput.value.replace(/\D+/g, '')),
+        paymentDeadline: paymentDeadlineInput.value,
+      };
+
+      values['gatherFeeInfo'] = gatherFeeInfo;
+    }
     createEvent.mutate(
-      {
-        eventName: eventNameInput.value,
-        totalPaymentAmount: totalPaymentAmountInput.value,
-        deadline: dateTimePickerInput.selectedDateTime,
-        clubId,
-      },
+      values,
       {
         onSuccess: () => navigation.goBack(),
         onError: (error) => {
@@ -63,14 +81,7 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
         },
       }
     );
-  }, [
-    eventNameInput,
-    totalPaymentAmountInput,
-    dateTimePickerInput,
-    createEvent,
-    clubId,
-    navigation,
-  ]);
+  };
 
   if (isLoading) {
     return <CustomLoader />;
@@ -102,13 +113,25 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
           keyboardType='numeric'
           autoCapitalize="none"
         />
-        <DateTimePickerInput 
+        <DateTimePickerInput
           label='납부 마감일'
-          isValid={dateTimePickerInput.isValid}
-          onBlur={dateTimePickerInput.onBlur}
-          handleTouched={dateTimePickerInput.handleTouched}
-          selectedDate={dateTimePickerInput.selectedDateTime}
-          setSelectedDateTime={dateTimePickerInput.setSelectedDateTime}
+          isValid={paymentDeadlineInput.isValid}
+          onBlur={paymentDeadlineInput.onBlur}
+          handleTouched={paymentDeadlineInput.handleTouched}
+          selectedDate={paymentDeadlineInput.selectedDateTime}
+          setSelectedDateTime={paymentDeadlineInput.setSelectedDateTime}
+        />
+        <ItemListSelector
+          items={itemList}
+          isValid={memberListSelector.isValid}
+          errorMessage={memberListSelector.errorMessage}
+          selectedIds={memberListSelector.selectedIds}
+          isSelected={memberListSelector.isSelected}
+          toggleSelectItem={memberListSelector.toggleSelectItem}
+          selectAll={memberListSelector.selectAll}
+          deselectAll={memberListSelector.deselectAll}
+          selectedCount={memberListSelector.selectedCount}
+          label='참가 회원'
         />
       </View>
       <View style={styles.footerContainer}>
@@ -120,14 +143,14 @@ function EventCreateScreen({ route, navigation }: EventCreateScreenProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 44,
+    flex: 1,
+    justifyContent: 'space-between',
     paddingHorizontal: 24,
+    paddingBottom: 36,
   },
   bodyContainer: {
-
   },
   footerContainer: {
-
   },
 });
 

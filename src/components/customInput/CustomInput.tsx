@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     borderColor: colors.Gray200,
     borderRadius: 5,
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 4,
   },
   invalidInputWrapper: {
     borderColor: colors.Red,

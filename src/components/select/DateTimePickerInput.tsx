@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import colors from '../../assets/colors/defaultColors';
 import { Text } from 'react-native-paper';
-import { Icon, Input, View } from '@ant-design/react-native';
+import { Icon, Input } from '@ant-design/react-native';
 
 type DateTimePickerInputProps = {
     label?: string;
@@ -48,8 +48,9 @@ const DateTimePickerInput: React.FC<DateTimePickerInputProps> = ({
             <Input
                 value={selectedDate || undefined}
                 placeholder="날짜를 선택하세요"
+                placeholderTextColor={colors.Gray500}
                 style={[styles.input, !isValid && styles.invalidInputWrapper]}
-                inputStyle={{ fontSize: 14, fontWeight: '500' }}
+                inputStyle={{ fontSize: 14, fontWeight: '500'}}
                 editable={false}
                 suffix={
                     <TouchableOpacity onPress={showDatePicker} style={styles.iconButton}>
@@ -66,7 +67,6 @@ const DateTimePickerInput: React.FC<DateTimePickerInputProps> = ({
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
                 date={selectedDate ? new Date(selectedDate) : new Date()}
-                maximumDate={new Date()}
                 locale="ko-KR"
             />
         </View>
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
         borderColor: colors.Gray200,
         borderRadius: 5,
         paddingHorizontal: 16,
-        paddingVertical: 12,
+        paddingVertical: 6,
     },
     invalidInputWrapper: {
         borderColor: colors.Red,

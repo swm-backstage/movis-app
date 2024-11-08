@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 interface UseDateTimePickerInputReturn {
     selectedDateTime: string | undefined;
     isValid: boolean;
+    value: string | undefined;
     setSelectedDateTime: (dateTime: string) => void;
     validate: () => boolean;
     onBlur: () => void;
@@ -35,7 +36,7 @@ const useDateTimePickerInput = (): UseDateTimePickerInputReturn => {
         validate();
     }, []);
 
-    return { isValid, validate, onBlur, selectedDateTime, setSelectedDateTime, handleTouched };
+    return { isValid, value: selectedDateTime, validate, onBlur, selectedDateTime, setSelectedDateTime, handleTouched };
 };
 
 export default useDateTimePickerInput;
