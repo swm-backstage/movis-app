@@ -7,6 +7,9 @@ import { Text } from 'react-native-paper';
 import { EventGetRes } from '../../types/event/response/EventGetRes';
 import { useQueryGetEventList } from '../../hooks/useEvent';
 import { useClassifiedEventBill } from '../../hooks/useEventBill';
+import { formatDistanceToNow } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type WithdrawalClassifiedScreenProps = StackScreenProps<
     MainStackParamList,
@@ -77,46 +80,55 @@ function WithdrawalClassifiedScreen({ route, navigation }: WithdrawalClassifiedS
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>미분류 설정</Text>
-            <Text style={styles.subtitle}>선택된 출금 내역</Text>
-            <View style={styles.selectedTransactionBox}>
-                {selectedWithdrawals.map((item) => (
-                    <View key={item.elementId} style={styles.transactionItem}>
-                        <Text style={styles.transactionName}>{item.name}</Text>
-                        <Text style={styles.transactionAmount}>{item.amount.toLocaleString()}원</Text>
-                    </View>
-                ))}
+            <View style={styles.contentContainer}>
+                <View style={styles.sectorContainer}>
+
+                    <Text style={styles.text}>선택된 출금 내역</Text>
+                    <ScrollView style={styles.selectedWithdrawalBox} contentContainerStyle={styles.tmp}>
+                        {selectedWithdrawals.map((item) => (
+                            <View key={item.elementId} style={styles.transactionItem}>
+                                <View style={styles.nameDateContainer}>
+                                    <Text style={styles.transactionName}>{item.name}</Text>
+                                    <Text style={styles.dateText}>{formatDistanceToNow(new Date(item.paidAt), { addSuffix: true, locale: ko })}</Text>
+                                </View>
+                                <Text style={styles.transactionAmount}>{item.amount.toLocaleString()}원</Text>
+                            </View>
+                        ))}
+                        <View style={{ height: 28 }} />
+                    </ScrollView>
+                </View>
+                <View style={styles.sectorContainer}>
+                    <Text style={styles.text}>이벤트 설정</Text>
+
+                    <ScrollView style={styles.eventBox} contentContainerStyle={styles.eventInner}>
+                        {events.map((event) => (
+                            <TouchableOpacity
+                                key={event.eventId}
+                                style={styles.transactionItem}
+                                onPress={() => handleEventSelect(event)}
+                            >
+                                <Text style={styles.transactionName}>{event.name}</Text>
+                                <View style={styles.radioButtonOuter}>
+                                    <View
+                                        style={[
+                                            styles.radioButtonInner,
+                                            selectedEvent?.eventId === event.eventId && styles.radioButtonSelected,
+                                        ]}
+                                    />
+                                </View>
+                            </TouchableOpacity>
+                        ))}
+                        <View style={{ height: 28 }} />
+                    </ScrollView>
+                </View>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
+                        <Text style={styles.confirmButtonText}>저장</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
 
-            <Text style={styles.eventTitle}>이벤트 설정</Text>
-            <FlatList
-                data={events}
-                renderItem={({ item }) => (
-                    <TouchableOpacity
-                        style={[
-                            styles.eventItem,
-                            selectedEvent?.eventId === item.eventId && styles.selectedEventItem,
-                        ]}
-                        onPress={() => handleEventSelect(item)}
-                    >
-                        <View style={styles.radioButtonOuter}>
-                            <View
-                                style={[
-                                    styles.radioButtonInner,
-                                    selectedEvent?.eventId === item.eventId && styles.radioButtonSelected,
-                                ]}
-                            />
-                        </View>
-                        <Text style={styles.eventText}>{item.name}</Text>
-                    </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.eventId}
-                style={styles.eventList}
-            />
 
-            <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
-                <Text style={styles.confirmButtonText}>설정 완료</Text>
-            </TouchableOpacity>
         </View>
     )
 }
@@ -124,19 +136,78 @@ function WithdrawalClassifiedScreen({ route, navigation }: WithdrawalClassifiedS
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
         backgroundColor: '#fff',
     },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 16,
-        color: 'black',
+    contentContainer: {
+        display: 'flex',
+        alignItems: 'flex-start',
+        flexDirection: 'column',
+        marginTop: 20,
+        gap: 16,
+        marginHorizontal: 24,
+        width: '90%'
     },
-    subtitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 8,
+    sectorContainer: {
+        display: 'flex',
+        padding: 12,
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: 8,
+        alignSelf: 'stretch'
+    },
+    nameDateContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        gap: 4,
+    },
+    text: {
+        fontFamily: 'Pretendard',
+        fontSize: 16,
+        fontStyle: 'normal',
+        fontWeight: '500',
+        lineHeight: 18.2,
+        letterSpacing: -0.28,
+        color: '#595E62',
+    },
+    dateText: {
+        fontFamily: 'Pretendard',
+        fontSize: 12,
+        fontStyle: 'normal',
+        fontWeight: '500',
+        lineHeight: 14.16,
+        letterSpacing: -0.24,
+        color: '#ACB2B5',
+    },
+    selectedWithdrawalBox: {
+        display: 'flex',
+        padding: 16,
+        flexDirection: 'column',
+        alignSelf: 'stretch',
+        borderWidth: 1,
+        borderRadius: 4,
+        borderColor: '#ACB2B5',
+        height: 200
+    },
+    tmp: {
+        alignItems: 'flex-start',
+    },
+    eventBox: {
+        display: 'flex',
+        padding: 8,
+        flexDirection: 'column',
+        gap: 8,
+        alignSelf: 'stretch',
+        borderWidth: 1,
+        borderRadius: 4,
+        borderColor: '#ACB2B5',
+        width: '100%',
+        height: 200
+    },
+    eventInner: {
+        alignItems: 'flex-start',
+        paddingHorizontal: 8
     },
     selectedTransactionBox: {
         borderWidth: 1,
@@ -145,9 +216,13 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     transactionItem: {
+        display: 'flex',
+        paddingVertical: 12,
+        alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        gap: 24,
+        alignSelf: 'stretch'
     },
     transactionName: {
         fontSize: 16,
@@ -157,12 +232,7 @@ const styles = StyleSheet.create({
     transactionAmount: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: 'black',
-    },
-    eventTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 8,
+        color: '#EE5648',
     },
     eventList: {
         marginBottom: 16,
@@ -176,21 +246,12 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginBottom: 8,
     },
-    selectedEventItem: {
-        borderColor: '#5B4BCF',
-        backgroundColor: '#D4BFFF',
-    },
-    eventText: {
-        fontSize: 16,
-        color: 'black',
-        marginLeft: 12,
-    },
     radioButtonOuter: {
-        width: 15,
-        height: 15,
+        width: 24,
+        height: 24,
         borderRadius: 12,
         borderWidth: 2,
-        borderColor: '#5B4BCF',
+        borderColor: '#5F47F1',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -201,13 +262,27 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     radioButtonSelected: {
-        backgroundColor: '#5B4BCF',
+        backgroundColor: '#5F47F1',
+    },
+    buttonContainer: {
+        display: 'flex',
+        padding: 16,
+        marginTop: 108,
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: 8,
+        alignSelf: 'stretch'
     },
     confirmButton: {
-        backgroundColor: '#5B4BCF',
-        padding: 16,
-        borderRadius: 8,
+        display: 'flex',
+        height: 52,
+        justifyContent: 'center',
+        backgroundColor: '#5F47F1',
+        gap: 10,
+        alignSelf: 'stretch',
+        borderRadius: 12,
         alignItems: 'center',
+
     },
     confirmButtonText: {
         color: '#fff',

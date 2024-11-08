@@ -27,7 +27,12 @@ const renderTransactionItem = ({ item, handleCheckboxToggle, selectedItems, isDe
             <Text style={styles.transactionName}>{item.name}</Text>
         </View>
         <View style={styles.amountAndCheckbox}>
-            <Text style={styles.transactionAmount}>{item.amount}</Text>
+            <Text style=
+                {[styles.transactionAmount,
+                item.status === 'FEE' && styles.amountBlue,
+                item.status === 'BILL' && styles.amountRed,]}>
+                {item.status === 'FEE' ? "+" + item.amount.toLocaleString() : item.amount.toLocaleString()}원
+            </Text>
             <TouchableOpacity
                 style={[
                     styles.checkbox,
@@ -250,8 +255,12 @@ const styles = StyleSheet.create({
     transactionAmount: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: 'black',
-        marginRight: 10,
+    },
+    amountBlue: {
+        color: '#0064FF',
+    },
+    amountRed: {
+        color: '#EE5648',
     },
     checkbox: {
         width: 20,
@@ -264,6 +273,8 @@ const styles = StyleSheet.create({
     amountAndCheckbox: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginLeft: -40,
+        gap: 8
     },
     editButton: {
         backgroundColor: '#5F47F1',

@@ -60,11 +60,11 @@ function WebViewScreen({ route, navigation }: WebViewScreenProps) {
       navigation.navigate(mainNavigations.EVENT_CREATE, { clubId: data.clubId });
     } else if (data.type === mainNavigations.TRANSACTIONHISTORY_CREATE) {
       navigation.navigate(mainNavigations.TRANSACTIONHISTORY_CREATE, { clubId: data.clubId, eventId: data.eventId });
-    } else if (data.type === mainNavigations.TRANSACTIONHISTORY_CREATE) {
+    } else if (data.type === mainNavigations.TRANSACTIONHISTORY_DEPOSIT_CREATE) {
       navigation.navigate(mainNavigations.TRANSACTIONHISTORY_DEPOSIT_CREATE, { clubId: data.clubId, eventId: data.eventId });
     } else if (data.type === mainNavigations.TRANSACTIONHISTORY_WITHDRAW_CREATE) {
       navigation.navigate(mainNavigations.TRANSACTIONHISTORY_WITHDRAW_CREATE, { clubId: data.clubId, eventId: data.eventId });
-    } else if (data.type === mainNavigations.UNCLASSIFIED) {
+    } else if (data.type === "unClassifiedTransaction") {
       navigation.navigate(mainNavigations.UNCLASSIFIED, { clubId: data.clubId });
     }
   };

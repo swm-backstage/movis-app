@@ -74,13 +74,13 @@ function MainStackNavigator() {
 
       <Stack.Screen name={mainNavigations.EVENT_CREATE} component={EventCreateScreen} options={{ headerTitle: '' }} />
 
-      <Stack.Screen name={mainNavigations.TRANSACTIONHISTORY_DEPOSIT_CREATE} component={TransactionHistoryDepositCreateScreen} options={{ headerTitle: ''}}/>
-      <Stack.Screen name={mainNavigations.TRANSACTIONHISTORY_WITHDRAW_CREATE} component={TransactionHistoryWithdrawCreateScreen} options={{ headerTitle: ''}}/>
+      <Stack.Screen name={mainNavigations.TRANSACTIONHISTORY_DEPOSIT_CREATE} component={TransactionHistoryDepositCreateScreen} options={{ headerTitle: '' }} />
+      <Stack.Screen name={mainNavigations.TRANSACTIONHISTORY_WITHDRAW_CREATE} component={TransactionHistoryWithdrawCreateScreen} options={{ headerTitle: '' }} />
 
       <Stack.Screen name={mainNavigations.WEBVIEW} component={WebViewScreen} options={{ headerShown: false, }} />
       <Stack.Screen name={mainNavigations.NOTIFICATION} component={NotificiationTest} options={{ headerTitle: '' }} />
       <Stack.Screen name={mainNavigations.UNCLASSIFIED} component={UnclassifiedListScreen} options={{ headerTitle: '', }} />
-      <Stack.Screen name={mainNavigations.WITHDRAWAL} component={WithdrawalClassifiedScreen} options={{ headerTitle: '', }} />
+      <Stack.Screen name={mainNavigations.WITHDRAWAL} component={WithdrawalClassifiedScreen} options={{ headerTitle: '미분류 설정(출금)', headerTitleStyle: { fontSize: 20, marginLeft: -12 }, }} />
       <Stack.Screen name={mainNavigations.DEPOSIT} component={DepositClassifiedScreen} options={{ headerTitle: '미분류 설정(입금)', headerTitleStyle: { fontSize: 20, marginLeft: -12 }, }} />
       <Stack.Screen name={mainNavigations.CHANGE_PASSWORD} component={ChangePasswordScreen} options={{ headerShown: false }} />
 
