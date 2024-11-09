@@ -30,7 +30,7 @@ function DepositClassifiedScreen({ route, navigation }: DepositClassifiedScreenP
     const { data } = useQueryGetEventList(clubId, "first", 1000);
     const events = data?.eventList || [];
 
-    const eventMembersData = useQueryGetEventMemberList(selectedEventId)
+    const { data: eventMembersData } = useQueryGetEventMemberList(selectedEventId)
     const classifiedFee = useClassifiedFee({
         onSuccess: () => {
             Alert.alert(
