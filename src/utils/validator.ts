@@ -3,6 +3,11 @@ export const EmailValidator = (text: string) => {
     return { valid: emailPattern.test(text), errorMessage: '옳바르지 않은 이메일 형식' };
 };
 
+export const PasswordValidator = (text: string) => {
+    const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*+=])(?=\S+$).{8,20}$/;
+    return { valid: passwordPattern.test(text), errorMessage: '비밀번호는 8-20자이며, 특수 문자, 대문자, 소문자, 숫자를 포함해야 합니다.' };
+}
+
 export const NameValidator = (text: string) => {
     if (text.trim().length > 10 || text.trim().length < 2) {
         return { valid: false, errorMessage: '2자리 이상 10자리 이하' };

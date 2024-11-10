@@ -41,6 +41,11 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
     navigation.navigate(mainNavigations.CHANGE_PASSWORD)
   }
 
+  const handleDeleteUser = () => {
+    closeCustomBottomSheet();
+    navigation.navigate(mainNavigations.USER_DELETE_SCREEN);
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -91,6 +96,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
           user={user}
           logout={() => logoutMutation.mutate(undefined)}
           handleChangePassword={handleChangePassword}
+          handleDeleteUser={handleDeleteUser}
         />
       </CustomBottomSheet>
     </View>
