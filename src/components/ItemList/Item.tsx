@@ -3,12 +3,16 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import colors from '../../assets/colors/defaultColors';
 
+interface Label {
+    text: string;
+    color?: string;
+}
 
 interface ItemProps {
     imageNode?: React.ReactNode;
     mainText: string;
     subText: string;
-    labelText?: string;
+    labels?: Label[];
     buttonHandler?: () => void;
 }
 
@@ -16,7 +20,7 @@ const Item: React.FC<ItemProps> = ({
     imageNode, 
     mainText, 
     subText, 
-    labelText, 
+    labels,
     buttonHandler,
 }) => {
     return (
@@ -32,12 +36,17 @@ const Item: React.FC<ItemProps> = ({
                         </Text>
                     </View>
                     {
-                    labelText && 
-                    <View style={styles.labelContainer}>
-                        <Text style={styles.labelText}>
-                            {labelText}
-                        </Text>
-                    </View> 
+                    labels && labels.length > 0 &&
+                    <View style={styles.labelsContainer}>
+                        {labels.map((label, index) => (
+                            
+                            <View key={index} style={[styles.labelContainer, label.color ? styles.labelColorContainer : null]}>
+                                <Text style={[styles.labelText, label.color ? styles.labelColorText : null]}>
+                                    {label.text}
+                                </Text>
+                            </View>
+                        ))}
+                    </View>
                     }
                 </View>
                 <View style={styles.lowerContentContainer}>
@@ -92,19 +101,29 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: colors.Black,
     },
+    labelsContainer: {
+        flexDirection: 'row',
+        marginLeft: 14,
+    },
     labelContainer: {
         backgroundColor: colors.Gray100,
         justifyContent: 'flex-start',
         borderRadius: 8,
-        marginLeft: 14,
         paddingTop: 1,
         paddingBottom: 4,
         paddingHorizontal: 8,
+        marginLeft: 4,
+    },
+    labelColorContainer: {
+        backgroundColor: '#F6E3CE',
     },
     labelText: {
         fontSize: 12,
         color: colors.Gray500,
     },
+    labelColorText: {
+        color: '#F06B23',
+    },  
     lowerContentContainer: {
 
     },

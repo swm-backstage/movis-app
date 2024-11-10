@@ -67,10 +67,8 @@ export default CustomInput;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 16,
   },
   labelContainer: {
-    marginBottom: 12,
   },
   labelText: {
     fontSize: 14,

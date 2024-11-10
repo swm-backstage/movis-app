@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   formBtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 24,
+    marginBottom: 16,
   },
 });
 

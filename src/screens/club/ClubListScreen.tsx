@@ -29,7 +29,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
     navigation.navigate(mainNavigations.CLUB_MAIN_INFO_CREATE);
   };
   const handlePressClubDetailScreen = (club: ClubGetRes) => {
-    navigation.navigate(mainNavigations.CLUB_DETAIL, { club });
+    navigation.navigate(mainNavigations.CLUB_DETAIL, { club: club, identifier: user?.identifier });
   };
 
   const handlePressWebView = (clubId: string) => {
