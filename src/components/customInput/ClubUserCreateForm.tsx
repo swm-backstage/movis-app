@@ -8,6 +8,8 @@ import { ClubUserCreateReq } from '../../types/clubUser/request/ClubUserReq';
 import { ResponseError } from '../../types/common';
 import ExpandedButton from '../Button/ExpandedButton';
 import CustomInput from './CustomInput';
+import { PhoneNumberValidator } from '../../utils/validator';
+import { FormatPhoneNumber } from '../../utils/formator';
 
 type ClubUserCreateFormProps = {
     clubId: string,
@@ -18,20 +20,26 @@ const ClubUserCreateForm: React.FC<ClubUserCreateFormProps> = ({
     clubId,
     createClubUser,
 }) => {
-    const identifierInput = useCustomInput({
+    const phoneNoInput = useCustomInput({
         required: true,
-        requiredMessage: '필수 항목입니다.',
-    });
+        requiredMessage: '휴대폰 번호는 필수 항목',
+        validator: PhoneNumberValidator,
+        formator: FormatPhoneNumber,
+      });
 
     const handleCreateClubUser = async () => {
+        const phoneNoIsValid = phoneNoInput.validate();
+        if(!phoneNoIsValid){
+            return;
+        }
         const data = {
             clubId: clubId,
-            identifier: identifierInput.value,
+            phoneNo: phoneNoInput.value,
         }
         createClubUser.mutate(
             data,
             {
-                onError: (error) => { console.error(error) }
+                onError: (error) => { console.error(error, error?.response?.data) }
             }
         );
     };
@@ -46,13 +54,14 @@ const ClubUserCreateForm: React.FC<ClubUserCreateFormProps> = ({
             </View>
             <View style={styles.bodyContainer}>
                 <CustomInput
-                    value={identifierInput.value}
-                    isValid={identifierInput.isValid}
-                    errorMessage={identifierInput.errorMessage}
-                    onChangeText={identifierInput.onChangeText}
-                    onBlur={identifierInput.onBlur}
-                    clearInput={identifierInput.clearInput}
-                    placeholder="이름"
+                    value={phoneNoInput.value}
+                    isValid={phoneNoInput.isValid}
+                    errorMessage={phoneNoInput.errorMessage}
+                    onChangeText={phoneNoInput.onChangeText}
+                    onBlur={phoneNoInput.onBlur}
+                    clearInput={phoneNoInput.clearInput}
+                    placeholder="운영진 전화번호"
+                    keyboardType='phone-pad'
                     autoCapitalize="none"
                 />
             </View>
