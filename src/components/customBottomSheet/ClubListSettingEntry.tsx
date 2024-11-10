@@ -9,9 +9,10 @@ type ClubListSettingEntryProps = {
     user: UserGetRes | undefined,
     logout: () => void;
     handleChangePassword: () => void;
+    handleDeleteUser: () => void
 };
 
-const ClubListSettingEntry: React.FC<ClubListSettingEntryProps> = ({ user, logout, handleChangePassword }) => {
+const ClubListSettingEntry: React.FC<ClubListSettingEntryProps> = ({ user, logout, handleChangePassword, handleDeleteUser }) => {
     const [hasPermission, setHasPermission] = useState(false)
     const [text, setText] = useState<string>('알림: 허용되지 않음');
 
@@ -107,9 +108,8 @@ const ClubListSettingEntry: React.FC<ClubListSettingEntryProps> = ({ user, logou
                     onPress={showLogoutAlert}
                 />
                 <SettingListItem
-                    text="회원 탈퇴(추가 예정)"
-                    onPress={() => Alert.alert("추가 예정입니다.")}
-                    disabled={true}
+                    text="회원 탈퇴"
+                    onPress={handleDeleteUser}
                 />
             </SettingList>
         </View>

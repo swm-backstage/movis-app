@@ -30,4 +30,10 @@ const changePassword = async (oldPassword: string, newPassword: string): Promise
   return data;
 };
 
-export { getUser, checkIdentifier, getIdentifierWithPhone, changePassword };
+const deleteUser = async (password: string): Promise<void> => {
+  const { data } = await axiosHost.patch('/api/v1/users/me', { password: password });
+
+  return data;
+}
+
+export { getUser, checkIdentifier, getIdentifierWithPhone, changePassword, deleteUser };

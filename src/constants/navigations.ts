@@ -1,4 +1,6 @@
 const mainNavigations = {
+  USER_DELETE_SCREEN: 'userDelete',
+
   CLUB_LIST: 'clubList',
   CLUB_DETAIL: 'clubDetail',
   CLUB_CREATE: 'clubCreate',

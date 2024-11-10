@@ -19,9 +19,12 @@ import TransactionHistoryDepositCreateScreen from '../screens/transactionHistory
 import TransactionHistoryWithdrawCreateScreen from '../screens/transactionHistory/TransactionHistoryWithdrawCreateScreen';
 import ClubUserUpdateScreen from '../screens/clubUser/ClubUserUpdateScreen';
 import ChangePasswordScreen from '../screens/auth/find/ChangePasswordScreen';
+import UserDeleteScreen from '../screens/auth/UserDeleteScreen';
 
 
 export type MainStackParamList = {
+  [mainNavigations.USER_DELETE_SCREEN]: undefined;
+
   [mainNavigations.CLUB_LIST]: undefined;
   [mainNavigations.CLUB_DETAIL]: { club: ClubGetRes };
   [mainNavigations.CLUB_CREATE]: undefined;
@@ -65,6 +68,7 @@ function MainStackNavigator() {
         headerTintColor: 'black',
       }}>
 
+
       <Stack.Screen name={mainNavigations.CLUB_LIST} component={ClubListScreen} options={{ headerShown: false }} />
       <Stack.Screen name={mainNavigations.CLUB_DETAIL} component={ClubDetailScreen} options={{ headerShown: false }} />
       <Stack.Screen name={mainNavigations.CLUB_MAIN_INFO_CREATE} component={ClubMainInfoCreateScreen} options={{ headerTitle: '' }} />
@@ -72,6 +76,8 @@ function MainStackNavigator() {
       <Stack.Screen name={mainNavigations.CLUB_CREATE_COMPLETE} component={ClubCreateCompleteScreen} options={{ headerShown: false }} />
       <Stack.Screen name={mainNavigations.CLUB_USER_UPDATE} component={ClubUserUpdateScreen} options={{ headerTitle: '' }} />
 
+      <Stack.Screen name={mainNavigations.USER_DELETE_SCREEN} component={UserDeleteScreen} options={{ headerTitle: '' }} />
+      
       <Stack.Screen name={mainNavigations.EVENT_CREATE} component={EventCreateScreen} options={{ headerTitle: '' }} />
 
       <Stack.Screen name={mainNavigations.TRANSACTIONHISTORY_DEPOSIT_CREATE} component={TransactionHistoryDepositCreateScreen} options={{ headerTitle: '' }} />
