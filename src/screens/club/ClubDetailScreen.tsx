@@ -5,8 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../../assets/colors/defaultColors';
 import ClubBankItemList from '../../components/ItemList/ClubBankItemList';
-import ClubMemberItemList from '../../components/ItemList/ClubMemberItemList';
-import ClubUserItemList from '../../components/ItemList/ClubUserItemList';
+import ClubUserAndMemberItemList from '../../components/ItemList/ClubUserAndMemberItemList';
 import ClubDetailSettingEntry from '../../components/customBottomSheet/ClubDetailSettingEntry';
 import { mainNavigations } from '../../constants/navigations';
 import { useMutateDeleteClub } from '../../hooks/useClub';
@@ -19,7 +18,7 @@ type ClubDetailScreenProps = StackScreenProps<
 >;
 
 const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
-  const { club } = route.params;
+  const { club, identifier } = route.params;
   const deleteClub = useMutateDeleteClub();
   const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
     snapPoints: useMemo(() => ['80%'], []),
@@ -48,8 +47,7 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
         </View>
       </View>
       <View style={styles.bodyContainer}>
-        <ClubUserItemList clubId={club.clubId} />
-        <ClubMemberItemList clubId={club.clubId} />
+        <ClubUserAndMemberItemList clubId={club.clubId} identifier={identifier}/>
         <ClubBankItemList club={club} />
       </View>
       <View style={styles.footerContainer}>
