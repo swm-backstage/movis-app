@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontSize: 14,
+        color: colors.Black,
         fontWeight: '600',
         textAlignVertical: 'center',
     },

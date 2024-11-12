@@ -8,6 +8,7 @@ import AntdWithStyleButton from '../../components/AntdWithStyleButton';
 import { mainNavigations } from '../../constants/navigations';
 import { useGetClubUserList, useMutateDelegateClubUser } from '../../hooks/useClubUser';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
+import colors from '../../assets/colors/defaultColors';
 
 type ClubUserUpdateScreenProps = StackScreenProps<
   MainStackParamList,
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'white',
     paddingHorizontal: 0,
     position: 'relative',
-    color: 'black',
+    color: colors.Black,
   },
   checkboxGroup: {
     borderRadius: 5,

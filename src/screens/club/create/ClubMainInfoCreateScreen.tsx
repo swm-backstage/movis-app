@@ -10,6 +10,7 @@ import useCustomInput from '../../../hooks/useCustomInput';
 import { MainStackParamList } from '../../../navigations/MainStackNavigator';
 import { ClubDescriptionValidator, ClubNameValidator } from '../../../utils/validator';
 import { ClubCreateReq } from '../../../types/club/request/ClubCreateReq';
+import colors from '../../../assets/colors/defaultColors';
 
 type ClubMainInfoCreateScreenProps = StackScreenProps<
     MainStackParamList,
@@ -90,7 +91,8 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontSize: 20,
-        fontWeight: '700'
+        fontWeight: '700',
+        color: colors.Black,
     },
     bodyContainer: {
         flex: 1,

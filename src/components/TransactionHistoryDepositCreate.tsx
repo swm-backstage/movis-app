@@ -10,6 +10,7 @@ import { createFee } from '../api/fee';
 import { useMutateCreateFee } from '../hooks/useFee';
 import { FeeCreateReq } from '../types/fee/request/feeCreateReq';
 import { EventMemberGetListRes } from '../types/eventMember/response/EventMemberGetListRes';
+import colors from '../assets/colors/defaultColors';
 
 interface TransactionHistoryDepositCreateProps {
   clubId: string;
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: '#d9d9d9',
     borderWidth: 1,
-    color: 'black',
+    color: colors.Black,
   },
   submitButton: {
     marginTop: 20,

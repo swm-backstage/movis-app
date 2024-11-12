@@ -7,6 +7,7 @@ import { useMutateCreateEventBill, useMutateUpdateEventBill } from '../hooks/use
 import { EventBillCreateReq } from '../types/eventBill/EventBillCreateReq';
 import AntdWithStyleButton from "./AntdWithStyleButton";
 import DateTimePickerWithAntdDInput from './DateTimePickerWithAntDInput';
+import colors from "../assets/colors/defaultColors";
 
 interface TransactionHistoryWithdrawCreateProps {
   clubId: string,
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'white',
     paddingHorizontal: 0,
     position: 'relative',
-    color: 'black',
+    color: colors.Black,
   },
   input: {
     paddingHorizontal: 10,
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: '#d9d9d9',
     borderWidth: 1,
-    color: 'black',
+    color: colors.Black,
   },
   uploadedImageContainer: {
     alignSelf: 'center',
