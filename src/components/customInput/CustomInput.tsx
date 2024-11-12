@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
   },
   labelText: {
     fontSize: 14,
-    fontWeight: '700'
+    fontWeight: '700',
+    color: colors.Black,
   },
   inputWrapper: {
     flexDirection: 'row',
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: '500',
     paddingVertical: 8,
+    color: colors.Black,
   },
   clearButton: {
     paddingHorizontal: 5,

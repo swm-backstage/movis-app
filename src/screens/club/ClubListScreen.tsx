@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../../assets/colors/defaultColors';
-import ClubList from '../../components/ClubList';
 import ClubListSettingEntry from '../../components/customBottomSheet/ClubListSettingEntry';
 import { mainNavigations } from '../../constants/navigations';
 import useAuth from '../../hooks/useAuth';
@@ -12,6 +11,7 @@ import { useGetUser } from '../../hooks/useUser';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
 import ExpandedButton from '../../components/Button/ExpandedButton';
+import ClubList from '../../components/ItemList/ClubList';
 
 type ClubHomeScreenProps = StackScreenProps<
   MainStackParamList,

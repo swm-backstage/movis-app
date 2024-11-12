@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         borderRadius: 12
     },
     ButtonText: {
-        color: 'white',
+        color: colors.White,
         fontSize: 16,
         fontWeight: '500',
     },

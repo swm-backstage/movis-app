@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 16,
     fontWeight: '800',
+    color: colors.Black,
   },
   bodyContainer: {
 

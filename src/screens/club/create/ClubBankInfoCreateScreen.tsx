@@ -17,6 +17,7 @@ import { ClubCreateReq } from '../../../types/club/request/ClubCreateReq';
 import { ClubAccountFormat } from '../../../utils/formator';
 import { ClubAccountValidator } from '../../../utils/validator';
 import CustomLoader from '../../../components/Loader';
+import colors from '../../../assets/colors/defaultColors';
 
 type ClubBankInfoCreateScreenProps = StackScreenProps<
     MainStackParamList,
@@ -110,7 +111,8 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontSize: 20,
-        fontWeight: '700'
+        fontWeight: '700',
+        color: colors.Black,
     },
     bodyContainer: {
         flex: 1,
