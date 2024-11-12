@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { StyleSheet, RefreshControl, ScrollView, View, Text } from 'react-native';
 import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import queryClient from '../api/queryClient';
-import colors from '../assets/colors/defaultColors';
-import { queryKeys } from '../constants/key';
-import { useGetClubList } from '../hooks/useClub';
-import { ClubGetRes } from '../types/club/response/ClubGetRes';
-import CustomLoader from './Loader';
 import ClubProfileList from './ClubProfileList';
+import { ClubGetRes } from '../../types/club/response/ClubGetRes';
+import { useGetClubList } from '../../hooks/useClub';
+import queryClient from '../../api/queryClient';
+import { queryKeys } from '../../constants/key';
+import CustomLoader from '../Loader';
+import colors from '../../assets/colors/defaultColors';
 
 type SettingEntryProps = {
   handlePressClubCreateScreen: () => void;

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import profileColors from '../assets/colors/profileColors';
-import colors from '../assets/colors/defaultColors';
-import { ClubGetRes } from '../types/club/response/ClubGetRes';
+import { ClubGetRes } from '../../types/club/response/ClubGetRes';
+import profileColors from '../../assets/colors/profileColors';
+import colors from '../../assets/colors/defaultColors';
 
 type ClubProfileListProps = {
   club: ClubGetRes;

@@ -17,7 +17,6 @@ import ClubCreateCompleteScreen from '../screens/club/create/ClubCreateCompleteS
 import DepositClassifiedScreen from '../screens/unclassified/DepositClassifiedScreen';
 import TransactionHistoryDepositCreateScreen from '../screens/transactionHistory/TransactionHistoryDepostiCreateScreen';
 import TransactionHistoryWithdrawCreateScreen from '../screens/transactionHistory/TransactionHistoryWithdrawCreateScreen';
-import ClubUserUpdateScreen from '../screens/clubUser/ClubUserUpdateScreen';
 import ChangePasswordScreen from '../screens/auth/find/ChangePasswordScreen';
 import UserDeleteScreen from '../screens/auth/UserDeleteScreen';
 
@@ -74,7 +73,6 @@ function MainStackNavigator() {
       <Stack.Screen name={mainNavigations.CLUB_MAIN_INFO_CREATE} component={ClubMainInfoCreateScreen} options={{ headerTitle: '' }} />
       <Stack.Screen name={mainNavigations.CLUB_BANK_INFO_CREATE} component={ClubBankInfoCreateScreen} options={{ headerTitle: '' }} />
       <Stack.Screen name={mainNavigations.CLUB_CREATE_COMPLETE} component={ClubCreateCompleteScreen} options={{ headerShown: false }} />
-      <Stack.Screen name={mainNavigations.CLUB_USER_UPDATE} component={ClubUserUpdateScreen} options={{ headerTitle: '' }} />
 
       <Stack.Screen name={mainNavigations.USER_DELETE_SCREEN} component={UserDeleteScreen} options={{ headerTitle: '' }} />
       
