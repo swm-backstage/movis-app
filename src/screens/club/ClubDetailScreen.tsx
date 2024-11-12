@@ -20,7 +20,7 @@ type ClubDetailScreenProps = StackScreenProps<
 const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
   const { club, identifier } = route.params;
   const deleteClub = useMutateDeleteClub();
-  const { openCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
+  const { openCustomBottomSheet, closeCustomBottomSheet, CustomBottomSheet } = useCustomBottomSheet({
     snapPoints: useMemo(() => ['80%'], []),
   });
 
@@ -55,6 +55,10 @@ const ClubDetailScreen = ({ route, navigation }: ClubDetailScreenProps) => {
           <ClubDetailSettingEntry
             clubId={club.clubId}
             navigationGoBack={navigation.goBack}
+            navigationGoClubUserDelegate={() => { 
+              navigation.navigate(mainNavigations.CLUB_USER_DELEGATE, { clubId: club.clubId, identifier: identifier });
+              closeCustomBottomSheet();
+            }}
             deleteClub={deleteClub}
           />
         </CustomBottomSheet>

@@ -7,10 +7,11 @@ import { UseMutationResult } from '@tanstack/react-query';
 type ClubDetailSettingEntryProps = {
     clubId: String,
     navigationGoBack: () => void,
+    navigationGoClubUserDelegate: () => void;
     deleteClub: UseMutationResult<void, unknown, Record<string, any>, unknown>;
 };
 
-const ClubDetailSettingEntry: React.FC<ClubDetailSettingEntryProps> = ({ clubId, navigationGoBack, deleteClub }) => {
+const ClubDetailSettingEntry: React.FC<ClubDetailSettingEntryProps> = ({ clubId, navigationGoBack, navigationGoClubUserDelegate, deleteClub }) => {
 
     const showClubDeleteAlert = () => {
         Alert.alert(
@@ -45,6 +46,12 @@ const ClubDetailSettingEntry: React.FC<ClubDetailSettingEntryProps> = ({ clubId,
                 <SettingListItem
                     text="모임 삭제"
                     onPress={showClubDeleteAlert}
+                />
+            </SettingList>
+            <SettingList title="권한 설정">
+                <SettingListItem
+                    text="총무 권한 위임"
+                    onPress={navigationGoClubUserDelegate}
                 />
             </SettingList>
         </View>

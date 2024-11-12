@@ -74,7 +74,7 @@ const TransactionHistoryDepositCreateScreen = ({ route, navigation }: Transactio
     const queryParams = {
       eventId: eventId,
     };
-    console.log(values, queryParams);
+
     createFee.mutate(
       { body: values, queryParams },
       {
