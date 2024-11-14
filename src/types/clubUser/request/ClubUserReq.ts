@@ -1,6 +1,6 @@
 type ClubUserCreateReq = {
 	clubId: String,
-	identifier: String,
+	phoneNo: String,
 }
 type ClubUserDelegateReq = {
 	queryParams: Record<string, any>,

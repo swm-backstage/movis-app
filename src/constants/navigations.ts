@@ -1,4 +1,6 @@
 const mainNavigations = {
+  USER_DELETE_SCREEN: 'userDelete',
+
   CLUB_LIST: 'clubList',
   CLUB_DETAIL: 'clubDetail',
   CLUB_CREATE: 'clubCreate',
@@ -6,7 +8,7 @@ const mainNavigations = {
   CLUB_BANK_INFO_CREATE: 'clubBankInfoCreate',
   CLUB_CREATE_COMPLETE: 'clubCreateComplete',
 
-  CLUB_USER_UPDATE: 'clubUserUpdate',
+  CLUB_USER_DELEGATE: 'clubUserDelegate',
 
   EVENT_CREATE: 'eventCreate',
 

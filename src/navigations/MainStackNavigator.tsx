@@ -17,19 +17,22 @@ import ClubCreateCompleteScreen from '../screens/club/create/ClubCreateCompleteS
 import DepositClassifiedScreen from '../screens/unclassified/DepositClassifiedScreen';
 import TransactionHistoryDepositCreateScreen from '../screens/transactionHistory/TransactionHistoryDepostiCreateScreen';
 import TransactionHistoryWithdrawCreateScreen from '../screens/transactionHistory/TransactionHistoryWithdrawCreateScreen';
-import ClubUserUpdateScreen from '../screens/clubUser/ClubUserUpdateScreen';
 import ChangePasswordScreen from '../screens/auth/find/ChangePasswordScreen';
+import UserDeleteScreen from '../screens/auth/UserDeleteScreen';
+import ClubUserDelegateScreen from '../screens/club/ClubUserDelegateScreen';
 
 
 export type MainStackParamList = {
+  [mainNavigations.USER_DELETE_SCREEN]: undefined;
+
   [mainNavigations.CLUB_LIST]: undefined;
-  [mainNavigations.CLUB_DETAIL]: { club: ClubGetRes };
+  [mainNavigations.CLUB_DETAIL]: { club: ClubGetRes, identifier: string };
   [mainNavigations.CLUB_CREATE]: undefined;
   [mainNavigations.CLUB_MAIN_INFO_CREATE]: undefined;
   [mainNavigations.CLUB_BANK_INFO_CREATE]: { values: ClubCreateReq };
   [mainNavigations.CLUB_CREATE_COMPLETE]: { club: ClubGetRes };
 
-  [mainNavigations.CLUB_USER_UPDATE]: { clubId: string };
+  [mainNavigations.CLUB_USER_DELEGATE]: { clubId: string, identifier: string };
 
   [mainNavigations.EVENT_CREATE]: { clubId: string };
 
@@ -65,13 +68,16 @@ function MainStackNavigator() {
         headerTintColor: 'black',
       }}>
 
+
       <Stack.Screen name={mainNavigations.CLUB_LIST} component={ClubListScreen} options={{ headerShown: false }} />
       <Stack.Screen name={mainNavigations.CLUB_DETAIL} component={ClubDetailScreen} options={{ headerShown: false }} />
       <Stack.Screen name={mainNavigations.CLUB_MAIN_INFO_CREATE} component={ClubMainInfoCreateScreen} options={{ headerTitle: '' }} />
       <Stack.Screen name={mainNavigations.CLUB_BANK_INFO_CREATE} component={ClubBankInfoCreateScreen} options={{ headerTitle: '' }} />
       <Stack.Screen name={mainNavigations.CLUB_CREATE_COMPLETE} component={ClubCreateCompleteScreen} options={{ headerShown: false }} />
-      <Stack.Screen name={mainNavigations.CLUB_USER_UPDATE} component={ClubUserUpdateScreen} options={{ headerTitle: '' }} />
+      <Stack.Screen name={mainNavigations.CLUB_USER_DELEGATE} component={ClubUserDelegateScreen} options={{ headerShown: false }} />
 
+      <Stack.Screen name={mainNavigations.USER_DELETE_SCREEN} component={UserDeleteScreen} options={{ headerTitle: '' }} />
+      
       <Stack.Screen name={mainNavigations.EVENT_CREATE} component={EventCreateScreen} options={{ headerTitle: '' }} />
 
       <Stack.Screen name={mainNavigations.TRANSACTIONHISTORY_DEPOSIT_CREATE} component={TransactionHistoryDepositCreateScreen} options={{ headerTitle: '' }} />

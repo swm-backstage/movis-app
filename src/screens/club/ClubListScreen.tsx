@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../../assets/colors/defaultColors';
-import ClubList from '../../components/ClubList';
 import ClubListSettingEntry from '../../components/customBottomSheet/ClubListSettingEntry';
 import { mainNavigations } from '../../constants/navigations';
 import useAuth from '../../hooks/useAuth';
@@ -12,6 +11,7 @@ import { useGetUser } from '../../hooks/useUser';
 import { MainStackParamList } from '../../navigations/MainStackNavigator';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
 import ExpandedButton from '../../components/Button/ExpandedButton';
+import ClubList from '../../components/ItemList/ClubList';
 
 type ClubHomeScreenProps = StackScreenProps<
   MainStackParamList,
@@ -29,7 +29,7 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
     navigation.navigate(mainNavigations.CLUB_MAIN_INFO_CREATE);
   };
   const handlePressClubDetailScreen = (club: ClubGetRes) => {
-    navigation.navigate(mainNavigations.CLUB_DETAIL, { club });
+    navigation.navigate(mainNavigations.CLUB_DETAIL, { club: club, identifier: user?.identifier });
   };
 
   const handlePressWebView = (clubId: string) => {
@@ -39,6 +39,11 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
   const handleChangePassword = () => {
     closeCustomBottomSheet()
     navigation.navigate(mainNavigations.CHANGE_PASSWORD)
+  }
+
+  const handleDeleteUser = () => {
+    closeCustomBottomSheet();
+    navigation.navigate(mainNavigations.USER_DELETE_SCREEN);
   }
 
   return (
@@ -77,20 +82,13 @@ function ClubListScreen({ navigation }: ClubHomeScreenProps) {
           handlePressClubDetailScreen={handlePressClubDetailScreen}
           handlePressWebView={handlePressWebView}>
         </ClubList>
-        <ExpandedButton
-          onPress={() => navigation.navigate(mainNavigations.TRANSACTIONHISTORY_DEPOSIT_CREATE, { clubId: '01JC2STQWSKTV58E92XZTA3ZQC', eventId: '01JC56Q5F69VAF78WQMZ1K82KM' })}
-          buttonText='입금 내역 생성(테스트)'
-        />
-        <ExpandedButton
-          onPress={() => navigation.navigate(mainNavigations.TRANSACTIONHISTORY_WITHDRAW_CREATE, { clubId: '01JC2STQWSKTV58E92XZTA3ZQC', eventId: '01JC56Q5F69VAF78WQMZ1K82KM' })}
-          buttonText='출금 내역 생성(테스트)'
-        />
       </View>
       <CustomBottomSheet>
         <ClubListSettingEntry
           user={user}
           logout={() => logoutMutation.mutate(undefined)}
           handleChangePassword={handleChangePassword}
+          handleDeleteUser={handleDeleteUser}
         />
       </CustomBottomSheet>
     </View>
