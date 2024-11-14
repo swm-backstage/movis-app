@@ -30,4 +30,13 @@ const changePassword = async (oldPassword: string, newPassword: string): Promise
   return data;
 };
 
-export { getUser, checkIdentifier, getIdentifierWithPhone, changePassword };
+const resetPassword = async (phoneNo: string): Promise<void> => {
+  const { data } = await axiosHost.post('/api/v1/users/password/reset', {
+    phoneNo: phoneNo
+  });
+
+  return data;
+};
+
+
+export { getUser, checkIdentifier, getIdentifierWithPhone, changePassword, resetPassword };

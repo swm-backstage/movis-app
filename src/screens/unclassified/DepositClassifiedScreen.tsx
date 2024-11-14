@@ -195,7 +195,6 @@ const styles = StyleSheet.create({
         padding: 12,
         flexDirection: 'column',
         alignItems: 'flex-start',
-        gap: 8,
         alignSelf: 'stretch'
     },
     buttonContainer: {
@@ -204,7 +203,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'flex-start',
         gap: 8,
-        alignSelf: 'stretch'
+        alignSelf: 'stretch',
+        marginBottom: 20
     },
     selectedDepositBox: {
         display: 'flex',
@@ -249,6 +249,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
+        width: "40%",
         gap: 4,
     },
     eventNameContainer: {

@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
         padding: 12,
         flexDirection: 'column',
         alignItems: 'flex-start',
-        gap: 8,
         alignSelf: 'stretch'
     },
     nameDateContainer: {
@@ -160,6 +159,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
+        width: "40%",
         gap: 4,
     },
     text: {

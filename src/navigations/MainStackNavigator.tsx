@@ -79,7 +79,7 @@ function MainStackNavigator() {
 
       <Stack.Screen name={mainNavigations.WEBVIEW} component={WebViewScreen} options={{ headerShown: false, }} />
       <Stack.Screen name={mainNavigations.NOTIFICATION} component={NotificiationTest} options={{ headerTitle: '' }} />
-      <Stack.Screen name={mainNavigations.UNCLASSIFIED} component={UnclassifiedListScreen} options={{ headerTitle: '', }} />
+      <Stack.Screen name={mainNavigations.UNCLASSIFIED} component={UnclassifiedListScreen} options={{ headerTitle: '미분류 내역', headerStyle: { height: 72 }, headerTitleStyle: { fontSize: 18, marginLeft: -12, fontWeight: 700, lineHeight: 21.24, letterSpacing: -0.36 }, }} />
       <Stack.Screen name={mainNavigations.WITHDRAWAL} component={WithdrawalClassifiedScreen} options={{ headerTitle: '미분류 설정(출금)', headerTitleStyle: { fontSize: 20, marginLeft: -12 }, }} />
       <Stack.Screen name={mainNavigations.DEPOSIT} component={DepositClassifiedScreen} options={{ headerTitle: '미분류 설정(입금)', headerTitleStyle: { fontSize: 20, marginLeft: -12 }, }} />
       <Stack.Screen name={mainNavigations.CHANGE_PASSWORD} component={ChangePasswordScreen} options={{ headerShown: false }} />
