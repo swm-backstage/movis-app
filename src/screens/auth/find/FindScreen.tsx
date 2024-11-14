@@ -5,8 +5,7 @@ import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'reac
 import { AuthStackParamList } from '../../../navigations/AuthStackNavigator';
 import ErrorMessageWithInput from '../../../components/customInput/ErrorMessageWithInput';
 import { useSendSms, useVerifyCode } from '../../../hooks/useSms';
-import { useGetIdentifier } from '../../../hooks/useUser';
-import Toast from 'react-native-toast-message';
+import { useGetIdentifier, usePasswordReset } from '../../../hooks/useUser';
 
 
 type FindScreenProps = StackScreenProps<AuthStackParamList>;
@@ -30,11 +29,15 @@ const FindIDScreen = ({ handleSendCode }: any) => {
             ,
             onError: (error) => {
                 console.log(error.response?.data)
-                Toast.show({
-                    type: 'error',
-                    text1: `${error.response?.data.message}`,
-                    position: 'bottom',
-                });
+                Alert.alert(
+                    '',
+                    '다시 시도하세요',
+                    [
+                        {
+                            text: '확인'
+                        },
+                    ]
+                );
             }
         }
     );
@@ -90,7 +93,16 @@ const FindIDScreen = ({ handleSendCode }: any) => {
             setFirstFocused(false);
         }
     }
-
+    // check가 true로 변경될 때 Alert 창을 띄우기 위한 useEffect
+    useEffect(() => {
+        if (check === true) {
+            Alert.alert(
+                "아이디 확인",
+                `휴대전화 정보와 일치하는 아이디입니다.\n아이디: ${identifier}`,
+                [{ text: "확인" }]
+            );
+        }
+    }, [identifier]);
 
 
     return (
@@ -135,15 +147,6 @@ const FindIDScreen = ({ handleSendCode }: any) => {
                 editable={!check}
                 isClosed={check}
             />
-
-
-            {check === true && (
-                <View style={styles.idContainer}>
-
-                    <Text style={styles.bottomText}>휴대전화 정보와 일치하는 아이디 입니다.</Text>
-                    <Text style={styles.idBox}>아이디 : {identifier} </Text>
-                </View>
-            )}
         </View>
     );
 };
@@ -155,12 +158,40 @@ const FindPasswordScreen = ({ handleSendCode, sendPassword }: any) => {
     const [check, setCheck] = useState<boolean>(false);
     const [flag, setFlag] = useState<boolean>(false);
 
-
+    const resetPasword = usePasswordReset(
+        {
+            onSuccess: (data) => {
+                Alert.alert(
+                    '',
+                    '임시 비밀번호가 문자로 전송되었습니다.',
+                    [
+                        {
+                            text: '확인'
+                        },
+                    ]
+                );
+            }
+            ,
+            onError: (error) => {
+                console.log(error.response?.data)
+                Alert.alert(
+                    '',
+                    '다시 시도해주세요',
+                    [
+                        {
+                            text: '확인'
+                        },
+                    ]
+                );
+            }
+        }
+    );
 
     const verifyCode = useVerifyCode({
         onSuccess: (result) => {
             console.log("hello")
             //여기에 sendPassword() 사용해서 문자메시지 보내기
+            resetPasword.mutate(phone)
             setCheck(true)
             setFlag(true)
         },

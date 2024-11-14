@@ -1,6 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { changePassword, checkIdentifier, deleteUser, getIdentifierWithPhone, getUser } from "../api/user";
+
+import { changePassword, checkIdentifier, deleteUser, getIdentifierWithPhone, getUser,resetPassword } from "../api/user";
+
 import { queryKeys } from "../constants/key";
 import { UseMutationCustomOptions } from "../types/common";
 
@@ -35,6 +37,16 @@ function useChangePassword(mutationOptions?: UseMutationCustomOptions) {
   })
 }
 
+
+function usePasswordReset(mutationOptions?: UseMutationCustomOptions) {
+  return useMutation({
+    mutationFn: (phoneNo: string) => resetPassword(phoneNo),
+    ...mutationOptions
+  })
+}
+
+
+
 function useMutateDeleteUser(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
     mutationFn: deleteUser,
@@ -42,4 +54,5 @@ function useMutateDeleteUser(mutationOptions?: UseMutationCustomOptions) {
   })
 }
 
-export { useGetUser, useCheckIdentifier, useGetIdentifier, useChangePassword, useMutateDeleteUser };
+export { useGetUser, useCheckIdentifier, useGetIdentifier, useChangePassword, useMutateDeleteUser, usePasswordReset };
+

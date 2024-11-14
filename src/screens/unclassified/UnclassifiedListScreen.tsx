@@ -64,9 +64,12 @@ const DepositScreen = ({ handleCheckboxToggle, selectedItems, handleEditButtonPr
             refreshing={refreshing}
             onRefresh={onRefresh}
         />
-        <TouchableOpacity style={styles.editButton} onPress={handleEditButtonPress}>
-            <Text style={styles.editButtonText}>내역 수정</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.editButton} onPress={handleEditButtonPress}>
+                <Text style={styles.editButtonText}>내역 수정</Text>
+            </TouchableOpacity>
+        </View>
+
     </View>
 
 );
@@ -79,11 +82,13 @@ const WithdrawalScreen = ({ handleCheckboxToggle, selectedItems, handleEditButto
             style={styles.list}
             refreshing={refreshing}
             onRefresh={onRefresh}
-        />
 
-        <TouchableOpacity style={styles.editButton} onPress={handleEditButtonPress}>
-            <Text style={styles.editButtonText}>일괄 수정</Text>
-        </TouchableOpacity>
+        />
+        <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.editButton} onPress={handleEditButtonPress}>
+                <Text style={styles.editButtonText}>일괄 수정</Text>
+            </TouchableOpacity>
+        </View>
     </View>
 );
 
@@ -147,16 +152,13 @@ function UnclassifiedListScreen({ route, navigation }: UnclassifiedListScreenPro
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>미분류 항목</Text>
-            <Text style={styles.subtitle}>자동 분류되지 않은 항목들은 이 곳에 자동으로 저장됩니다. 항목들을 재분류 해주세요!</Text>
-
             <Tab.Navigator
                 screenOptions={({ route }) => ({
-                    tabBarActiveTintColor: route.name === '출금' ? 'red' : '#007aff',
+                    tabBarActiveTintColor: 'black',
                     tabBarInactiveTintColor: '#8e8e93',
                     tabBarLabelStyle: { fontSize: 16, fontWeight: 'bold' },
                     tabBarIndicatorStyle: {
-                        backgroundColor: route.name === '출금' ? 'red' : '#007aff',
+                        backgroundColor: '#5F47F1',
                     },
                     tabBarStyle: {
                         backgroundColor: 'white',
@@ -208,7 +210,6 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        padding: 16,
         backgroundColor: '#fff',
     },
     title: {
@@ -232,12 +233,15 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     list: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignSelf: 'stretch',
         borderBottomColor: '#ccc',
     },
     transactionItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 16,
+        padding: 20,
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
     },
@@ -293,9 +297,13 @@ const styles = StyleSheet.create({
         letterSpacing: -0.32
     },
     buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 16,
+        display: 'flex',
+        paddingHorizontal: 24,
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 12,
+        alignSelf: 'stretch',
+        marginBottom: 12
     },
     button: {
         flex: 1,
@@ -327,6 +335,9 @@ const styles = StyleSheet.create({
     singleCheckbox: {
         borderRadius: 10, // 단일 선택의 경우 radius 스타일 적용
     },
+    tmp: {
+        alignItems: 'flex-start'
+    }
 });
 
 export default UnclassifiedListScreen;
