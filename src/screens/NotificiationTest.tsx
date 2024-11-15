@@ -125,7 +125,7 @@ function NotificiationTest() {
         RNAndroidNotificationListener.requestPermission()
     }
 
-    const handleAppStateChange = async (nextAppState: string,force = false) => {
+    const handleAppStateChange = async (nextAppState: string, force = false) => {
         if (nextAppState === 'active' || force) {
             const status = await RNAndroidNotificationListener.getPermissionStatus()
             setHasPermission(status !== 'denied')
@@ -133,28 +133,28 @@ function NotificiationTest() {
     }
 
     const handleCheckNotificationInterval = async () => {
-        
+
         const lastStoredNotification = await AsyncStorage.getItem('@lastNotification')
 
         if (lastStoredNotification) {
             const parseData = JSON.parse(lastStoredNotification)
-            console.log(parseData)
+
             setLastNotification(parseData)
         }
     }
 
     useEffect(() => {
-        console.log('컴포넌트가 마운트 되었습니다.')
+
         clearInterval(interval)
 
         interval = setInterval(handleCheckNotificationInterval, 5000)
 
-        const listener = AppState.addEventListener('change',handleAppStateChange)
+        const listener = AppState.addEventListener('change', handleAppStateChange)
 
         handleAppStateChange('', true)
 
         return () => {
-            console.log('컴포넌트가 언마운트 되었습니다.')
+
             clearInterval(interval)
             listener.remove()
         }

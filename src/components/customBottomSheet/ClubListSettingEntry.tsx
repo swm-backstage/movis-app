@@ -39,10 +39,6 @@ const ClubListSettingEntry: React.FC<ClubListSettingEntryProps> = ({ user, logou
     }
 
     useEffect(() => {
-        console.log('현재 text 상태:', text)
-    }, [text])
-
-    useEffect(() => {
 
         handleAppStateChange('', true)
 
@@ -93,7 +89,7 @@ const ClubListSettingEntry: React.FC<ClubListSettingEntryProps> = ({ user, logou
 
             <SettingList title="권한 설정">
                 <SettingListItem
-                    text={text}
+                    text="알림 권한"
                     onPress={handleOnPressPermissionButton}
                 />
             </SettingList>

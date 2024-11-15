@@ -39,7 +39,7 @@ function WithdrawalClassifiedScreen({ route, navigation }: WithdrawalClassifiedS
             );
         },
         onError: (error) => {
-            console.log(error.response?.data)
+
             Alert.alert(
                 '실패',
                 `요청이 실패했습니다: ${error.response?.data || '알 수 없는 오류'}`,
@@ -60,11 +60,10 @@ function WithdrawalClassifiedScreen({ route, navigation }: WithdrawalClassifiedS
 
     const handleConfirm = () => {
         if (selectedEvent) {
-            console.log(selectedEvent)
-            console.log(clubId);
+
 
             selectedWithdrawals.forEach((withdrawal) => {
-                console.log(withdrawal)
+
                 classifiedEventBill.mutate({
                     eventBillId: withdrawal.elementId,
                     body: {

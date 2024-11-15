@@ -66,25 +66,24 @@ const TransactionHistoryWithdrawCreateScreen = ({ route, navigation }: Transacti
       eventId: eventId,
     };
 
-    console.log(values);
 
     try {
       // 1. 이벤트 빌 생성
       const eventBill = await createEventBill.mutateAsync(
         { body: values, queryParams }
       );
-  
+
       // 2. Presigned URL 요청
       const extension = imageInput.image?.type?.split('/')[1];
       const url = await getPresignedUrl({
-        billUid: eventBill.eventBillId, 
+        billUid: eventBill.eventBillId,
         extension: extension || 'jpg',
       });
-  
+
       // 3. 이미지 URI를 Blob으로 변환
       const response = await fetch(imageInput.image?.uri || '');
       const imageBlob = await response.blob();
-  
+
       // 4. Presigned URL로 이미지 업로드
       await fetch(url.toString(), {
         method: 'PUT',
@@ -93,17 +92,17 @@ const TransactionHistoryWithdrawCreateScreen = ({ route, navigation }: Transacti
           'Content-Type': imageInput.image?.type || 'image/jpeg',
         },
       });
-  
+
       // 5. EventBill의 image를 presignedUrl로 업데이트
       updateEventBill.mutate({
-        body: { image: url, ...values }, 
+        body: { image: url, ...values },
         queryParams: { eventBillId: eventBill.eventBillId },
       });
 
       // 6. 이전 화면으로 이동
       navigation.goBack();
     } catch (error) {
-        console.error('Error creating fee:', error, error.message, error.name, error.response?.data);
+      console.error('Error creating fee:', error, error.message, error.name, error.response?.data);
     }
   };
 

@@ -9,7 +9,6 @@ import Toast from 'react-native-toast-message';
 
 
 function RootNavigator() {
-  console.log('RootNavigator Screen');
   const { isLogin } = useAuth();
   const [modalVisible, setModalVisible] = useState(false);
   const [depositCount, setDepositCount] = useState(0);
@@ -25,7 +24,6 @@ function RootNavigator() {
       const deposit = parseInt(await AsyncStorage.getItem('@depositCount') || '0', 10);
       const withdraw = parseInt(await AsyncStorage.getItem('@withdrawCount') || '0', 10);
 
-      console.log(deposit, withdraw)
       setDepositCount(deposit);
       setWithdrawCount(withdraw);
       setModalVisible(true);

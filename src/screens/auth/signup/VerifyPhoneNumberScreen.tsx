@@ -30,7 +30,7 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
     const send = useSendSms(
         {
             onSuccess: () => {
-                console.log("success")
+
                 Alert.alert(
                     '인증코드 전송',
                     '3분안에 인증코드를 입력해주세요',
@@ -42,7 +42,7 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
                 );
             },
             onError: (error) => {
-                console.log(error.response?.data)
+
                 Alert.alert(
                     '실패',
                     `인증코드 전송에 실패 : ${error.response?.data || '알 수 없는 오류'}`,
@@ -172,7 +172,7 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
     };
 
     const handleSingUp = () => {
-        console.log(data, phoneNo, name)
+
         const signupBody: RequestCreateUser = {
             identifier: data.identifier,
             password: data.password,
@@ -181,7 +181,7 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
         }
         signupMutation.mutate(signupBody, {
             onSuccess: () => {
-                console.log("hello")
+
                 navigation.navigate('Welcome', { identifier: signupBody.identifier, password: signupBody.password, name: name })
             },
             onError: (error) => {
