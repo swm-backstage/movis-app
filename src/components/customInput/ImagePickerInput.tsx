@@ -33,7 +33,6 @@ const ImagePickerInput: React.FC<ImagePickerInputProps> = ({
             <Image source={{ uri: image.uri }} style={styles.image} />
             <TouchableOpacity
               onPress={() => {
-                console.log('Remove button pressed');
                 clearImage();
               }}
               style={styles.removeButton}

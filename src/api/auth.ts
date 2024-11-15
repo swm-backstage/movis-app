@@ -35,7 +35,6 @@ const postLogin = async ({ identifier, password }: RequestLogin): Promise<Respon
         identifier,
         password,
     });
-    console.log(data)
     return data;
 }
 

@@ -88,8 +88,7 @@ function DepositClassifiedScreen({ route, navigation }: DepositClassifiedScreenP
                 paidAmount: deposit.amount,
                 paidAt: deposit.paidAt
             }));
-            console.log(feeId)
-            console.log(request)
+
             request.forEach(req => {
                 classifiedFee.mutate({ feeId: feeId, body: req })
             })

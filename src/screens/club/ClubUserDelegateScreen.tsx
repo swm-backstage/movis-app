@@ -38,7 +38,7 @@ function ClubUserDelegateScreen({ route, navigation }: ClubUserDelegateScreenPro
         const queryParams = {
             clubId: clubId,
         }
-        console.log(clubUserRadio.value)
+
         delegateClubUser.mutate(
             { toIdentifier: clubUserRadio.value, queryParams: queryParams },
             {

@@ -22,4 +22,4 @@ const getClubUid = async (accountNumber: string): Promise<ClubGetUidRes> => {
 };
 
 
-export { createFee, getClubUid}
+export { createFee, getClubUid }

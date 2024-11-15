@@ -108,7 +108,6 @@ const ClubMemberListCreateForm: React.FC<ClubMemberListCreateFormProps> = ({ clu
       memberList,
     };
 
-    console.log('멤버 데이터:', memberCreateListReq);
 
     // 멤버 데이터 전송
     createMemberList.mutate(

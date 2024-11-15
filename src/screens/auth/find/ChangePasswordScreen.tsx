@@ -76,7 +76,7 @@ function ChangePasswordScreen({ route, navigation, }: ChangePasswordScreenProps)
     };
 
     const handleChangePassword = () => {
-        console.log(prevPassword, password, confirmPassword)
+
 
         chnagePasswordMutation.mutate(
             {
@@ -97,7 +97,7 @@ function ChangePasswordScreen({ route, navigation, }: ChangePasswordScreenProps)
                     navigation.navigate(mainNavigations.CLUB_LIST)
                 },
                 onError: (error) => {
-                    console.log(error.response?.data)
+
                     Alert.alert(
                         '실패',
                         error.response?.data?.message === 'Invalid Input Value' ? "기존 비밀번호가 올바르지 않습니다" : "페이지를 다시 접근하세요",

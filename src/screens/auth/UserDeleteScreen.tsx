@@ -19,6 +19,7 @@ type UserDeleteScreenProps = StackScreenProps<
 function UserDeleteScreen({ navigation }: UserDeleteScreenProps) {
   const deleteUser = useMutateDeleteUser();
 
+
   const password1Input = useCustomInput({
     required: true,
     requiredMessage: '필수 항목',
@@ -57,7 +58,7 @@ function UserDeleteScreen({ navigation }: UserDeleteScreenProps) {
             password1Input.value,
             {
               onSuccess: navigation.goBack,
-              onError: (error: any) => { 
+              onError: (error: any) => {
                 console.error('Error deleting user:', error, error.message, error.name, error.response.data);
               }
             }

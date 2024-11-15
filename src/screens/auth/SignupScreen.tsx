@@ -77,7 +77,6 @@ function SignupScreen({ navigation }: AuthHomeScreenProps) {
       identifier: values.identifier,
       password: values.password,
     }
-    console.log('start')
     if (values.password === values.passwordConfirm) {
       signupMutation.mutate(signupBody, {
         onSuccess: () => {

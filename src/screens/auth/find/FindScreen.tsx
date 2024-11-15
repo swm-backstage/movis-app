@@ -28,7 +28,7 @@ const FindIDScreen = ({ handleSendCode }: any) => {
             }
             ,
             onError: (error) => {
-                console.log(error.response?.data)
+
                 Alert.alert(
                     '',
                     '다시 시도하세요',
@@ -45,13 +45,13 @@ const FindIDScreen = ({ handleSendCode }: any) => {
 
     const verifyCode = useVerifyCode({
         onSuccess: (result) => {
-            console.log("hello")
+
             getIdentifier.mutate(phone)
             setCheck(true)
             setFlag(true)
         },
         onError: () => {
-            console.log("fail")
+
             setCheck(false)
             setFlag(true)
         }
@@ -60,7 +60,7 @@ const FindIDScreen = ({ handleSendCode }: any) => {
     useEffect(() => {
         if (code.length === 4) {
             const timeout = setTimeout(() => {
-                console.log(phone, code)
+
                 verifyCode.mutate({ phoneNumber: phone, verifyCode: code });
             }, 1000);
 
@@ -173,7 +173,7 @@ const FindPasswordScreen = ({ handleSendCode, sendPassword }: any) => {
             }
             ,
             onError: (error) => {
-                console.log(error.response?.data)
+
                 Alert.alert(
                     '',
                     '다시 시도해주세요',
@@ -189,14 +189,14 @@ const FindPasswordScreen = ({ handleSendCode, sendPassword }: any) => {
 
     const verifyCode = useVerifyCode({
         onSuccess: (result) => {
-            console.log("hello")
+
             //여기에 sendPassword() 사용해서 문자메시지 보내기
             resetPasword.mutate(phone)
             setCheck(true)
             setFlag(true)
         },
         onError: () => {
-            console.log("fail")
+
             setCheck(false)
             setFlag(true)
         }
@@ -205,7 +205,7 @@ const FindPasswordScreen = ({ handleSendCode, sendPassword }: any) => {
     useEffect(() => {
         if (code.length === 4) {
             const timeout = setTimeout(() => {
-                console.log(phone, code)
+
                 verifyCode.mutate({ phoneNumber: phone, verifyCode: code });
             }, 1000);
 
@@ -300,7 +300,7 @@ function FindScreen({ navigation }: FindScreenProps) {
     const send = useSendSms(
         {
             onSuccess: () => {
-                console.log("success")
+
                 Alert.alert(
                     '인증코드 전송',
                     '3분안에 인증코드를 입력해주세요',
@@ -312,7 +312,7 @@ function FindScreen({ navigation }: FindScreenProps) {
                 );
             },
             onError: (error) => {
-                console.log(error.response?.data)
+
                 Alert.alert(
                     '실패',
                     `인증코드 전송에 실패 : ${error.response?.data || '알 수 없는 오류'}`,
