@@ -14,6 +14,7 @@ type VerifyPhoneNumberScreenProps = StackScreenProps<AuthStackParamList>;
 function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenProps) {
 
     const [name, setName] = useState('');
+    const [checkName, setCheckName] = useState(false);
     const [phoneNo, setPhoneNo] = useState('');
     const [code, setCode] = useState('');
     const [isFirstFocused, setIsFirstFocused] = useState(false);
@@ -119,6 +120,14 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
         }
     }, [code]);
 
+    useEffect(() => {
+        if (isValidateName(name)) {
+            setCheckName(true);
+        } else {
+            setCheckName(false);
+        }
+    }, [name]); // name 값이 변경될 때마다 실행
+
     const handleChangeText = (field: 'name' | 'phoneNo' | 'code', text: string) => {
         if (field === 'name') {
             setName(text)
@@ -179,6 +188,7 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
             phoneNo: phoneNo,
             name: name
         }
+        console.log(signupBody)
         signupMutation.mutate(signupBody, {
             onSuccess: () => {
 
@@ -190,21 +200,29 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
         })
     }
 
+    function isValidateName(input: string) {
+        const regex = /^[A-Za-z가-힣]{3,10}$/;
+        return regex.test(input)
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.contentContainer}>
                 <Text style={styles.text}>휴대폰 번호를{'\n'}인증해 주세요</Text>
 
                 <View style={styles.inputLayout}>
-                    <CancelButtonWithText
-                        placeholder="이름 입력"
+                    <ErrorMessageWithInput
+                        placeholder='이름 입력'
                         placeholderTextColor="#ACB2B5"
                         value={name}
                         onChangeText={(text) => handleChangeText('name', text)}
                         onFocus={() => handleFocus('first')}
                         onBlur={() => handleBlur('first')}
                         onClear={() => setName('')}
+                        isValidText={isValidateName}
                         isFocused={isFirstFocused}
+                        maxLength={10}
+                        errorText='3 ~ 10자리의 영문자, 한글만 가능합니다.'
                     />
 
                     <View style={styles.inputContainerWithButton}>
@@ -246,7 +264,7 @@ function VerifyPhoneNumberScreen({ route, navigation }: VerifyPhoneNumberScreenP
                     />
                 </View>
             </View>
-            {check === true && (
+            {check === true && checkName === true && (
                 <TouchableOpacity
                     style={isKeyboardVisible ? styles.nextButtonWithKeyboard : styles.nextButton}
                     onPress={handleSingUp}
