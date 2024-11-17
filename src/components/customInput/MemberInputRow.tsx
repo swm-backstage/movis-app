@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     paddingTop: 10,
+    paddingBottom: 8,
   },
   formInputName: {
     flex: 1,
