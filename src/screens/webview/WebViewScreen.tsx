@@ -66,6 +66,14 @@ function WebViewScreen({ route, navigation }: WebViewScreenProps) {
       navigation.navigate(mainNavigations.TRANSACTIONHISTORY_WITHDRAW_CREATE, { clubId: data.clubId, eventId: data.eventId });
     } else if (data.type === "unClassifiedTransaction") {
       navigation.navigate(mainNavigations.UNCLASSIFIED, { clubId: data.clubId });
+    } else if (data.type === "getToken") {
+      if (webViewRef.current) {
+        webViewRef.current.injectJavaScript(injectedJavascript);
+        webViewRef.current.postMessage(JSON.stringify({
+          isChongmu: true,
+          accessToken: getHeader('Authorization').split(' ')[1]
+        }));
+      }
     }
   };
   const onLoad = () => {
