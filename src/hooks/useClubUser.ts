@@ -36,7 +36,7 @@ function useMutateDelegateClubUser(mutationOptions?: UseMutationCustomOptions) {
   })
 }
 
-function useMutateDeleteClub(mutationOptions?: UseMutationCustomOptions) {
+function useMutateDeleteClubUser(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
     mutationFn: deleteClubUser,
     onSuccess: () => {
@@ -48,4 +48,4 @@ function useMutateDeleteClub(mutationOptions?: UseMutationCustomOptions) {
   })
 }
 
-export { useGetClubUserList, useMutateCreateClubUser, useMutateDelegateClubUser, useMutateDeleteClub };
+export { useGetClubUserList, useMutateCreateClubUser, useMutateDelegateClubUser, useMutateDeleteClubUser };
