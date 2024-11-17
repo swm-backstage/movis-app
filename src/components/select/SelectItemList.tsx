@@ -1,10 +1,11 @@
 import React from 'react';
-import { FlatList, Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors/defaultColors';
 import { bankList } from '../../constants/mockData';
+import SvgIcon from '../../constants/SvgIcon';
 
 interface SelectItemListProps {
   selectItem: (itemId: string) => void;
@@ -14,23 +15,19 @@ const SelectItemList: React.FC<SelectItemListProps> = ({ selectItem }) => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>
-          은행계좌 선택
-        </Text>
+        <Text style={styles.headerText}>은행계좌 선택</Text>
       </View>
       <ScrollView style={styles.bodyContainer}>
-        <FlatList
-          data={bankList}
-          keyExtractor={(item) => item.key}
-          renderItem={({ item }) => (
-            <View>
-              <TouchableOpacity style={styles.item} onPress={() => selectItem(item.key)}>
-                <Image source={item.data.imageURL} style={styles.itemImage} />
-                <Text style={styles.itemName}>{item.data.name}</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        />
+        {bankList.map((item) => (
+          <View key={item.key}>
+            <TouchableOpacity style={styles.item} onPress={() => selectItem(item.key)}>
+              <View style={styles.svgIcon}>
+                <SvgIcon size={32} name={item.data.svg} />
+              </View>
+              <Text style={styles.itemName}>{item.data.name}</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
       </ScrollView>
     </View>
   );
@@ -52,13 +49,7 @@ const styles = StyleSheet.create({
     color: colors.Black,
   },
   bodyContainer: {
-
-  },
-  selectedBankContainer: {
-    padding: 10,
-    backgroundColor: colors.Gray100,
-    marginTop: 10,
-    borderRadius: 8,
+    // 필요한 스타일 추가
   },
   item: {
     flexDirection: 'row',
@@ -70,10 +61,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 12,
   },
-  itemImage: {
-    width: 28,
-    height: 28,
-    marginRight: 8,
+  svgIcon: {
+    marginRight: 10,
   },
   itemName: {
     fontSize: 16,

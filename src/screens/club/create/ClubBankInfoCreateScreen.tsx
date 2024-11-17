@@ -91,7 +91,7 @@ function ClubBankInfoCreateScreen({ route, navigation }: ClubBankInfoCreateScree
                     autoCapitalize="none"
                 />
             <View style={styles.selectItem}>
-                <SelectItemInput name={bankSelectInput.selectedItem?.name} imageURL={bankSelectInput.selectedItem?.imageURL} openSelectItemList={() => openCustomBottomSheet()} />
+                <SelectItemInput name={bankSelectInput.selectedItem?.name} svg={bankSelectInput.selectedItem?.svg} openSelectItemList={() => openCustomBottomSheet()} />
             </View>
             </View>
             <View style={styles.footerContainer}>

@@ -5,20 +5,24 @@ import { Text } from 'react-native-paper';
 import colors from '../../assets/colors/defaultColors';
 import { View } from '@ant-design/react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import SvgIcon from '../../constants/SvgIcon';
+import * as Icons from "../../assets/svg/svg";
 
 
 interface SelectItemInputProps {
   name: string | undefined;
-  imageURL: ImageSourcePropType | undefined;
+  svg: keyof typeof Icons;
   openSelectItemList: () => void;
 }
 
-const SelectItemInput: React.FC<SelectItemInputProps> = ({ name, imageURL, openSelectItemList }) => (
+const SelectItemInput: React.FC<SelectItemInputProps> = ({ name, svg, openSelectItemList }) => (
     <TouchableOpacity style={styles.container} onPress={openSelectItemList}>
       {name
         ?
         <View style={styles.selectedItem}>
-          <Image source={imageURL} style={styles.itemImage} />
+          <View style={styles.svgIcon}>
+            <SvgIcon size={32} name={svg} />
+          </View>
           <Text style={styles.itemName}>{name}</Text>
         </View>
         :
@@ -45,6 +49,9 @@ const styles = StyleSheet.create({
   selectedItem: {
     flex: 1,
     flexDirection: 'row',
+  },
+  svgIcon: {
+    marginRight: 10,
   },
   unSelectedItem: {
     flex: 1,

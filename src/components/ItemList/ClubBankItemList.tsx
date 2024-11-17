@@ -7,6 +7,7 @@ import { bankMap } from '../../constants/mockData';
 import { ClubGetRes } from '../../types/club/response/ClubGetRes';
 import Item from './Item';
 import ItemList from './ItemList';
+import SvgIcon from '../../constants/SvgIcon';
 
 
 interface ClubBankItemListProps {
@@ -25,12 +26,9 @@ const ClubBankItemList: React.FC<ClubBankItemListProps> = ({ club }) => {
             <View style={styles.bodyContainer}>
                 <ItemList>
                     <Item
-                        imageNode={<Image
-                            source={data?.imageURL}
-                            style={styles.bankImage}/>}                        
+                        imageNode={<SvgIcon size={32} name={data?.svg ?? "Kakao"} />}                        
                         mainText={data?.name ?? "은행"}
                         subText={club.accountNumber}
-                        labelText={"은행 코드 : " + club.bankCode}
                     />
                 </ItemList>
             </View>
