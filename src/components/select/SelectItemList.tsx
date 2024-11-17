@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, Image, StyleSheet, View } from 'react-native';
 
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors/defaultColors';
 import { bankList } from '../../constants/mockData';
@@ -18,7 +18,7 @@ const SelectItemList: React.FC<SelectItemListProps> = ({ selectItem }) => {
           은행계좌 선택
         </Text>
       </View>
-      <View style={styles.bodyContainer}>
+      <ScrollView style={styles.bodyContainer}>
         <FlatList
           data={bankList}
           keyExtractor={(item) => item.key}
@@ -31,7 +31,7 @@ const SelectItemList: React.FC<SelectItemListProps> = ({ selectItem }) => {
             </View>
           )}
         />
-      </View>
+      </ScrollView>
     </View>
   );
 };

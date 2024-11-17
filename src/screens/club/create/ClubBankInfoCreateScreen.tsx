@@ -90,7 +90,9 @@ function ClubBankInfoCreateScreen({ route, navigation }: ClubBankInfoCreateScree
                     keyboardType='numeric'
                     autoCapitalize="none"
                 />
+            <View style={styles.selectItem}>
                 <SelectItemInput name={bankSelectInput.selectedItem?.name} imageURL={bankSelectInput.selectedItem?.imageURL} openSelectItemList={() => openCustomBottomSheet()} />
+            </View>
             </View>
             <View style={styles.footerContainer}>
                 <ExpandedButton onPress={onPress} buttonText='완료' />
@@ -117,6 +119,8 @@ const styles = StyleSheet.create({
     bodyContainer: {
         flex: 1,
         paddingTop: 20,
+    },
+    selectItem: {
     },
     footerContainer: {
         justifyContent: 'flex-end',
