@@ -3,9 +3,9 @@ import React, { useMemo } from 'react';
 import { Alert, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import colors from '../../assets/colors/defaultColors';
-import { useGetClubUserList, useMutateCreateClubUser, useMutateDeleteClub } from '../../hooks/useClubUser';
+import { useGetClubUserList, useMutateCreateClubUser, useMutateDeleteClubUser } from '../../hooks/useClubUser';
 import useCustomBottomSheet from '../../hooks/useCustomButtomSheet';
-import { useGetMemberList, useMutateCreateMemberList } from '../../hooks/useMember';
+import { useGetMemberList, useMutateCreateMemberList, useMutateDeleteMember } from '../../hooks/useMember';
 import { ClubUserGetRes } from '../../types/clubUser/response/ClubUserGetRes';
 import { MemberGetRes } from '../../types/member/response/MemberGetRes';
 import ItemListButton from '../Button/ItemListButton';
@@ -26,7 +26,8 @@ const ClubUserAndMemberItemList: React.FC<ClubUserAndMemberItemListProps> = ({ c
     const { data: memberData, isLoading: memberIsLoading } = useGetMemberList(clubId);
 
     const createClubUser = useMutateCreateClubUser();
-    const deleteClubUser = useMutateDeleteClub();
+    const deleteClubUser = useMutateDeleteClubUser();
+    const deleteClubMember = useMutateDeleteMember();
     const createMemberList = useMutateCreateMemberList();
 
     const { openCustomBottomSheet: openCreateClubUserCustomBottomSheet, CustomBottomSheet: CreateClubUserBottomSheet } = useCustomBottomSheet({
@@ -61,7 +62,32 @@ const ClubUserAndMemberItemList: React.FC<ClubUserAndMemberItemListProps> = ({ c
                             values,
                             {
                                 onError: (error: any) => {
-                                    console.error('Error deleting club:', error, error.message, error.name, error.response.data);
+                                    console.error('Error deleting clubUser:', error, error.message, error.name, error.response.data);
+                                }
+                            }
+                        )
+                    }
+                ],
+            );
+        }
+    }
+    const handleDeleteClubMember = (memberId: string) => {
+        return () => {
+            Alert.alert(
+                "모임 회원 내보내기",
+                "해당 회원을 모임에서 내보내시겠습니까? ",
+                [
+                    {
+                        text: "아니오",
+                        style: "cancel"
+                    },
+                    {
+                        text: "예",
+                        onPress: () => deleteClubMember.mutate(
+                            memberId,
+                            {
+                                onError: (error: any) => {
+                                    console.error('Error deleting clubMember:', error, error.message, error.name, error.response.data);
                                 }
                             }
                         )
@@ -115,7 +141,7 @@ const ClubUserAndMemberItemList: React.FC<ClubUserAndMemberItemListProps> = ({ c
                                 mainText={item.identifier || item.name}
                                 subText={item.phoneNo || item.identifier}
                                 labels={labels}
-                                buttonHandler={(item.type === 'clubUser' && !isMe) ? handleDeleteClubUser(item.identifier) : undefined}
+                                buttonHandler={(item.type === 'clubUser' && !isMe) ? handleDeleteClubUser(item.identifier) : handleDeleteClubMember(item.memberId)}
                             />
                         )
                     })}
