@@ -20,7 +20,11 @@ const createMemberList = async (body: MemberCreateListReq): Promise<void> => {
 };
 
 const deleteMember = async (memberId: string): Promise<void> => {
-  const { data } = await axiosHost.post(`/api/v1/members/${memberId}`);
+  const { data } = await axiosHost.delete('/api/v1/members', {
+    params: {
+      memberId: memberId,
+    }
+  });
 
   return data;
 };
