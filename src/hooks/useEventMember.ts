@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getEventMemberList } from "../api/eventMember";
+import { getEventMemberList, getEventMemberListNotPaid } from "../api/eventMember";
 
 function useQueryGetEventMemberList(eventId: string | null) {
     return useQuery({
@@ -11,5 +11,15 @@ function useQueryGetEventMemberList(eventId: string | null) {
     });
 }
 
-export { useQueryGetEventMemberList }
+function useQueryGetEventMemberListNotPaid(eventId: string | null) {
+    return useQuery({
+        queryFn: () => getEventMemberListNotPaid(eventId!),
+        queryKey: ["eventMemberListNotPaid", eventId],
+        refetchOnMount: 'always', // 추가 옵션
+        enabled: !!eventId
+    });
+}
+
+
+export { useQueryGetEventMemberList, useQueryGetEventMemberListNotPaid }
 

@@ -11,5 +11,16 @@ const getEventMemberList = async (eventId: string): Promise<EventMemberGetListRe
     return data;
 };
 
-export { getEventMemberList };
+const getEventMemberListNotPaid = async (eventId: string): Promise<EventMemberGetListRes> => {
+    const { data } = await axiosHost.get('/api/v1/eventMembers/paid', {
+        params: {
+            eventId: eventId
+        },
+    });
+    return data;
+};
+
+
+
+export { getEventMemberList, getEventMemberListNotPaid };
 
