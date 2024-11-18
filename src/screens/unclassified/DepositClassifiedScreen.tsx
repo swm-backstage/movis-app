@@ -6,7 +6,7 @@ import { mainNavigations } from '../../constants/navigations';
 import { Text } from 'react-native-paper';
 import { useQueryGetEventList } from '../../hooks/useEvent';
 import { EventGetRes } from '../../types/event/response/EventGetRes';
-import { useQueryGetEventMemberList } from '../../hooks/useEventMember';
+import { useQueryGetEventMemberList, useQueryGetEventMemberListNotPaid } from '../../hooks/useEventMember';
 import { EventMemberGetRes } from '../../types/eventMember/EventMemberGetRes';
 import { useClassifiedFee } from '../../hooks/useFee';
 import { formatDistanceToNow } from 'date-fns';
@@ -30,7 +30,7 @@ function DepositClassifiedScreen({ route, navigation }: DepositClassifiedScreenP
     const { data } = useQueryGetEventList(clubId, "first", 1000);
     const events = data?.eventList || [];
 
-    const { data: eventMembersData } = useQueryGetEventMemberList(selectedEventId)
+    const { data: eventMembersData } = useQueryGetEventMemberListNotPaid(selectedEventId)
     const classifiedFee = useClassifiedFee({
         onSuccess: () => {
             Alert.alert(

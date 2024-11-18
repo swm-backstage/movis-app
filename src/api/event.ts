@@ -22,4 +22,5 @@ const getEventList = async (clubId: string, lastId: string, size: number): Promi
 
 
 
+
 export { createEvent, getEventList };
